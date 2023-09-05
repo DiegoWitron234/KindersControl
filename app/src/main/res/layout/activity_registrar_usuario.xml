@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="20dp"
+    tools:context=".RegistrarUsuario">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lblRegistrarNuevoUsuario"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_marginBottom="30dp"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lblCorreo"
+        android:textSize="25sp"
+        android:layout_marginBottom="15dp"
+        />
+
+    <EditText
+        android:id="@+id/campoNuevoCorreo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:textSize="20sp"
+        android:layout_marginBottom="30dp"
+        android:hint="Correo Electrónico"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lblNuevaContra"
+        android:textSize="25sp"
+        android:layout_marginBottom="15dp"
+        />
+
+    <EditText
+        android:id="@+id/campoNuevaContraseña"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:inputType="textPassword"
+        android:layout_marginBottom="30dp"
+        android:hint="Contraseña"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lblConfirmaContra"
+        android:textSize="25sp"
+        android:layout_marginBottom="15dp"
+        />
+
+    <EditText
+        android:id="@+id/campoConfirmarContraseña"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:inputType="textPassword"
+        android:textSize="20sp"
+        android:hint="Contraseña"
+        />
+
+    <TextView
+        android:id="@+id/txtCorreoValido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/rojo"
+        android:textSize="15sp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="15dp"
+        />
+
+    <TextView
+        android:id="@+id/txtContraseñaValida"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/rojo"
+        android:textSize="15sp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="15dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        >
+        <CheckBox
+            android:id="@+id/checkboxAceptar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        <TextView
+            android:id="@+id/termsAndPrivacyTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnRegistrarse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lblRegistrarse"
+        android:textSize="20sp"
+        android:background="@drawable/redondeado_completo"
+        android:layout_gravity="center"/>
+
+</LinearLayout>

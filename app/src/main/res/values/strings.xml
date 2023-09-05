@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">KindersControl</string>
+    <string name="lblIniciarSesion">Iniciar sesión</string>
+    <string name="hintCorreo">Correo electrónico</string>
+    <string name="hintContrasena">Contraseña</string>
+    <string name="lblRegistrarNuevoUsuario">Registrar nuevo usuario</string>
+    <string name="lblCorreo">Correo electrónico:</string>
+    <string name="lblNuevaContra">Nueva contraseña:</string>
+    <string name="lblConfirmaContra">Confirma tu contraseña:</string>
+    <string name="lblRegistrarse">Registrarse</string>
+    <string name="lblRegistrate">¿No tienes cuenta? Regístrate</string>
 </resources>

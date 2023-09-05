@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "757359205518",
+    "project_id": "kinderscontrol",
+    "storage_bucket": "kinderscontrol.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:757359205518:android:ccd18c1845763d3a75bddf",
+        "android_client_info": {
+          "package_name": "com.miraimx.kinderscontrol"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "757359205518-g0rbim95dh924knagfmocalvb5hdbm38.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.miraimx.kinderscontrol",
+            "certificate_hash": "3b7218b50316b4fcf0c90648dc12df5832ead807"
+          }
+        },
+        {
+          "client_id": "757359205518-gier3ddikmcprgk01qe9nh45n6eflspu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMrzVFfSh_7FDI-Tx1Bs6OPsWAOwAKfLQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "757359205518-gier3ddikmcprgk01qe9nh45n6eflspu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
