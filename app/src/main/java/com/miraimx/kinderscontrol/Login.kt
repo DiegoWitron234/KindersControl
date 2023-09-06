@@ -97,6 +97,7 @@ class Login : AppCompatActivity() {
         textRegistrar.setOnClickListener {
             // Intent para ir a la activity de registro de usuario
             val intent= Intent(this, RegistrarUsuario::class.java)
+            intent.putExtra("rol", "Usuario")
             startActivity(intent)
         }
     }

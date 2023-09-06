@@ -38,11 +38,15 @@ class RegistrarUsuario : AppCompatActivity() {
     private lateinit var txtContraseñaValida: TextView
     private lateinit var checkboxAceptar: CheckBox
 
-    private lateinit var radioGroup: RadioGroup
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registrar_usuario)
+
+        val rol = intent.getStringExtra("rol")
+        if (rol == null){
+            Toast.makeText(this, "El rol es desconocido", Toast.LENGTH_LONG).show()
+            finish()
+        }
 
         /*val actionBar: ActionBar? = supportActionBar
 
@@ -67,8 +71,6 @@ class RegistrarUsuario : AppCompatActivity() {
         campoNuevoCorreo.addTextChangedListener(watcher)
         campoNuevaContraseña.addTextChangedListener(watcher)
         campoConfirmarContraseña.addTextChangedListener(watcher)
-
-        radioGroup = findViewById(R.id.radioGroup)
 
         checkboxAceptar = findViewById(R.id.checkboxAceptar)
 
@@ -101,9 +103,11 @@ class RegistrarUsuario : AppCompatActivity() {
         btnRegistrarse.setOnClickListener {
             val correo = campoNuevoCorreo.text.toString()
             val contraseña = campoNuevaContraseña.text.toString()
-            val rol = obtenerValorSeleccionado()
+            //val rol = obtenerValorSeleccionado()
             if (checkboxAceptar.isChecked){
-                crearCuenta(correo, contraseña, rol)
+                if (rol != null) {
+                    crearCuenta(correo, contraseña, rol)
+                }
                 //Toast.makeText(this, "Usuario registrado", Toast.LENGTH_SHORT).show()
             } else{
                 Toast.makeText(this, "Debe aceptar los términos y condiciones", Toast.LENGTH_SHORT)
@@ -150,7 +154,7 @@ class RegistrarUsuario : AppCompatActivity() {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    private fun obtenerValorSeleccionado(): String {
+    /*private fun obtenerValorSeleccionado(): String {
         // Obtener el ID del radio button seleccionado
         val selectedRadioButtonId = radioGroup.checkedRadioButtonId
 
@@ -165,7 +169,7 @@ class RegistrarUsuario : AppCompatActivity() {
         // Si no se ha seleccionado ningún radio button, puedes retornar un valor por defecto o lanzar una excepción según tus necesidades
         Toast.makeText(this, "Error con el radiobutton", Toast.LENGTH_SHORT).show()
         return "Ninguna opción seleccionada" // Valor por defecto
-    }
+    }*/
 
     /*private fun crearCuenta(email: String, password: String) {
         // [START create_user_with_email]

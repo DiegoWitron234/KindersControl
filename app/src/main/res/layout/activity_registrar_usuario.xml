@@ -117,6 +117,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
         </LinearLayout>
 
+        <!--
         <RadioGroup
             android:id="@+id/radioGroup"
             android:layout_width="wrap_content"
@@ -138,6 +139,7 @@
                 android:text="Usuario" />
 
         </RadioGroup>
+        -->
 
 
         <Button
