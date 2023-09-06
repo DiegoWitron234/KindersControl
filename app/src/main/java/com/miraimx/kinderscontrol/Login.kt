@@ -14,6 +14,10 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 
 class Login : AppCompatActivity() {
@@ -99,11 +103,46 @@ class Login : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        val currentUser = auth.currentUser
+
+        // Obtener una referencia a la base de datos
+        val database = FirebaseDatabase.getInstance()
+        val currentUser = FirebaseAuth.getInstance().currentUser
+
+        // Verificar si el usuario está autenticado
         if (currentUser != null) {
-            Toast.makeText(this, "Bienvenido", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            val uid = currentUser.uid
+            val userRef = database.getReference("users").child(uid)
+
+            userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        val role = dataSnapshot.child("role").value.toString()
+
+                        // Aquí puedes tomar decisiones basadas en el rol del usuario
+                        if (role == "Admin") {
+                            // Mostrar la interfaz de administrador
+                            val intent = Intent(this@Login, PanelAdmin::class.java)
+                            startActivity(intent)
+                        } else if (role == "Usuario") {
+                            // Mostrar la interfaz de usuario
+                            val intent = Intent(this@Login, MainActivity::class.java)
+                            startActivity(intent)
+                        } else {
+                            // Rol desconocido
+                            Toast.makeText(this@Login, "Rol desconocido", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    } else {
+                        // El nodo de rol no existe para este usuario
+                        Toast.makeText(this@Login, "El usuario no está en la RTBD", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    // Manejar errores de lectura de la base de datos
+                }
+            })
         }
     }
 

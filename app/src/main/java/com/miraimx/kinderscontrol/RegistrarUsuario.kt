@@ -16,11 +16,14 @@ import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 
 class RegistrarUsuario : AppCompatActivity() {
@@ -34,6 +37,8 @@ class RegistrarUsuario : AppCompatActivity() {
     private lateinit var txtCorreoValido: TextView
     private lateinit var txtContraseñaValida: TextView
     private lateinit var checkboxAceptar: CheckBox
+
+    private lateinit var radioGroup: RadioGroup
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +67,8 @@ class RegistrarUsuario : AppCompatActivity() {
         campoNuevoCorreo.addTextChangedListener(watcher)
         campoNuevaContraseña.addTextChangedListener(watcher)
         campoConfirmarContraseña.addTextChangedListener(watcher)
+
+        radioGroup = findViewById(R.id.radioGroup)
 
         checkboxAceptar = findViewById(R.id.checkboxAceptar)
 
@@ -94,8 +101,9 @@ class RegistrarUsuario : AppCompatActivity() {
         btnRegistrarse.setOnClickListener {
             val correo = campoNuevoCorreo.text.toString()
             val contraseña = campoNuevaContraseña.text.toString()
+            val rol = obtenerValorSeleccionado()
             if (checkboxAceptar.isChecked){
-                crearCuenta(correo, contraseña)
+                crearCuenta(correo, contraseña, rol)
                 //Toast.makeText(this, "Usuario registrado", Toast.LENGTH_SHORT).show()
             } else{
                 Toast.makeText(this, "Debe aceptar los términos y condiciones", Toast.LENGTH_SHORT)
@@ -103,6 +111,7 @@ class RegistrarUsuario : AppCompatActivity() {
             }
         }
     }
+
 
     private fun openWebPage(url: String) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
@@ -141,7 +150,24 @@ class RegistrarUsuario : AppCompatActivity() {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    private fun crearCuenta(email: String, password: String) {
+    private fun obtenerValorSeleccionado(): String {
+        // Obtener el ID del radio button seleccionado
+        val selectedRadioButtonId = radioGroup.checkedRadioButtonId
+
+        // Verificar si se ha seleccionado un radio button
+        if (selectedRadioButtonId != -1) {
+            // Obtener la referencia al radio button seleccionado
+            val selectedRadioButton = findViewById<RadioButton>(selectedRadioButtonId)
+
+            // Obtener el valor seleccionado como cadena y retornarlo
+            return selectedRadioButton.text.toString()
+        }
+        // Si no se ha seleccionado ningún radio button, puedes retornar un valor por defecto o lanzar una excepción según tus necesidades
+        Toast.makeText(this, "Error con el radiobutton", Toast.LENGTH_SHORT).show()
+        return "Ninguna opción seleccionada" // Valor por defecto
+    }
+
+    /*private fun crearCuenta(email: String, password: String) {
         // [START create_user_with_email]
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
@@ -164,5 +190,52 @@ class RegistrarUsuario : AppCompatActivity() {
                 }
             }
         // [END create_user_with_email]
+    }*/
+
+    private fun crearCuenta(email: String, password: String, rol: String) {
+        // [START create_user_with_email]
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "createUserWithEmail:success")
+                    Toast.makeText(this, "Usuario registrado", Toast.LENGTH_SHORT).show()
+
+                    // Obtener el usuario actualmente autenticado
+                    val user = auth.currentUser
+                    if (user != null) {
+                        // Obtener el UID del usuario recién registrado
+                        val uid = user.uid
+
+                        // Guardar el rol en Firebase Realtime Database
+                        val database = FirebaseDatabase.getInstance()
+                        val usersRef = database.getReference("users")
+
+                        val userData = hashMapOf(
+                            "role" to rol
+                        )
+
+                        usersRef.child(uid).setValue(userData)
+
+                        // Redirigir a la siguiente actividad (puedes modificar esto según tus necesidades)
+                        //val intent = Intent(this, Login::class.java)
+                        //startActivity(intent)
+                        finish()
+                    }
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                    Toast.makeText(
+                        baseContext,
+                        "Error de autenticación.",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                    //Hacer algo si sale mal, o no hacer nada :D
+                }
+            }
+        // [END create_user_with_email]
     }
+
+
+
 }
