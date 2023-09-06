@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SingUpEmpleado">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/tvTitulos1"
+            android:text="@string/registrarse" />
+
+        <TextView
+            style="@style/tvTitulos2"
+            android:text="@string/nombre" />
+
+        <EditText
+            style="@style/etTitulos"
+            android:hint="@string/nombre" />
+
+        <TextView
+            style="@style/tvTitulos2"
+            android:text="@string/puesto" />
+
+        <EditText
+            style="@style/etTitulos"
+            android:hint="@string/puesto" />
+
+        <TextView
+            style="@style/tvTitulos2"
+            android:text="@string/lblCorreo" />
+
+        <EditText
+            style="@style/etTitulos"
+            android:hint="@string/hintCorreo" />
+
+    </LinearLayout>
+</ScrollView>

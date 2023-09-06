@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SingUpTutor">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:text="@string/registrarse"
+            style="@style/tvTitulos1"
+             />
+
+        <TextView
+            style="@style/tvTitulos2"
+            android:text="@string/nombre" />
+
+        <EditText
+            style="@style/etTitulos"
+            android:hint="@string/nombre" />
+
+        <TextView
+            style="@style/tvTitulos2"
+            android:text="@string/edad" />
+
+        <EditText
+            style="@style/etTitulos"
+            android:hint="@string/edad" />
+
+        <TextView
+            style="@style/tvTitulos2"
+            android:text="@string/lblCorreo" />
+
+        <EditText
+            style="@style/etTitulos"
+            android:hint="@string/hintCorreo" />
+
+        <TextView
+            style="@style/tvTitulos2"
+            android:text="@string/telefono" />
+
+        <EditText
+            style="@style/etTitulos"
+            android:hint="@string/telefono" />
+
+        <TextView
+            style="@style/tvTitulos2"
+            android:text="@string/direccion" />
+
+        <EditText
+            style="@style/etTitulos"
+            android:hint="@string/direccion" />
+
+        <TextView
+            style="@style/tvTitulos2"
+            android:text="@string/foto" />
+
+        <EditText
+            style="@style/etTitulos"
+            android:hint="@string/foto" />
+    </LinearLayout>
+</ScrollView>

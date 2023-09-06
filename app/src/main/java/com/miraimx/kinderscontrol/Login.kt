@@ -125,7 +125,7 @@ class Login : AppCompatActivity() {
                             startActivity(intent)
                         } else if (role == "Usuario") {
                             // Mostrar la interfaz de usuario
-                            val intent = Intent(this@Login, MainActivity::class.java)
+                            val intent = Intent(this@Login, PanelUsuario::class.java)
                             startActivity(intent)
                         } else {
                             // Rol desconocido

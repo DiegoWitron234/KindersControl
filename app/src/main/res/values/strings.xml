@@ -9,4 +9,14 @@
     <string name="lblConfirmaContra">Confirma tu contraseña:</string>
     <string name="lblRegistrarse">Registrarse</string>
     <string name="lblRegistrate">¿No tienes cuenta? Regístrate</string>
+    <string name="nombre">Nombre</string>
+    <string name="edad">Edad</string>
+    <string name="telefono">Número telefónico</string>
+    <string name="direccion">Dirección</string>
+    <string name="foto">Fotografía</string>
+    <string name="registrarse">Registrarse</string>
+    <string name="puesto">Puesto</string>
+    <string name="tipo_de_sangre">Tipo de sangre</string>
+    <string name="grado_y_grupo">Grado y grupo</string>
+    <string name="matricula">Matricula</string>
 </resources>

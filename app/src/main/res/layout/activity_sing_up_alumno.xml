@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SingUpAlumno">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/tvTitulos1"
+            android:text="@string/registrarse" />
+
+        <TextView
+            style="@style/tvTitulos2"
+            android:text="@string/matricula" />
+
+        <EditText
+            style="@style/etTitulos"
+            android:hint="@string/matricula" />
+
+        <TextView
+            style="@style/tvTitulos2"
+            android:text="@string/nombre" />
+
+        <EditText
+            style="@style/etTitulos"
+            android:hint="@string/nombre" />
+
+        <TextView
+            style="@style/tvTitulos2"
+            android:text="@string/edad" />
+
+        <EditText
+            style="@style/etTitulos"
+            android:hint="@string/edad" />
+
+        <TextView
+            style="@style/tvTitulos2"
+            android:text="@string/tipo_de_sangre" />
+
+        <EditText
+            style="@style/etTitulos"
+            android:hint="@string/tipo_de_sangre" />
+
+        <TextView
+            style="@style/tvTitulos2"
+            android:text="@string/grado_y_grupo" />
+
+        <EditText
+            style="@style/etTitulos"
+            android:hint="@string/grado_y_grupo" />
+
+    </LinearLayout>
+</ScrollView>
