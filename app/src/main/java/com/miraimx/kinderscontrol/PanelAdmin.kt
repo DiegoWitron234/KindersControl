@@ -7,7 +7,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class PanelAdmin : AppCompatActivity() {
@@ -45,4 +51,35 @@ class PanelAdmin : AppCompatActivity() {
             .setNegativeButton("Cancelar", null)
             .show()
     }
+
+    override fun onStart() {
+        super.onStart()
+        verificarUsuario()
+    }
+
+    private fun verificarUsuario(){
+        val database = FirebaseDatabase.getInstance()
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null){
+            val uid = currentUser.uid
+            val uRef = database.getReference("empleados").child(uid)
+            uRef.addListenerForSingleValueEvent(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (!snapshot.exists())
+                    {
+                        val intent = Intent(this@PanelAdmin, SingUpEmpleado::class.java)
+                        startActivity(intent)
+                        Toast.makeText(this@PanelAdmin, "Registrando Empleado", Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(this@PanelAdmin, "Existe", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@PanelAdmin, "onCancelled", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+    }
+
+
 }

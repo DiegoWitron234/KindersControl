@@ -38,6 +38,7 @@ class RegistrarUsuario : AppCompatActivity() {
     private lateinit var txtContraseñaValida: TextView
     private lateinit var checkboxAceptar: CheckBox
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registrar_usuario)
@@ -72,11 +73,13 @@ class RegistrarUsuario : AppCompatActivity() {
         campoNuevaContraseña.addTextChangedListener(watcher)
         campoConfirmarContraseña.addTextChangedListener(watcher)
 
+
         checkboxAceptar = findViewById(R.id.checkboxAceptar)
 
         val termsAndPrivacyTextView = findViewById<TextView>(R.id.termsAndPrivacyTextView)
 
-        val message = "Confirma que has leído y aceptas los términos y condiciones y el aviso de privacidad."
+        val message =
+            "Confirma que has leído y aceptas los términos y condiciones y el aviso de privacidad."
 
         val spannableString = SpannableString(message)
 
@@ -154,22 +157,6 @@ class RegistrarUsuario : AppCompatActivity() {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    /*private fun obtenerValorSeleccionado(): String {
-        // Obtener el ID del radio button seleccionado
-        val selectedRadioButtonId = radioGroup.checkedRadioButtonId
-
-        // Verificar si se ha seleccionado un radio button
-        if (selectedRadioButtonId != -1) {
-            // Obtener la referencia al radio button seleccionado
-            val selectedRadioButton = findViewById<RadioButton>(selectedRadioButtonId)
-
-            // Obtener el valor seleccionado como cadena y retornarlo
-            return selectedRadioButton.text.toString()
-        }
-        // Si no se ha seleccionado ningún radio button, puedes retornar un valor por defecto o lanzar una excepción según tus necesidades
-        Toast.makeText(this, "Error con el radiobutton", Toast.LENGTH_SHORT).show()
-        return "Ninguna opción seleccionada" // Valor por defecto
-    }*/
 
     /*private fun crearCuenta(email: String, password: String) {
         // [START create_user_with_email]

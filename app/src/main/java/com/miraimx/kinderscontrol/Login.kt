@@ -104,7 +104,40 @@ class Login : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        verificacionRol()
 
+    }
+
+    // Función para validar el formato del correo electrónico
+    private fun CharSequence?.isValidEmail(): Boolean {
+        if (this == null || isEmpty()) return false
+        return Patterns.EMAIL_ADDRESS.matcher(this).matches()
+    }
+
+    private fun signIn(email: String, password: String) {
+        // [START sign_in_with_email]
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithEmail:success")
+                    Toast.makeText(this, "Bienvenido", Toast.LENGTH_SHORT).show()
+                    verificacionRol()
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithEmail:failure", task.exception)
+                    Toast.makeText(
+                        baseContext,
+                        "No se pudo iniciar sesión.",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                    //Hacer algo si sale mal
+                }
+            }
+        // [END sign_in_with_email]
+    }
+
+    private fun verificacionRol() {
         // Obtener una referencia a la base de datos
         val database = FirebaseDatabase.getInstance()
         val currentUser = FirebaseAuth.getInstance().currentUser
@@ -123,11 +156,14 @@ class Login : AppCompatActivity() {
                         if (role == "Admin") {
                             // Mostrar la interfaz de administrador
                             val intent = Intent(this@Login, PanelAdmin::class.java)
+                            intent.putExtra("Role", role)
                             startActivity(intent)
+                            finish()
                         } else if (role == "Usuario") {
                             // Mostrar la interfaz de usuario
                             val intent = Intent(this@Login, PanelUsuario::class.java)
                             startActivity(intent)
+                            finish()
                         } else {
                             // Rol desconocido
                             Toast.makeText(this@Login, "Rol desconocido", Toast.LENGTH_SHORT)
@@ -145,36 +181,6 @@ class Login : AppCompatActivity() {
                 }
             })
         }
-    }
-
-    // Función para validar el formato del correo electrónico
-    private fun CharSequence?.isValidEmail(): Boolean {
-        if (this == null || isEmpty()) return false
-        return Patterns.EMAIL_ADDRESS.matcher(this).matches()
-    }
-
-    private fun signIn(email: String, password: String) {
-        // [START sign_in_with_email]
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithEmail:success")
-                    Toast.makeText(this, "Bienvenido", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithEmail:failure", task.exception)
-                    Toast.makeText(
-                        baseContext,
-                        "No se pudo iniciar sesión.",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                    //Hacer algo si sale mal
-                }
-            }
-        // [END sign_in_with_email]
     }
 
 }
