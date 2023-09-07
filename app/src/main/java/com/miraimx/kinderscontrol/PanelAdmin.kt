@@ -25,11 +25,17 @@ class PanelAdmin : AppCompatActivity() {
         setContentView(R.layout.activity_panel_admin)
 
         btnAgregarEmpleado = findViewById(R.id.btnAgregarEmpleado)
+        val btnAgregarAlumno = findViewById<Button>(R.id.btnAgregarNino)
         btnCerrarSesion = findViewById(R.id.btnCerrarSesion)
 
         btnAgregarEmpleado.setOnClickListener {
             val intent = Intent(this, RegistrarUsuario::class.java)
             intent.putExtra("rol", "Admin")
+            startActivity(intent)
+        }
+
+        btnAgregarAlumno.setOnClickListener(){
+            val intent = Intent(this, SingUpAlumno::class.java)
             startActivity(intent)
         }
 
@@ -42,6 +48,8 @@ class PanelAdmin : AppCompatActivity() {
             .setPositiveButton("Salir") { _, _ -> // Acción de confirmación
                 Firebase.auth.signOut()
                 Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, Login::class.java)
+                startActivity(intent)
                 finish()
             }
             .setNegativeButton("Cancelar", null)
@@ -64,6 +72,7 @@ class PanelAdmin : AppCompatActivity() {
                     if (!snapshot.exists()) {
                         val intent = Intent(this@PanelAdmin, SingUpEmpleado::class.java)
                         intent.putExtra("id", uid)
+                        intent.putExtra("correo",currentUser.email)
                         startActivity(intent)
                         Toast.makeText(this@PanelAdmin, "Registrando Empleado", Toast.LENGTH_SHORT)
                             .show()

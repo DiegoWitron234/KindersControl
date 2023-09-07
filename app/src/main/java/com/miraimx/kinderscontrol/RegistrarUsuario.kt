@@ -156,32 +156,6 @@ class RegistrarUsuario : AppCompatActivity() {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-
-    /*private fun crearCuenta(email: String, password: String) {
-        // [START create_user_with_email]
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "createUserWithEmail:success")
-                    Toast.makeText(this, "Usuario registrado", Toast.LENGTH_SHORT).show()
-                    val user = auth.currentUser
-                    val intent = Intent(this, Login::class.java)
-                    startActivity(intent)
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    Toast.makeText(
-                        baseContext,
-                        "Error de autenticación.",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                    //Hacer algo si sale mal, o no hacer nada :D
-                }
-            }
-        // [END create_user_with_email]
-    }*/
-
     private fun crearCuenta(email: String, password: String, rol: String) {
         // [START create_user_with_email]
         auth.createUserWithEmailAndPassword(email, password)

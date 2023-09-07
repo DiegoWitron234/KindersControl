@@ -33,6 +33,8 @@ class PanelUsuario : AppCompatActivity() {
             .setPositiveButton("Salir") { _, _ -> // Acción de confirmación
                 Firebase.auth.signOut()
                 Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, Login::class.java)
+                startActivity(intent)
                 finish()
             }
             .setNegativeButton("Cancelar", null)
@@ -53,7 +55,7 @@ class PanelUsuario : AppCompatActivity() {
             uRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (!snapshot.exists()) {
-                        val intent = Intent(this@PanelUsuario, SingUpEmpleado::class.java)
+                        val intent = Intent(this@PanelUsuario, SingUpTutor::class.java)
                         startActivity(intent)
                         Toast.makeText(this@PanelUsuario, "Registrando Tutor", Toast.LENGTH_SHORT)
                             .show()

@@ -19,56 +19,58 @@ class SingUpEmpleado : AppCompatActivity() {
         setContentView(R.layout.activity_sing_up_empleado)
 
         val btnRegEmpleado = findViewById<Button>(R.id.btnRegEmpleado)
+        val edCorreo = findViewById<EditText>(R.id.edEmpleadoCorreo)
+
+        val emailEmpleado = intent?.getStringExtra("correo")
+        val idEmpleado = intent?.getStringExtra("id")
+        Toast.makeText(this, emailEmpleado, Toast.LENGTH_SHORT).show()
+        edCorreo.setText(emailEmpleado)
 
         btnRegEmpleado.setOnClickListener {
-            registrar()
+            registrar(idEmpleado, emailEmpleado)
         }
 
         // Agregar el callback para el botón "Back"
-        if (esUsuarioActual){
-            val onBackPressedCallback = object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    AlertDialog.Builder(this@SingUpEmpleado)
-                        .setMessage("¿Seguro que quieres cerrar la sesión?")
-                        .setPositiveButton("Salir") { _, _ -> // Acción de confirmación
-                            Firebase.auth.signOut()
-                            Toast.makeText(this@SingUpEmpleado, "Sesión cerrada", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this@SingUpEmpleado, Login::class.java)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                            startActivity(intent)
-                            finish()
-                        }
-                        .setNegativeButton("Cancelar", null)
-                        .show()
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val mensaje: String
+                if (esUsuarioActual) {
+                    mensaje = "¿Seguro que quieres cerrar la sesión?"
+                    val flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    alerta(mensaje, flags)
+                } else {
+                    mensaje = "¿Seguro que quiere salir del registro?"
+                    alerta(mensaje, 0)
                 }
             }
-            onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         }
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
-    private fun registrar() {
+    private fun registrar(idEmpleado: String?, emailEmpleado: String?) {
         val edNombre = findViewById<EditText>(R.id.edEmpleadoNombre)
         val edPuesto = findViewById<EditText>(R.id.edEmpleadoPuesto)
-        val edCorreo = findViewById<EditText>(R.id.edEmpleadoCorreo)
+
 
         val database = FirebaseDatabase.getInstance()
         var empleadoRef = database.getReference("empleados")
-        var idEmpleado = intent?.getStringExtra("id")
+        val id: String?
 
-        if (idEmpleado != null){
-                empleadoRef = empleadoRef.child(idEmpleado)
-                esUsuarioActual = true
-        }else{
+        if (idEmpleado != null) {
+            esUsuarioActual = true
+            empleadoRef = empleadoRef.child(idEmpleado)
+            id = idEmpleado
+        } else {
             esUsuarioActual = false
             val nuevoEmpleado = empleadoRef.push()
-            idEmpleado = nuevoEmpleado.key
+            id = nuevoEmpleado.key
         }
 
-        val empleadoInfo =  hashMapOf(
-            "empleado_id" to idEmpleado,
+        val empleadoInfo = hashMapOf(
+            "empleado_id" to id,
             "nombre_empleado" to edNombre.text.toString(),
             "puesto_empleado" to edPuesto.text.toString(),
-            "correo_empleado" to edCorreo.text.toString()
+            "correo_empleado" to emailEmpleado
         )
 
         empleadoRef.setValue(empleadoInfo)
@@ -82,4 +84,21 @@ class SingUpEmpleado : AppCompatActivity() {
             }
     }
 
+    private fun alerta(mensaje: String, flag: Int){
+        AlertDialog.Builder(this@SingUpEmpleado)
+            .setMessage(mensaje)
+            .setPositiveButton("Salir") { _, _ -> // Acción de confirmación
+                if (flag != 0){
+                    Toast.makeText(this@SingUpEmpleado, "Sesión cerrada", Toast.LENGTH_SHORT)
+                        .show()
+                    Firebase.auth.signOut()
+                    val intent = Intent(this@SingUpEmpleado, Login::class.java)
+                    intent.addFlags(flag)
+                    startActivity(intent)
+                }
+                finish()
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
 }

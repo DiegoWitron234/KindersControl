@@ -1,11 +1,16 @@
 package com.miraimx.kinderscontrol
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
 
 class SingUpAlumno : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,6 +21,13 @@ class SingUpAlumno : AppCompatActivity() {
         btnRegEmpleado.setOnClickListener {
             registrar()
         }
+
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                alerta()
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
     private fun registrar() {
@@ -46,5 +58,17 @@ class SingUpAlumno : AppCompatActivity() {
                 }
             }
 
+    }
+
+    private fun alerta(){
+        val mensaje = "¿Desea salir del registro?"
+
+        AlertDialog.Builder(this@SingUpAlumno)
+            .setMessage(mensaje)
+            .setPositiveButton("Salir") { _, _ -> // Acción de confirmación
+                finish()
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
     }
 }
