@@ -35,7 +35,7 @@ class SingUpAlumno : AppCompatActivity() {
         val edGradoGrupo = findViewById<EditText>(R.id.edAluGradoGrupo).text.toString()
 
         val database = FirebaseDatabase.getInstance()
-        val usuarioRef = database.getReference("alumnos")
+        val usuarioRef = database.getReference("alumnos").child(edMatricula)
 
         if (validarDatosAlumno(edMatricula, edNombre, edEdad, edTSangre, edGradoGrupo)){
             val usuarioInfo = hashMapOf(

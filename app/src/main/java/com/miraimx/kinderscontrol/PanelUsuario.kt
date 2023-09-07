@@ -25,7 +25,11 @@ class PanelUsuario : AppCompatActivity() {
         btnCerrarSesion = findViewById(R.id.btnCerrarSesion)
 
         btnCerrarSesion.setOnClickListener { cerrarSesion() }
+
+        val btnMostrarQR = findViewById<Button>(R.id.btnMostrarQR)
+        btnMostrarQR.setOnClickListener{}
     }
+
 
     private fun cerrarSesion() {
         AlertDialog.Builder(this)
@@ -40,12 +44,6 @@ class PanelUsuario : AppCompatActivity() {
             .setNegativeButton("Cancelar", null)
             .show()
     }
-
-    override fun onStart() {
-        super.onStart()
-        verificarUsuario()
-    }
-
     private fun verificarUsuario() {
         val database = FirebaseDatabase.getInstance()
         val currentUser = FirebaseAuth.getInstance().currentUser
@@ -70,5 +68,11 @@ class PanelUsuario : AppCompatActivity() {
                 }
             })
         }
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+        verificarUsuario()
     }
 }

@@ -64,6 +64,9 @@ class SingUpEmpleado : AppCompatActivity() {
             esUsuarioActual = false
             val nuevoEmpleado = empleadoRef.push()
             id = nuevoEmpleado.key
+            if (id != null){
+                empleadoRef = empleadoRef.child(id)
+            }
             Toast.makeText(this, "Es usuario Nuevo", Toast.LENGTH_LONG).show()
         }
 
