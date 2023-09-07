@@ -1,5 +1,6 @@
 package com.miraimx.kinderscontrol
 
+import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.net.Uri
@@ -16,11 +17,8 @@ import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.RadioButton
-import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.ActionBar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
@@ -44,7 +42,7 @@ class RegistrarUsuario : AppCompatActivity() {
         setContentView(R.layout.activity_registrar_usuario)
 
         val rol = intent.getStringExtra("rol")
-        if (rol == null){
+        if (rol == null) {
             Toast.makeText(this, "El rol es desconocido", Toast.LENGTH_LONG).show()
             finish()
         }
@@ -107,12 +105,12 @@ class RegistrarUsuario : AppCompatActivity() {
             val correo = campoNuevoCorreo.text.toString()
             val contraseña = campoNuevaContraseña.text.toString()
             //val rol = obtenerValorSeleccionado()
-            if (checkboxAceptar.isChecked){
+            if (checkboxAceptar.isChecked) {
                 if (rol != null) {
                     crearCuenta(correo, contraseña, rol)
                 }
                 //Toast.makeText(this, "Usuario registrado", Toast.LENGTH_SHORT).show()
-            } else{
+            } else {
                 Toast.makeText(this, "Debe aceptar los términos y condiciones", Toast.LENGTH_SHORT)
                     .show()
             }
@@ -128,23 +126,24 @@ class RegistrarUsuario : AppCompatActivity() {
     private val watcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
+        @SuppressLint("SetTextI18n")
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             val correoValido = isValidEmail(campoNuevoCorreo.text.toString())
             val contrasenaValida = campoNuevaContraseña.text.length >= 6
             val contrasenasCoinciden =
                 campoNuevaContraseña.text.toString() == campoConfirmarContraseña.text.toString()
 
-            if (correoValido){
-                txtCorreoValido.setText("")
-            }else{
-                txtCorreoValido.setText("Ingrese un correo válido")
+            if (correoValido) {
+                txtCorreoValido.text = ""
+            } else {
+                txtCorreoValido.text = "Ingrese un correo válido"
             }
-            if (!contrasenaValida){
-                txtContraseñaValida.setText("La contraseña debe tener al menos 6 caracteres")
-            } else if (!contrasenasCoinciden){
-                txtContraseñaValida.setText("Las contraseñas no coinciden")
+            if (!contrasenaValida) {
+                txtContraseñaValida.text = "La contraseña debe tener al menos 6 caracteres"
+            } else if (!contrasenasCoinciden) {
+                txtContraseñaValida.text = "Las contraseñas no coinciden"
             } else
-                txtContraseñaValida.setText("")
+                txtContraseñaValida.text = ""
 
             btnRegistrarse.isEnabled = correoValido && contrasenaValida && contrasenasCoinciden
         }
@@ -226,7 +225,4 @@ class RegistrarUsuario : AppCompatActivity() {
             }
         // [END create_user_with_email]
     }
-
-
-
 }

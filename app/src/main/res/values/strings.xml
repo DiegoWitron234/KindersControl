@@ -18,7 +18,9 @@
     <string name="puesto">Puesto</string>
     <string name="tipo_de_sangre">Tipo de sangre</string>
     <string name="grado_y_grupo">Grado y grupo</string>
-    <string name="matricula">Matricula</string>
+    <string name="matricula">Matrícula</string>
     <string name="registrar_empleado">Registrar Empleado</string>
     <string name="registrar">Registrar</string>
+    <string name="registrar_tutor">Registrar tutor</string>
+    <string name="registrar_alumno">Registrar alumno</string>
 </resources>

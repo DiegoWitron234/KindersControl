@@ -1,5 +1,6 @@
 package com.miraimx.kinderscontrol
 
+import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -34,38 +35,32 @@ class Login : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        /*
-        val actionBar: ActionBar? = supportActionBar
-
-
+        /*val actionBar: ActionBar? = supportActionBar
         if (actionBar != null) {
             //Poner el ícono al ActionBar
             actionBar.setIcon(R.mipmap.ic_launcher_foreground)
             actionBar.setDisplayShowHomeEnabled(true)
-        }
-         */
+        }*/
 
         auth = Firebase.auth
-
         campoCorreo = findViewById(R.id.editCorreo)
         campoContrasena = findViewById(R.id.editContrasena)
         btnLogin = findViewById(R.id.btnLogin)
         textRegistrar = findViewById(R.id.textRegistrar)
         txtCorreoValido = findViewById(R.id.txtCorreoValido)
-
         btnLogin.isEnabled = false
-
 
         // Agregar el TextWatcher al campo de correo electrónico
         campoCorreo.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
+            @SuppressLint("SetTextI18n")
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val correoValido = s.isValidEmail()
-                if (correoValido){
-                    txtCorreoValido.setText("")
-                }else{
-                    txtCorreoValido.setText("Ingrese un correo válido")
+                if (correoValido) {
+                    txtCorreoValido.text = ""
+                } else {
+                    txtCorreoValido.text = "Ingrese un correo válido"
                 }
                 btnLogin.isEnabled = correoValido && campoContrasena.text.isNotEmpty()
             }
@@ -88,15 +83,15 @@ class Login : AppCompatActivity() {
         btnLogin.setOnClickListener {
             // Lógica del Login
             val correo: String = campoCorreo.text.toString()
-            val contraseña: String = campoContrasena.text.toString()
-            println("Correo: $correo \nContraseña: $contraseña")
-            signIn(correo, contraseña)
+            val password: String = campoContrasena.text.toString()
+            println("Correo: $correo \nContraseña: $password")
+            signIn(correo, password)
         }
 
         // Listener para registrar un nuevo usuario
         textRegistrar.setOnClickListener {
             // Intent para ir a la activity de registro de usuario
-            val intent= Intent(this, RegistrarUsuario::class.java)
+            val intent = Intent(this, RegistrarUsuario::class.java)
             intent.putExtra("rol", "Usuario")
             startActivity(intent)
         }
@@ -110,7 +105,7 @@ class Login : AppCompatActivity() {
 
     // Función para validar el formato del correo electrónico
     private fun CharSequence?.isValidEmail(): Boolean {
-        if (this == null || isEmpty()) return false
+        if (isNullOrEmpty()) return false
         return Patterns.EMAIL_ADDRESS.matcher(this).matches()
     }
 
@@ -150,28 +145,37 @@ class Login : AppCompatActivity() {
             userRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        val role = dataSnapshot.child("role").value.toString()
 
                         // Aquí puedes tomar decisiones basadas en el rol del usuario
-                        if (role == "Admin") {
-                            // Mostrar la interfaz de administrador
-                            val intent = Intent(this@Login, PanelAdmin::class.java)
-                            intent.putExtra("Role", role)
-                            startActivity(intent)
-                            finish()
-                        } else if (role == "Usuario") {
-                            // Mostrar la interfaz de usuario
-                            val intent = Intent(this@Login, PanelUsuario::class.java)
-                            startActivity(intent)
-                            finish()
-                        } else {
-                            // Rol desconocido
-                            Toast.makeText(this@Login, "Rol desconocido", Toast.LENGTH_SHORT)
-                                .show()
+                        when (val role = dataSnapshot.child("role").value.toString()) {
+                            "Admin" -> {
+                                // Mostrar la interfaz de administrador
+                                val intent = Intent(this@Login, PanelAdmin::class.java)
+                                intent.putExtra("Role", role)
+                                startActivity(intent)
+                                finish()
+                            }
+
+                            "Usuario" -> {
+                                // Mostrar la interfaz de usuario
+                                val intent = Intent(this@Login, PanelUsuario::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+
+                            else -> {
+                                // Rol desconocido
+                                Toast.makeText(this@Login, "Rol desconocido", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
                         }
                     } else {
                         // El nodo de rol no existe para este usuario
-                        Toast.makeText(this@Login, "El usuario no está en la RTBD", Toast.LENGTH_SHORT)
+                        Toast.makeText(
+                            this@Login,
+                            "El usuario no está en la RTBD",
+                            Toast.LENGTH_SHORT
+                        )
                             .show()
                     }
                 }
@@ -182,5 +186,4 @@ class Login : AppCompatActivity() {
             })
         }
     }
-
 }

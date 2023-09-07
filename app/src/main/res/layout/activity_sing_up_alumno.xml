@@ -14,13 +14,15 @@
 
         <TextView
             style="@style/tvTitulos1"
-            android:text="@string/registrarse" />
+            android:text="@string/registrar_alumno" />
 
         <TextView
             style="@style/tvTitulos2"
             android:text="@string/matricula" />
 
         <EditText
+            android:id="@+id/matricula"
+            android:inputType="text"
             style="@style/etTitulos"
             android:hint="@string/matricula" />
 
@@ -29,6 +31,8 @@
             android:text="@string/nombre" />
 
         <EditText
+            android:id="@+id/edAluNombre"
+            android:inputType="textPersonName"
             style="@style/etTitulos"
             android:hint="@string/nombre" />
 
@@ -37,6 +41,9 @@
             android:text="@string/edad" />
 
         <EditText
+            android:id="@+id/edAluEdad"
+            android:inputType="number"
+            android:maxLength="4"
             style="@style/etTitulos"
             android:hint="@string/edad" />
 
@@ -45,6 +52,9 @@
             android:text="@string/tipo_de_sangre" />
 
         <EditText
+            android:id="@+id/edAluSangre"
+            android:inputType="textCapCharacters"
+            android:maxLength="4"
             style="@style/etTitulos"
             android:hint="@string/tipo_de_sangre" />
 
@@ -53,8 +63,18 @@
             android:text="@string/grado_y_grupo" />
 
         <EditText
+            android:id="@+id/edAluGradoGrupo"
+            android:inputType="textCapCharacters|number"
+            android:maxLength="4"
             style="@style/etTitulos"
             android:hint="@string/grado_y_grupo" />
+
+        <Button
+            android:id="@+id/btnRegAlumno"
+            android:text="@string/registrar"
+            android:layout_gravity="center"
+            style="@style/boton"
+            />
 
     </LinearLayout>
 </ScrollView>

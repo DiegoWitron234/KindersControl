@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -13,13 +12,10 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class PanelAdmin : AppCompatActivity() {
 
-    private var backPressedTime: Long = 0
-    private val backPressedInterval: Long = 2000
     // Intervalo de tiempo para considerar dos pulsaciones seguidas
     private lateinit var btnAgregarEmpleado: Button
     private lateinit var btnCerrarSesion: Button
@@ -40,7 +36,7 @@ class PanelAdmin : AppCompatActivity() {
         btnCerrarSesion.setOnClickListener { cerrarSesion() }
     }
 
-    private fun cerrarSesion(){
+    private fun cerrarSesion() {
         AlertDialog.Builder(this)
             .setMessage("¿Seguro que quieres cerrar la sesión?")
             .setPositiveButton("Salir") { _, _ -> // Acción de confirmación
@@ -57,29 +53,29 @@ class PanelAdmin : AppCompatActivity() {
         verificarUsuario()
     }
 
-    private fun verificarUsuario(){
+    private fun verificarUsuario() {
         val database = FirebaseDatabase.getInstance()
         val currentUser = FirebaseAuth.getInstance().currentUser
-        if (currentUser != null){
+        if (currentUser != null) {
             val uid = currentUser.uid
             val uRef = database.getReference("empleados").child(uid)
-            uRef.addListenerForSingleValueEvent(object : ValueEventListener{
+            uRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    if (!snapshot.exists())
-                    {
+                    if (!snapshot.exists()) {
                         val intent = Intent(this@PanelAdmin, SingUpEmpleado::class.java)
+                        intent.putExtra("id", uid)
                         startActivity(intent)
-                        Toast.makeText(this@PanelAdmin, "Registrando Empleado", Toast.LENGTH_SHORT).show()
-                    }else{
+                        Toast.makeText(this@PanelAdmin, "Registrando Empleado", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
                         Toast.makeText(this@PanelAdmin, "Existe", Toast.LENGTH_SHORT).show()
                     }
                 }
+
                 override fun onCancelled(error: DatabaseError) {
                     Toast.makeText(this@PanelAdmin, "onCancelled", Toast.LENGTH_SHORT).show()
                 }
             })
         }
     }
-
-
 }

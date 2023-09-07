@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="tvTitulos1">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
@@ -9,16 +10,24 @@
         <item name="android:layout_marginBottom">30dp</item>
         <item name="android:layout_marginTop">10dp</item>
     </style>
+
     <style name="tvTitulos2">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:textSize">25sp</item>
         <item name="android:layout_marginBottom">15dp</item>
     </style>
+
     <style name="etTitulos">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:textSize">20sp</item>
         <item name="android:layout_marginBottom">30dp</item>
+    </style>
+
+    <style name="boton">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">30sp</item>
     </style>
 </resources>

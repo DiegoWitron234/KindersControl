@@ -27,7 +27,7 @@ class PanelUsuario : AppCompatActivity() {
         btnCerrarSesion.setOnClickListener { cerrarSesion() }
     }
 
-    private fun cerrarSesion(){
+    private fun cerrarSesion() {
         AlertDialog.Builder(this)
             .setMessage("¿Seguro que quieres cerrar la sesión?")
             .setPositiveButton("Salir") { _, _ -> // Acción de confirmación
@@ -44,23 +44,24 @@ class PanelUsuario : AppCompatActivity() {
         verificarUsuario()
     }
 
-    private fun verificarUsuario(){
+    private fun verificarUsuario() {
         val database = FirebaseDatabase.getInstance()
         val currentUser = FirebaseAuth.getInstance().currentUser
-        if (currentUser != null){
+        if (currentUser != null) {
             val uid = currentUser.uid
             val uRef = database.getReference("tutores").child(uid)
             uRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    if (!snapshot.exists())
-                    {
+                    if (!snapshot.exists()) {
                         val intent = Intent(this@PanelUsuario, SingUpEmpleado::class.java)
                         startActivity(intent)
-                        Toast.makeText(this@PanelUsuario, "Registrando Empleado", Toast.LENGTH_SHORT).show()
-                    }else{
+                        Toast.makeText(this@PanelUsuario, "Registrando Tutor", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
                         Toast.makeText(this@PanelUsuario, "Existe", Toast.LENGTH_SHORT).show()
                     }
                 }
+
                 override fun onCancelled(error: DatabaseError) {
                     Toast.makeText(this@PanelUsuario, "onCancelled", Toast.LENGTH_SHORT).show()
                 }

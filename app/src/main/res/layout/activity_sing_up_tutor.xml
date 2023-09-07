@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:text="@string/registrarse"
+            android:text="@string/registrar_tutor"
             style="@style/tvTitulos1"
              />
 
@@ -22,6 +22,8 @@
             android:text="@string/nombre" />
 
         <EditText
+            android:id="@+id/edTutorNombre"
+            android:inputType="textPersonName"
             style="@style/etTitulos"
             android:hint="@string/nombre" />
 
@@ -30,39 +32,48 @@
             android:text="@string/edad" />
 
         <EditText
+            android:id="@+id/edTutorEdad"
+            android:inputType="number"
+            android:maxLength="4"
             style="@style/etTitulos"
             android:hint="@string/edad" />
-
-        <TextView
-            style="@style/tvTitulos2"
-            android:text="@string/lblCorreo" />
-
-        <EditText
-            style="@style/etTitulos"
-            android:hint="@string/hintCorreo" />
 
         <TextView
             style="@style/tvTitulos2"
             android:text="@string/telefono" />
 
         <EditText
+            android:id="@+id/edTutorTelefono"
+            android:inputType="phone"
+            android:maxLength="8"
             style="@style/etTitulos"
             android:hint="@string/telefono" />
+
+        <TextView
+            style="@style/tvTitulos2"
+            android:text="@string/lblCorreo" />
+
+        <EditText
+            android:id="@+id/edTutorCorreo"
+            android:inputType="textEmailAddress"
+            style="@style/etTitulos"
+            android:hint="@string/hintCorreo" />
 
         <TextView
             style="@style/tvTitulos2"
             android:text="@string/direccion" />
 
         <EditText
+            android:id="@+id/edTutorDireccion"
+            android:inputType="text"
             style="@style/etTitulos"
             android:hint="@string/direccion" />
-
-        <TextView
-            style="@style/tvTitulos2"
-            android:text="@string/foto" />
-
-        <EditText
-            style="@style/etTitulos"
-            android:hint="@string/foto" />
+        
+        <Button
+            android:id="@+id/btnRegTutor"
+            android:text="@string/registrar"
+            android:layout_gravity="center"
+            style="@style/boton"
+            />
     </LinearLayout>
 </ScrollView>
