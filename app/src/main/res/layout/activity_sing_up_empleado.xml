@@ -49,6 +49,7 @@
             android:id="@+id/btnRegEmpleado"
             android:layout_gravity="center"
             android:text="@string/registrar"
+            android:layout_marginBottom="70dp"
             style="@style/boton"
         />
     </LinearLayout>

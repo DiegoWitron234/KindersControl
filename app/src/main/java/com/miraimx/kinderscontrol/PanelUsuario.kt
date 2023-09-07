@@ -56,7 +56,6 @@ class PanelUsuario : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (!snapshot.exists()) {
                         val intent = Intent(this@PanelUsuario, SingUpTutor::class.java)
-                        intent.putExtra("id", uid)
                         intent.putExtra("correo",currentUser.email)
                         startActivity(intent)
                         Toast.makeText(this@PanelUsuario, "Registrando Tutor", Toast.LENGTH_SHORT)

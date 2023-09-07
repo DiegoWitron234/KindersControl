@@ -3,6 +3,7 @@ package com.miraimx.kinderscontrol
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -23,7 +24,7 @@ class SingUpEmpleado : AppCompatActivity() {
 
         val emailEmpleado = intent?.getStringExtra("correo")
         val idEmpleado = intent?.getStringExtra("id")
-        Toast.makeText(this, emailEmpleado, Toast.LENGTH_SHORT).show()
+
         edCorreo.setText(emailEmpleado)
 
         btnRegEmpleado.setOnClickListener {
@@ -48,9 +49,8 @@ class SingUpEmpleado : AppCompatActivity() {
     }
 
     private fun registrar(idEmpleado: String?, emailEmpleado: String?) {
-        val edNombre = findViewById<EditText>(R.id.edEmpleadoNombre)
-        val edPuesto = findViewById<EditText>(R.id.edEmpleadoPuesto)
-
+        val edNombre = findViewById<EditText>(R.id.edEmpleadoNombre).text.toString()
+        val edPuesto = findViewById<EditText>(R.id.edEmpleadoPuesto).text.toString()
 
         val database = FirebaseDatabase.getInstance()
         var empleadoRef = database.getReference("empleados")
@@ -64,24 +64,26 @@ class SingUpEmpleado : AppCompatActivity() {
             esUsuarioActual = false
             val nuevoEmpleado = empleadoRef.push()
             id = nuevoEmpleado.key
+            Toast.makeText(this, "Es usuario Nuevo", Toast.LENGTH_LONG).show()
         }
 
-        val empleadoInfo = hashMapOf(
-            "empleado_id" to id,
-            "nombre_empleado" to edNombre.text.toString(),
-            "puesto_empleado" to edPuesto.text.toString(),
-            "correo_empleado" to emailEmpleado
-        )
-
-        empleadoRef.setValue(empleadoInfo)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(this, "Empleado registrado", Toast.LENGTH_SHORT).show()
-                    finish()
-                } else {
-                    Toast.makeText(this, "Ha ocurrido un error", Toast.LENGTH_SHORT).show()
+        if (validarDatos(edNombre, edPuesto, emailEmpleado)){
+            val empleadoInfo = hashMapOf(
+                "empleado_id" to id,
+                "nombre_empleado" to edNombre,
+                "puesto_empleado" to edPuesto,
+                "correo_empleado" to emailEmpleado
+            )
+            empleadoRef.setValue(empleadoInfo)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(this, "Empleado registrado", Toast.LENGTH_SHORT).show()
+                        finish()
+                    } else {
+                        Toast.makeText(this, "Ha ocurrido un error", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
+        }
     }
 
     private fun alerta(mensaje: String, flag: Int){
@@ -100,5 +102,19 @@ class SingUpEmpleado : AppCompatActivity() {
             }
             .setNegativeButton("Cancelar", null)
             .show()
+    }
+
+    private fun validarDatos(nombre: String, puesto: String, email: String?): Boolean {
+        if (nombre.isEmpty() || puesto.isEmpty() || email!!.isEmpty()) {
+            Toast.makeText(this, "Verifique que los campos no esten vacios", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(this, "Dirección de correo no valido", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        return true
     }
 }

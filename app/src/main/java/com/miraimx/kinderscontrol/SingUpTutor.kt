@@ -3,6 +3,7 @@ package com.miraimx.kinderscontrol
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -18,9 +19,14 @@ class SingUpTutor : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sing_up_tutor)
         val btnRegEmpleado = findViewById<Button>(R.id.btnRegTutor)
+        val edCorreo = findViewById<EditText>(R.id.edTutorCorreo)
+
+        val emailEmpleado = intent?.getStringExtra("correo")
+
+        edCorreo.setText(emailEmpleado)
 
         btnRegEmpleado.setOnClickListener {
-            registrar()
+            registrar(emailEmpleado)
         }
 
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
@@ -31,41 +37,43 @@ class SingUpTutor : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
-    private fun registrar() {
-        val edNombre = findViewById<EditText>(R.id.edTutorNombre)
-        val edEdad = findViewById<EditText>(R.id.edTutorEdad)
-        val edTelefono = findViewById<EditText>(R.id.edTutorTelefono)
-        val edCorreo = findViewById<EditText>(R.id.edTutorCorreo)
-        val edDireccion = findViewById<EditText>(R.id.edTutorDireccion)
+    private fun registrar(emailEmpleado: String?) {
+        val edNombre = findViewById<EditText>(R.id.edTutorNombre).text.toString()
+        val edEdad = findViewById<EditText>(R.id.edTutorEdad).text.toString()
+        val edTelefono = findViewById<EditText>(R.id.edTutorTelefono).text.toString()
+        val edDireccion = findViewById<EditText>(R.id.edTutorDireccion).text.toString()
 
         val database = FirebaseDatabase.getInstance()
         val currentUser = FirebaseAuth.getInstance().currentUser
-        if  (currentUser != null){
+
+        if (currentUser != null) {
             val idUsuario = currentUser.uid
             val usuarioRef = database.getReference("tutores").child(idUsuario)
 
-            val usuarioInfo = hashMapOf(
-                "tutor_id" to idUsuario,
-                "nombre_tutor" to edNombre.text.toString(),
-                "edad_tutor" to edEdad.text.toString(),
-                "telefono_tutor" to edTelefono.text.toString(),
-                "correo_tutor" to edCorreo.text.toString(),
-                "direccion_tutor" to edDireccion.text.toString()
-            )
+            if (validarDatos(edNombre, edEdad, edTelefono, edDireccion, emailEmpleado)) {
+                val usuarioInfo = hashMapOf(
+                    "tutor_id" to idUsuario,
+                    "nombre_tutor" to edNombre,
+                    "edad_tutor" to edEdad,
+                    "telefono_tutor" to edTelefono,
+                    "direccion_tutor" to edDireccion,
+                    "correo_tutor" to emailEmpleado
+                )
 
-            usuarioRef.setValue(usuarioInfo)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(this, "Tutor registrado", Toast.LENGTH_SHORT).show()
-                        finish()
-                    } else {
-                        Toast.makeText(this, "Ha ocurrido un error", Toast.LENGTH_SHORT).show()
+                usuarioRef.setValue(usuarioInfo)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Toast.makeText(this, "Tutor registrado", Toast.LENGTH_SHORT).show()
+                            finish()
+                        } else {
+                            Toast.makeText(this, "Ha ocurrido un error", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                }
+            }
         }
     }
 
-    private fun alerta(){
+    private fun alerta() {
         val mensaje = "¿Seguro que quieres cerrar la sesión?"
         val flag = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
 
@@ -83,4 +91,34 @@ class SingUpTutor : AppCompatActivity() {
             .setNegativeButton("Cancelar", null)
             .show()
     }
+
+    private fun validarDatos(
+        nombre: String,
+        edad: String,
+        telefono: String,
+        direccion: String,
+        correo: String?
+    ): Boolean {
+        val regex = Regex("^[0-9]{8}$")
+
+        if (nombre.isEmpty() || edad.isEmpty() || telefono.isEmpty() || direccion.isEmpty() ||
+            correo!!.isEmpty()) {
+            Toast.makeText(this, "Verifique que los campos no esten vacios", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (!regex.matches(telefono)){
+            Toast.makeText(this, "Teléfono no valido", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
+            Toast.makeText(this, "Dirección de correo no valido", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        return true
+    }
+
 }

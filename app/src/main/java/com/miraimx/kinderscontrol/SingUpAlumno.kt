@@ -1,16 +1,13 @@
 package com.miraimx.kinderscontrol
 
 import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.ktx.Firebase
 
 class SingUpAlumno : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,32 +28,33 @@ class SingUpAlumno : AppCompatActivity() {
     }
 
     private fun registrar() {
-        val edMatricula = findViewById<EditText>(R.id.matricula)
-        val edNombre = findViewById<EditText>(R.id.edAluNombre)
-        val edEdad = findViewById<EditText>(R.id.edAluEdad)
-        val edTSangre = findViewById<EditText>(R.id.edAluSangre)
-        val edGradoGrupo = findViewById<EditText>(R.id.edAluGradoGrupo)
+        val edMatricula = findViewById<EditText>(R.id.matricula).text.toString()
+        val edNombre = findViewById<EditText>(R.id.edAluNombre).text.toString()
+        val edEdad = findViewById<EditText>(R.id.edAluEdad).text.toString()
+        val edTSangre = findViewById<EditText>(R.id.edAluSangre).text.toString()
+        val edGradoGrupo = findViewById<EditText>(R.id.edAluGradoGrupo).text.toString()
 
         val database = FirebaseDatabase.getInstance()
         val usuarioRef = database.getReference("alumnos")
 
-        val usuarioInfo = hashMapOf(
-            "matricula" to edMatricula,
-            "nombre_alumno" to edNombre.text.toString(),
-            "edad_alumno" to edEdad.text.toString(),
-            "tiposangre_alumno" to edTSangre.text.toString(),
-            "grado_grupo" to edGradoGrupo.text.toString(),
-        )
-
-        usuarioRef.setValue(usuarioInfo)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(this, "Tutor registrado", Toast.LENGTH_SHORT).show()
-                    finish()
-                } else {
-                    Toast.makeText(this, "Ha ocurrido un error", Toast.LENGTH_SHORT).show()
+        if (validarDatosAlumno(edMatricula, edNombre, edEdad, edTSangre, edGradoGrupo)){
+            val usuarioInfo = hashMapOf(
+                "matricula" to edMatricula,
+                "nombre_alumno" to edNombre,
+                "edad_alumno" to edEdad,
+                "tiposangre_alumno" to edTSangre,
+                "grado_grupo" to edGradoGrupo,
+            )
+            usuarioRef.setValue(usuarioInfo)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(this, "Tutor registrado", Toast.LENGTH_SHORT).show()
+                        finish()
+                    } else {
+                        Toast.makeText(this, "Ha ocurrido un error", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
+        }
     }
 
     private fun alerta(){
@@ -69,5 +67,21 @@ class SingUpAlumno : AppCompatActivity() {
             }
             .setNegativeButton("Cancelar", null)
             .show()
+    }
+
+    private fun validarDatosAlumno(
+        matricula: String,
+        nombre: String,
+        edad: String,
+        tipoSangre: String,
+        gradoGrupo: String
+    ): Boolean {
+        if (matricula.isEmpty() || nombre.isEmpty() || edad.isEmpty() ||
+            tipoSangre.isEmpty() || gradoGrupo.isEmpty()) {
+            Toast.makeText(this, "Verifique que los campos no esten vacios", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        return true
     }
 }

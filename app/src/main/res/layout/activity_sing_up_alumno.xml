@@ -53,7 +53,7 @@
 
         <EditText
             android:id="@+id/edAluSangre"
-            android:inputType="textCapCharacters"
+            android:inputType="textCapCharacters|text"
             android:maxLength="4"
             style="@style/etTitulos"
             android:hint="@string/tipo_de_sangre" />
@@ -64,15 +64,16 @@
 
         <EditText
             android:id="@+id/edAluGradoGrupo"
-            android:inputType="textCapCharacters|number"
-            android:maxLength="4"
             style="@style/etTitulos"
-            android:hint="@string/grado_y_grupo" />
+            android:hint="@string/grado_y_grupo"
+            android:inputType="textCapCharacters|text"
+            android:maxLength="4" />
 
         <Button
             android:id="@+id/btnRegAlumno"
             android:text="@string/registrar"
             android:layout_gravity="center"
+            android:layout_marginBottom="70dp"
             style="@style/boton"
             />
 
