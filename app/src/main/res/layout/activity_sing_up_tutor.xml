@@ -45,7 +45,7 @@
         <EditText
             android:id="@+id/edTutorTelefono"
             android:inputType="phone"
-            android:maxLength="8"
+            android:maxLength="15"
             style="@style/etTitulos"
             android:hint="@string/telefono" />
 
