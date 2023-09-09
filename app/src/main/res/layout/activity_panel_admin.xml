@@ -42,7 +42,14 @@
         android:layout_gravity="center"
         android:layout_marginTop="60dp"
         />
-
+    <Button
+        android:id="@+id/btnRegistroSalida"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Entrada Salidaa"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        />
     <Button
         android:id="@+id/btnCerrarSesion"
         android:layout_width="wrap_content"

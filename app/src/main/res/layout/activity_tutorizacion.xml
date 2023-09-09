@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Tutorizacion">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/tvTitulos1"
+            android:text="Asignar tutor" />
+
+        <TextView
+            style="@style/tvTitulos2"
+            android:text="Bucar alumno" />
+
+        <SearchView
+            android:id="@+id/buscarAlumno"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:iconifiedByDefault="false"
+            android:queryHint="Matricula o nombre"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAlumnos"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            />
+
+        <TextView
+            style="@style/tvTitulos2"
+            android:text="Buscar tutor" />
+
+        <SearchView
+            android:id="@+id/buscarTutor"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:iconifiedByDefault="false"
+            android:queryHint="Nombre"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTutores"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            />
+
+        <Button
+            android:id="@+id/btnAsignar"
+            android:layout_gravity="center"
+            android:text="Asignar"
+            android:layout_margin="50dp"
+            style="@style/boton"/>
+
+    </LinearLayout>
+</ScrollView>

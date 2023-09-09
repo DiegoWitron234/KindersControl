@@ -99,7 +99,7 @@ class SingUpTutor : AppCompatActivity() {
         direccion: String,
         correo: String?
     ): Boolean {
-        val regex = Regex("^[0-9]{8}$")
+        val regex = Regex("^[0-9]{10}$")
 
         if (nombre.isEmpty() || edad.isEmpty() || telefono.isEmpty() || direccion.isEmpty() ||
             correo!!.isEmpty()) {

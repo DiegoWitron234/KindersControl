@@ -117,7 +117,6 @@ class SingUpEmpleado : AppCompatActivity() {
             Toast.makeText(this, "Dirección de correo no valido", Toast.LENGTH_SHORT).show()
             return false
         }
-
         return true
     }
 }

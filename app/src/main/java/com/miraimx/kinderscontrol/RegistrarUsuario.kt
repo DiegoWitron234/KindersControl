@@ -27,15 +27,13 @@ import com.google.firebase.ktx.Firebase
 class RegistrarUsuario : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-
     private lateinit var campoNuevoCorreo: EditText
-    private lateinit var campoNuevaContraseña: EditText
-    private lateinit var campoConfirmarContraseña: EditText
+    private lateinit var campoNuevaPassword: EditText
+    private lateinit var campoConfirmarPassword: EditText
     private lateinit var btnRegistrarse: Button
     private lateinit var txtCorreoValido: TextView
-    private lateinit var txtContraseñaValida: TextView
+    private lateinit var txtPassValida: TextView
     private lateinit var checkboxAceptar: CheckBox
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,30 +45,19 @@ class RegistrarUsuario : AppCompatActivity() {
             finish()
         }
 
-        /*val actionBar: ActionBar? = supportActionBar
-
-        if (actionBar != null) {
-            //Poner el ícono al ActionBar
-            actionBar.setIcon(R.mipmap.ic_launcher_foreground)
-            actionBar.setDisplayShowHomeEnabled(true)
-        }
-         */
-
         auth = Firebase.auth
 
         campoNuevoCorreo = findViewById(R.id.campoNuevoCorreo)
-        campoNuevaContraseña = findViewById(R.id.campoNuevaContraseña)
-        campoConfirmarContraseña = findViewById(R.id.campoConfirmarContraseña)
+        campoNuevaPassword = findViewById(R.id.campoNuevaContraseña)
+        campoConfirmarPassword = findViewById(R.id.campoConfirmarContraseña)
         btnRegistrarse = findViewById(R.id.btnRegistrarse)
         txtCorreoValido = findViewById(R.id.txtCorreoValido)
-        txtContraseñaValida = findViewById(R.id.txtContraseñaValida)
-
+        txtPassValida = findViewById(R.id.txtContraseñaValida)
         btnRegistrarse.isEnabled = false
 
         campoNuevoCorreo.addTextChangedListener(watcher)
-        campoNuevaContraseña.addTextChangedListener(watcher)
-        campoConfirmarContraseña.addTextChangedListener(watcher)
-
+        campoNuevaPassword.addTextChangedListener(watcher)
+        campoConfirmarPassword.addTextChangedListener(watcher)
 
         checkboxAceptar = findViewById(R.id.checkboxAceptar)
 
@@ -81,10 +68,9 @@ class RegistrarUsuario : AppCompatActivity() {
 
         val spannableString = SpannableString(message)
 
-        // Definir los clics en los enlaces
         val termsClickableSpan = object : ClickableSpan() {
             override fun onClick(view: View) {
-                openWebPage("https://drive.google.com/file/d/1bRcUV6G8qncZ0i-nLLMNvfMKFbNok2UB/view?usp=sharinghttps://drive.google.com/file/d/1bRcUV6G8qncZ0i-nLLMNvfMKFbNok2UB/view?usp=sharing")
+                openWebPage("https://drive.google.com/file/d/1bRcUV6G8qncZ0i-nLLMNvfMKFbNok2UB/view?usp=sharing")
             }
         }
 
@@ -94,7 +80,6 @@ class RegistrarUsuario : AppCompatActivity() {
             }
         }
 
-        // Aplicar los estilos y enlaces a las partes del texto
         spannableString.setSpan(termsClickableSpan, 37, 59, 0)
         spannableString.setSpan(privacyClickableSpan, 65, 84, 0)
 
@@ -103,20 +88,18 @@ class RegistrarUsuario : AppCompatActivity() {
 
         btnRegistrarse.setOnClickListener {
             val correo = campoNuevoCorreo.text.toString()
-            val contraseña = campoNuevaContraseña.text.toString()
-            //val rol = obtenerValorSeleccionado()
+            val password = campoNuevaPassword.text.toString()
+
             if (checkboxAceptar.isChecked) {
                 if (rol != null) {
-                    crearCuenta(correo, contraseña, rol)
+                    crearCuenta(correo, password, rol)
                 }
-                //Toast.makeText(this, "Usuario registrado", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Debe aceptar los términos y condiciones", Toast.LENGTH_SHORT)
                     .show()
             }
         }
     }
-
 
     private fun openWebPage(url: String) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
@@ -129,9 +112,9 @@ class RegistrarUsuario : AppCompatActivity() {
         @SuppressLint("SetTextI18n")
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             val correoValido = isValidEmail(campoNuevoCorreo.text.toString())
-            val contrasenaValida = campoNuevaContraseña.text.length >= 6
+            val contrasenaValida = campoNuevaPassword.text.length >= 6
             val contrasenasCoinciden =
-                campoNuevaContraseña.text.toString() == campoConfirmarContraseña.text.toString()
+                campoNuevaPassword.text.toString() == campoConfirmarPassword.text.toString()
 
             if (correoValido) {
                 txtCorreoValido.text = ""
@@ -139,64 +122,46 @@ class RegistrarUsuario : AppCompatActivity() {
                 txtCorreoValido.text = "Ingrese un correo válido"
             }
             if (!contrasenaValida) {
-                txtContraseñaValida.text = "La contraseña debe tener al menos 6 caracteres"
+                txtPassValida.text = "La contraseña debe tener al menos 6 caracteres"
             } else if (!contrasenasCoinciden) {
-                txtContraseñaValida.text = "Las contraseñas no coinciden"
+                txtPassValida.text = "Las contraseñas no coinciden"
             } else
-                txtContraseñaValida.text = ""
-
+                txtPassValida.text = ""
             btnRegistrarse.isEnabled = correoValido && contrasenaValida && contrasenasCoinciden
         }
 
         override fun afterTextChanged(s: Editable?) {}
     }
 
-    // Función para validar el formato del correo electrónico
     private fun isValidEmail(email: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
     private fun crearCuenta(email: String, password: String, rol: String) {
-        // [START create_user_with_email]
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "createUserWithEmail:success")
                     Toast.makeText(this, "Usuario registrado", Toast.LENGTH_SHORT).show()
-
-                    // Obtener el usuario actualmente autenticado
                     val user = auth.currentUser
                     if (user != null) {
-                        // Obtener el UID del usuario recién registrado
                         val uid = user.uid
-
-                        // Guardar el rol en Firebase Realtime Database
                         val database = FirebaseDatabase.getInstance()
                         val usersRef = database.getReference("users")
-
                         val userData = hashMapOf(
                             "role" to rol
                         )
-
                         usersRef.child(uid).setValue(userData)
-
-                        // Redirigir a la siguiente actividad (puedes modificar esto según tus necesidades)
-                        //val intent = Intent(this, Login::class.java)
-                        //startActivity(intent)
                         finish()
                     }
                 } else {
-                    // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
                     Toast.makeText(
                         baseContext,
                         "Error de autenticación.",
                         Toast.LENGTH_SHORT,
                     ).show()
-                    //Hacer algo si sale mal, o no hacer nada :D
                 }
             }
-        // [END create_user_with_email]
     }
 }

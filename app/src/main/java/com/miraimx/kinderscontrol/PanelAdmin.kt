@@ -7,20 +7,17 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 class PanelAdmin : AppCompatActivity() {
 
-    // Intervalo de tiempo para considerar dos pulsaciones seguidas
     private lateinit var btnAgregarEmpleado: Button
     private lateinit var btnCerrarSesion: Button
 
@@ -31,13 +28,12 @@ class PanelAdmin : AppCompatActivity() {
         btnAgregarEmpleado = findViewById(R.id.btnAgregarEmpleado)
         val btnAgregarAlumno = findViewById<Button>(R.id.btnAgregarNino)
         val btnRegistrarEntrada = findViewById<Button>(R.id.btnRegistroEntrada)
+        val btnRegistrarSalida = findViewById<Button>(R.id.btnRegistroSalida)
         val btnAsignarTutor = findViewById<Button>(R.id.btnAsignarTutorias)
 
-        btnRegistrarEntrada.setOnClickListener{ registroEntrada() }
-
-        btnAsignarTutor.setOnClickListener{ asignarTutor() }
-
-        btnCerrarSesion = findViewById(R.id.btnCerrarSesion)
+        btnRegistrarEntrada.setOnClickListener { registro("In") }
+        btnRegistrarSalida.setOnClickListener { registro("Out") }
+        btnAsignarTutor.setOnClickListener { startActivity(Intent(this, Tutorizacion::class.java)) }
 
         btnAgregarEmpleado.setOnClickListener {
             val intent = Intent(this, RegistrarUsuario::class.java)
@@ -45,26 +41,27 @@ class PanelAdmin : AppCompatActivity() {
             startActivity(intent)
         }
 
-        btnAgregarAlumno.setOnClickListener{
+        btnAgregarAlumno.setOnClickListener {
             val intent = Intent(this, SingUpAlumno::class.java)
             startActivity(intent)
         }
+
+        btnCerrarSesion = findViewById(R.id.btnCerrarSesion)
 
         btnCerrarSesion.setOnClickListener { cerrarSesion() }
     }
 
     private fun verificarUsuario() {
-        val database = FirebaseDatabase.getInstance()
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
             val uid = currentUser.uid
-            val uRef = database.getReference("empleados").child(uid)
+            val uRef = FirebaseDatabase.getInstance().getReference("empleados").child(uid)
             uRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (!snapshot.exists()) {
                         val intent = Intent(this@PanelAdmin, SingUpEmpleado::class.java)
                         intent.putExtra("id", uid)
-                        intent.putExtra("correo",currentUser.email)
+                        intent.putExtra("correo", currentUser.email)
                         startActivity(intent)
                         Toast.makeText(this@PanelAdmin, "Registrando Empleado", Toast.LENGTH_SHORT)
                             .show()
@@ -80,94 +77,45 @@ class PanelAdmin : AppCompatActivity() {
         }
     }
 
-    private fun registroEntrada() {
-        val database = FirebaseDatabase.getInstance()
+    private fun registro(estado: String) {
         val tutor = "8PalsQD1XmMSEELuEh8x8maxqdv2"
         val alumno = "09876"
-        val checkinRef = database.getReference("checkin")
-        val nuevoCheck = checkinRef.push()
-        val checkID = nuevoCheck.key
-
-        val registroActual = checkinRef.child(tutor).child(alumno)
-
-        // Construye la consulta para obtener el registro más reciente
-        val consulta: Query = checkinRef
-            .orderByChild("tutor_id")
-            .equalTo(tutor)
-            .startAt(alumno + "_")
-            .endAt(alumno + "_\uf8ff")
-            .orderByChild("horafecha_check")
-            .limitToLast(1)
-
-        if (checkID != null){
-            val estadoInOutRef = checkinRef.child(checkID).child("in_out")
-
-            estadoInOutRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    var valorInOut = "In" // Valor predeterminado si no existe un registro anterior
-
-                    if (snapshot.exists()) {
-                        valorInOut = snapshot.value.toString()
-
-                        // Cambia el estado de "in" a "out" y viceversa
-                        if (valorInOut == "In") {
-                            valorInOut = "Out"
-                        } else {
-                            valorInOut = "In"
-                        }
-                    }
-
-                    val calendar = Calendar.getInstance()
-                    val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-                    val fechaHoraActual = dateFormat.format(calendar.time)
-
-                    val checkInfo = hashMapOf(
-                        "check_id" to checkID,
-                        "matricula" to alumno,
-                        "tutor_id" to tutor,
-                        "in_out" to valorInOut,
-                        "horafecha_check" to fechaHoraActual
-                    )
-
-                    checkinRef.child(checkID).setValue(checkInfo).addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Toast.makeText(this@PanelAdmin, "El Check-IN fué exitoso", Toast.LENGTH_SHORT).show()
-                        } else {
-                            Toast.makeText(this@PanelAdmin, "No se realizó el Check-IN", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    // Handle error
-                }
-            })
+        var empleado = ""
+        val empleadoInstancia = FirebaseAuth.getInstance().currentUser
+        if(empleadoInstancia != null){
+            empleado = empleadoInstancia.uid
         }
-
+        val checkinRef = FirebaseDatabase.getInstance().getReference("checkin").push()
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val fechaHoraActual = dateFormat.format(calendar.time)
+        val checkInfo = hashMapOf(
+            "matricula" to alumno,
+            "tutor_id" to tutor,
+            "empleado_id" to empleado,
+            "in_out" to estado,
+            "horafecha_check" to fechaHoraActual
+        )
+        guardarRegistroEnFirebase(checkinRef, checkInfo)
     }
 
     private fun asignarTutor() {
-        val database = FirebaseDatabase.getInstance()
         val tutor = "8PalsQD1XmMSEELuEh8x8maxqdv2"
         val alumno = "09876"
-        var tutorizacionRef = database.getReference("tutorizacion")
-        val nuevaAsignacion = tutorizacionRef.push()
-        val asignacionID = nuevaAsignacion.key
-        if(asignacionID != null){
-            tutorizacionRef = tutorizacionRef.child(asignacionID)
-        }
-
+        val tutorizacionRef = FirebaseDatabase.getInstance().getReference("tutorizacion").push()
         val tutorizacionInfo = hashMapOf(
-            "asignacion_id" to asignacionID,
             "matricula" to alumno,
             "tutor_id" to tutor
-            )
-        tutorizacionRef.setValue(tutorizacionInfo).addOnCompleteListener{
-            task ->
-            if (task.isSuccessful){
-                Toast.makeText(this, "Asignacion registrada", Toast.LENGTH_SHORT).show()
-            }else{
-                Toast.makeText(this, "No se pudo realizar la asingacion", Toast.LENGTH_SHORT).show()
+        )
+        guardarRegistroEnFirebase(tutorizacionRef, tutorizacionInfo)
+    }
+
+    private fun guardarRegistroEnFirebase(ref: DatabaseReference, data: Map<String, Any>) {
+        ref.setValue(data).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Toast.makeText(this@PanelAdmin, "Operación exitosa", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this@PanelAdmin, "No se pudo realizar la operación", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -175,8 +123,8 @@ class PanelAdmin : AppCompatActivity() {
     private fun cerrarSesion() {
         AlertDialog.Builder(this)
             .setMessage("¿Seguro que quieres cerrar la sesión?")
-            .setPositiveButton("Salir") { _, _ -> // Acción de confirmación
-                Firebase.auth.signOut()
+            .setPositiveButton("Salir") { _, _ ->
+                FirebaseAuth.getInstance().signOut()
                 Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, Login::class.java)
                 startActivity(intent)
@@ -185,6 +133,7 @@ class PanelAdmin : AppCompatActivity() {
             .setNegativeButton("Cancelar", null)
             .show()
     }
+
     override fun onStart() {
         super.onStart()
         verificarUsuario()

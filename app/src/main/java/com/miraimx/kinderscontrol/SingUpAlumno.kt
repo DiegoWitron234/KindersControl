@@ -59,7 +59,6 @@ class SingUpAlumno : AppCompatActivity() {
 
     private fun alerta(){
         val mensaje = "¿Desea salir del registro?"
-
         AlertDialog.Builder(this@SingUpAlumno)
             .setMessage(mensaje)
             .setPositiveButton("Salir") { _, _ -> // Acción de confirmación
@@ -81,7 +80,6 @@ class SingUpAlumno : AppCompatActivity() {
             Toast.makeText(this, "Verifique que los campos no esten vacios", Toast.LENGTH_SHORT).show()
             return false
         }
-
         return true
     }
 }

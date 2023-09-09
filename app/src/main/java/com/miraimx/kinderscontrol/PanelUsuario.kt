@@ -44,6 +44,7 @@ class PanelUsuario : AppCompatActivity() {
             .setNegativeButton("Cancelar", null)
             .show()
     }
+
     private fun verificarUsuario() {
         val database = FirebaseDatabase.getInstance()
         val currentUser = FirebaseAuth.getInstance().currentUser
@@ -69,7 +70,6 @@ class PanelUsuario : AppCompatActivity() {
             })
         }
     }
-
 
     override fun onStart() {
         super.onStart()
