@@ -52,16 +52,13 @@ class Tutorizacion : AppCompatActivity() {
     private fun busquedas(srvAlumno: SearchView, srvTutores: SearchView) {
         srvAlumno.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(p0: String?): Boolean {
-                //recyclerAdapterAlumnos.notifyDataSetChanged()
                 return false
             }
 
             override fun onQueryTextChange(p0: String?): Boolean {
-                alumnoLista.clear()
                 if (p0 != null) {
                     consulta("alumnos", p0, "matricula", "nombre_alumno", alumnoLista)
                 }
-                recyclerAdapterAlumnos.notifyDataSetChanged()
                 return true
             }
 
@@ -69,22 +66,32 @@ class Tutorizacion : AppCompatActivity() {
 
         srvTutores.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(p0: String?): Boolean {
-                //recyclerAdapterTutores.notifyDataSetChanged()
                 return false
             }
 
             override fun onQueryTextChange(p0: String?): Boolean {
-                tutoresLista.clear()
                 if (p0 != null) {
                     consulta("tutores", p0, "tutor_id", "nombre_tutor", tutoresLista)
                 }
-                recyclerAdapterTutores.notifyDataSetChanged()
                 return true
             }
 
         })
-    }
 
+        srvAlumno.setOnCloseListener {
+            // Borrar la lista de alumnos y notificar al adaptador
+            alumnoLista.clear()
+            recyclerAdapterAlumnos.notifyDataSetChanged()
+            true
+        }
+
+        srvTutores.setOnCloseListener {
+            // Borrar la lista de tutores y notificar al adaptador
+            tutoresLista.clear()
+            recyclerAdapterTutores.notifyDataSetChanged()
+            true
+        }
+    }
     private fun consulta(
         tabla: String,
         nombre: String,
@@ -98,6 +105,7 @@ class Tutorizacion : AppCompatActivity() {
                 database.orderByChild(atributoNombre).startAt(nombre).endAt(nombre + "\uf8ff")
             alumnosQuery.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    lista.clear() // Borra la lista antes de agregar nuevos resultados
                     for (usuario in snapshot.children) {
                         val id = usuario.child(atributoId).getValue(String::class.java)
                         val nombreUsuario = usuario.child(atributoNombre).getValue(String::class.java)
@@ -106,13 +114,14 @@ class Tutorizacion : AppCompatActivity() {
                             lista.add(usuarioDatos)
                         }
                     }
+                    recyclerAdapterAlumnos.notifyDataSetChanged()
+                    recyclerAdapterTutores.notifyDataSetChanged()
                 }
 
                 override fun onCancelled(error: DatabaseError) {
                 }
             })
         }
-
     }
 
     private fun initRecyclerView(ryAlumnos: RecyclerView, ryTutores: RecyclerView) {
