@@ -7,11 +7,13 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -49,7 +51,11 @@ class PanelAdmin : AppCompatActivity() {
         btnCerrarSesion = findViewById(R.id.btnCerrarSesion)
 
         btnCerrarSesion.setOnClickListener { cerrarSesion() }
+
+
     }
+
+
 
     private fun verificarUsuario() {
         val currentUser = FirebaseAuth.getInstance().currentUser
@@ -123,8 +129,8 @@ class PanelAdmin : AppCompatActivity() {
     private fun cerrarSesion() {
         AlertDialog.Builder(this)
             .setMessage("¿Seguro que quieres cerrar la sesión?")
-            .setPositiveButton("Salir") { _, _ ->
-                FirebaseAuth.getInstance().signOut()
+            .setPositiveButton("Salir") { _, _ -> // Acción de confirmación
+                Firebase.auth.signOut()
                 Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, Login::class.java)
                 startActivity(intent)

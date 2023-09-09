@@ -16,6 +16,9 @@
         android:theme="@style/Theme.KindersControl"
         tools:targetApi="31">
         <activity
+            android:name=".AsignacionesTutor"
+            android:exported="false" />
+        <activity
             android:name=".Tutorizacion"
             android:exported="false" />
         <activity

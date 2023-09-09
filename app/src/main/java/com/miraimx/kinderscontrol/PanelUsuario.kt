@@ -28,8 +28,21 @@ class PanelUsuario : AppCompatActivity() {
 
         val btnMostrarQR = findViewById<Button>(R.id.btnMostrarQR)
         btnMostrarQR.setOnClickListener{}
+        mostrarAsignaciones()
     }
 
+    private fun mostrarAsignaciones() {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val cUserId = currentUser?.uid.toString()
+        findViewById<Button>(R.id.btnMostrarNinos).setOnClickListener {
+            startActivity(
+                Intent(
+                    this@PanelUsuario,
+                    AsignacionesTutor::class.java
+                ).putExtra("currentId", cUserId)
+            )
+        }
+    }
 
     private fun cerrarSesion() {
         AlertDialog.Builder(this)

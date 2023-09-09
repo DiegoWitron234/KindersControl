@@ -19,6 +19,5 @@ class RecyclerViewAdapter(
         val item = dataList[position]
         holder.render(item, onClickListener)
     }
-
 }
 

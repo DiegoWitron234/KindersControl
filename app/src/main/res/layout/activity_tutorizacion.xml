@@ -23,30 +23,29 @@
             android:id="@+id/buscarAlumno"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:iconifiedByDefault="false"
             android:queryHint="Matricula o nombre"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvAlumnos"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="200dp"
             />
 
         <TextView
             style="@style/tvTitulos2"
             android:text="Buscar tutor" />
 
+
         <SearchView
             android:id="@+id/buscarTutor"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:iconifiedByDefault="false"
             android:queryHint="Nombre"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvTutores"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="200dp"
             />
 
         <Button

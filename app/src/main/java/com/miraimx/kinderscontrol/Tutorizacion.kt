@@ -45,20 +45,21 @@ class Tutorizacion : AppCompatActivity() {
         initRecyclerView(recyclerAlumnos, recyclerTutores)
         busquedas(buscarAlumnos, buscarTutores)
         btnAsignar()
+
+
     }
 
     private fun busquedas(srvAlumno: SearchView, srvTutores: SearchView) {
         srvAlumno.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(p0: String?): Boolean {
-                recyclerAdapterAlumnos.notifyDataSetChanged()
+                //recyclerAdapterAlumnos.notifyDataSetChanged()
                 return false
             }
 
             override fun onQueryTextChange(p0: String?): Boolean {
                 alumnoLista.clear()
                 if (p0 != null) {
-                    Toast.makeText(this@Tutorizacion, p0, Toast.LENGTH_SHORT).show()
-                    consulta("alumnos", p0, "matricula", "nombre_alumno")
+                    consulta("alumnos", p0, "matricula", "nombre_alumno", alumnoLista)
                 }
                 recyclerAdapterAlumnos.notifyDataSetChanged()
                 return true
@@ -68,15 +69,14 @@ class Tutorizacion : AppCompatActivity() {
 
         srvTutores.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(p0: String?): Boolean {
-                recyclerAdapterTutores.notifyDataSetChanged()
+                //recyclerAdapterTutores.notifyDataSetChanged()
                 return false
             }
 
             override fun onQueryTextChange(p0: String?): Boolean {
                 tutoresLista.clear()
-                if (p0 != null){
-                    Toast.makeText(this@Tutorizacion, p0, Toast.LENGTH_SHORT).show()
-                    consulta("tutores", p0, "tutor_id", "nombre_tutor")
+                if (p0 != null) {
+                    consulta("tutores", p0, "tutor_id", "nombre_tutor", tutoresLista)
                 }
                 recyclerAdapterTutores.notifyDataSetChanged()
                 return true
@@ -85,8 +85,14 @@ class Tutorizacion : AppCompatActivity() {
         })
     }
 
-    private fun consulta(tabla: String, nombre: String, atributoId: String, atributoNombre: String) {
-        if (nombre.isNotBlank()){
+    private fun consulta(
+        tabla: String,
+        nombre: String,
+        atributoId: String,
+        atributoNombre: String,
+        lista: MutableList<Usuario>
+    ) {
+        if (nombre.isNotBlank()) {
             val database = FirebaseDatabase.getInstance().reference.child(tabla)
             val alumnosQuery =
                 database.orderByChild(atributoNombre).startAt(nombre).endAt(nombre + "\uf8ff")
@@ -94,14 +100,10 @@ class Tutorizacion : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     for (usuario in snapshot.children) {
                         val id = usuario.child(atributoId).getValue(String::class.java)
-                        val nombre = usuario.child(atributoNombre).getValue(String::class.java)
-                        if (nombre != null && id != null) {
-                            val usuarioDatos = Usuario(id, nombre, false)
-                            if (atributoId == "matricula"){
-                                alumnoLista.add(usuarioDatos)
-                            }else{
-                                tutoresLista.add(usuarioDatos)
-                            }
+                        val nombreUsuario = usuario.child(atributoNombre).getValue(String::class.java)
+                        if (nombreUsuario != null && id != null) {
+                            val usuarioDatos = Usuario(id, nombreUsuario, false)
+                            lista.add(usuarioDatos)
                         }
                     }
                 }
@@ -116,9 +118,11 @@ class Tutorizacion : AppCompatActivity() {
     private fun initRecyclerView(ryAlumnos: RecyclerView, ryTutores: RecyclerView) {
         val managerAlumnos = LinearLayoutManager(this)
         val managerTutores = LinearLayoutManager(this)
+
         ryAlumnos.layoutManager = managerAlumnos
         recyclerAdapterAlumnos = RecyclerViewAdapter(alumnoLista) { selectLister() }
         ryAlumnos.adapter = recyclerAdapterAlumnos
+
         ryTutores.layoutManager = managerTutores
         recyclerAdapterTutores = RecyclerViewAdapter(tutoresLista) { selectLister() }
         ryTutores.adapter = recyclerAdapterTutores
@@ -137,32 +141,36 @@ class Tutorizacion : AppCompatActivity() {
             var tutorizacionInfo = hashMapOf<String, String>()
             var i = 0
             var y = 0
-            for (alumno in alumnoLista){
-                if (alumno.seleccionado){
+            for (alumno in alumnoLista) {
+                if (alumno.seleccionado) {
                     alumnoSeleccion.add(alumno.id)
                 }
             }
-            for (tutor in tutoresLista){
-                if (tutor.seleccionado){
+            for (tutor in tutoresLista) {
+                if (tutor.seleccionado) {
                     tutorSeleccion.add(tutor.id)
                 }
             }
-             while (i < tutorSeleccion.size){
-                while (y < alumnoSeleccion.size){
+            while (i < tutorSeleccion.size) {
+                while (y < alumnoSeleccion.size) {
                     tutorizacionInfo = hashMapOf(
                         "matricula" to alumnoSeleccion[y],
                         "tutor_id" to tutorSeleccion[i]
                     )
                     y++
                 }
-                 i++
+                i++
             }
-            tutorizacionRef.setValue(tutorizacionInfo).addOnCompleteListener{
-                task ->
+            tutorizacionRef.setValue(tutorizacionInfo).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Toast.makeText(this@Tutorizacion, "Operación exitosa", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Tutorizacion, "Operación exitosa", Toast.LENGTH_SHORT)
+                        .show()
                 } else {
-                    Toast.makeText(this@Tutorizacion, "No se pudo realizar la operación", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@Tutorizacion,
+                        "No se pudo realizar la operación",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             alumnoLista.clear()
@@ -186,21 +194,9 @@ class Tutorizacion : AppCompatActivity() {
     }
 
     private fun selectLister() {
-        var esAlumno = false
-        var esTutor = false
-        for (alumno in alumnoLista) {
-            if (alumno.seleccionado) {
-                esAlumno= true
-                break
-            }
-        }
-        for (alumno in tutoresLista) {
-            if (alumno.seleccionado) {
-                esTutor= true
-                break
-            }
-        }
-        btnAsignar.isEnabled = esAlumno && esTutor
+        val esAlumnoSeleccionado = alumnoLista.any { it.seleccionado }
+        val esTutorSeleccionado = tutoresLista.any { it.seleccionado }
+        btnAsignar.isEnabled = esAlumnoSeleccionado && esTutorSeleccionado
     }
 
     private fun btnAsignar() {
@@ -208,6 +204,5 @@ class Tutorizacion : AppCompatActivity() {
             mostrarConfirmacion()
         }
     }
-
 }
 
