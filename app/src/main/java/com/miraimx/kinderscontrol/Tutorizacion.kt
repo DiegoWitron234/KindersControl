@@ -2,6 +2,7 @@ package com.miraimx.kinderscontrol
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.SearchView
 import android.widget.Toast
@@ -12,6 +13,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.lang.Integer.min
 
 class Tutorizacion : AppCompatActivity() {
 
@@ -127,15 +129,23 @@ class Tutorizacion : AppCompatActivity() {
     private fun initRecyclerView(ryAlumnos: RecyclerView, ryTutores: RecyclerView) {
         val managerAlumnos = LinearLayoutManager(this)
         val managerTutores = LinearLayoutManager(this)
+        //val observerAlumno = AdapterObserver(ryAlumnos)
+        //val observerTutores = AdapterObserver(ryTutores)
 
         ryAlumnos.layoutManager = managerAlumnos
         recyclerAdapterAlumnos = RecyclerViewAdapter(alumnoLista) { selectLister() }
+        //recyclerAdapterAlumnos.registerAdapterDataObserver(observerAlumno)
         ryAlumnos.adapter = recyclerAdapterAlumnos
 
         ryTutores.layoutManager = managerTutores
         recyclerAdapterTutores = RecyclerViewAdapter(tutoresLista) { selectLister() }
+        //recyclerAdapterTutores.registerAdapterDataObserver(observerTutores)
         ryTutores.adapter = recyclerAdapterTutores
+
+        //recyclerAdapterAlumnos.notifyDataSetChanged()
+        //recyclerAdapterTutores.notifyDataSetChanged()
     }
+
 
     private fun mostrarConfirmacion() {
         val builder = AlertDialog.Builder(this)
@@ -182,7 +192,7 @@ class Tutorizacion : AppCompatActivity() {
                     ).show()
                 }
             }
-            alumnoLista.clear()
+           alumnoLista.clear()
             tutoresLista.clear()
             recyclerAdapterAlumnos.notifyDataSetChanged()
             recyclerAdapterTutores.notifyDataSetChanged()

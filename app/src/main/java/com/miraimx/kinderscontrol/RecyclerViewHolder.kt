@@ -19,8 +19,8 @@ class RecyclerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                 btnAlumnoSeleccion.setBackgroundColor(Color.BLUE)
                 itemAlumno.seleccionado = true
             } else {
-                //btnAlumnoSeleccion.setTextColor(Color.BLACK)
-                //btnAlumnoSeleccion.setBackgroundColor(Color.WHITE)
+                btnAlumnoSeleccion.setTextColor(Color.BLACK)
+                btnAlumnoSeleccion.setBackgroundColor(Color.WHITE)
                 itemAlumno.seleccionado = false
             }
             onClickListener()
