@@ -57,4 +57,9 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-database-ktx")
+    implementation("com.google.firebase:firebase-messaging")
+
+    //QR
+    implementation ("com.google.zxing:core:3.4.1")
+
 }
