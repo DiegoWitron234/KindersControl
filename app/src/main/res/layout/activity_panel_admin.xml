@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
-        android:text="Asignar Tutorias"
+        android:text="Administrar Tutorias"
         android:layout_gravity="center"
         />
 
@@ -42,6 +42,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="60dp"
         />
+
     <Button
         android:id="@+id/btnRegistroSalida"
         android:layout_width="wrap_content"
@@ -50,6 +51,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="60dp"
         />
+
     <Button
         android:id="@+id/btnCerrarSesion"
         android:layout_width="wrap_content"
@@ -58,4 +60,5 @@
         android:text="Cerrar Sesión"
         android:layout_gravity="center"
         />
+
 </LinearLayout>

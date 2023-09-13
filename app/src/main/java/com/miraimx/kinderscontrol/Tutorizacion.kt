@@ -30,7 +30,8 @@ class Tutorizacion : AppCompatActivity() {
     data class Usuario(
         val id: String,
         val nombre: String,
-        var seleccionado: Boolean
+        var seleccionado: Boolean,
+        var usuario: String
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,7 +113,7 @@ class Tutorizacion : AppCompatActivity() {
                         val id = usuario.child(atributoId).getValue(String::class.java)
                         val nombreUsuario = usuario.child(atributoNombre).getValue(String::class.java)
                         if (nombreUsuario != null && id != null) {
-                            val usuarioDatos = Usuario(id, nombreUsuario, false)
+                            val usuarioDatos = Usuario(id, nombreUsuario, false, tabla)
                             lista.add(usuarioDatos)
                         }
                     }
@@ -129,21 +130,15 @@ class Tutorizacion : AppCompatActivity() {
     private fun initRecyclerView(ryAlumnos: RecyclerView, ryTutores: RecyclerView) {
         val managerAlumnos = LinearLayoutManager(this)
         val managerTutores = LinearLayoutManager(this)
-        //val observerAlumno = AdapterObserver(ryAlumnos)
-        //val observerTutores = AdapterObserver(ryTutores)
 
         ryAlumnos.layoutManager = managerAlumnos
         recyclerAdapterAlumnos = RecyclerViewAdapter(alumnoLista) { selectLister() }
-        //recyclerAdapterAlumnos.registerAdapterDataObserver(observerAlumno)
         ryAlumnos.adapter = recyclerAdapterAlumnos
 
         ryTutores.layoutManager = managerTutores
         recyclerAdapterTutores = RecyclerViewAdapter(tutoresLista) { selectLister() }
-        //recyclerAdapterTutores.registerAdapterDataObserver(observerTutores)
         ryTutores.adapter = recyclerAdapterTutores
 
-        //recyclerAdapterAlumnos.notifyDataSetChanged()
-        //recyclerAdapterTutores.notifyDataSetChanged()
     }
 
 
@@ -216,6 +211,10 @@ class Tutorizacion : AppCompatActivity() {
         val esAlumnoSeleccionado = alumnoLista.any { it.seleccionado }
         val esTutorSeleccionado = tutoresLista.any { it.seleccionado }
         btnAsignar.isEnabled = esAlumnoSeleccionado && esTutorSeleccionado
+    }
+
+    private fun eliminarTutorizacion(){
+       // val database = FirebaseDatabase.getInstance().reference.child(tabla)
     }
 
     private fun btnAsignar() {
