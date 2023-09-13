@@ -59,7 +59,7 @@ dependencies {
     implementation("com.google.firebase:firebase-database-ktx")
     implementation("com.google.firebase:firebase-messaging")
 
-    //QR
     implementation ("com.google.zxing:core:3.4.1")
 
+    implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
 }

@@ -23,12 +23,15 @@ class PanelUsuario : AppCompatActivity() {
 
     private lateinit var btnCerrarSesion: Button
     private lateinit var uid: String
+    private lateinit var btnMostrarQR: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_panel_usuario)
 
         btnCerrarSesion = findViewById(R.id.btnCerrarSesion)
+
+        btnMostrarQR = findViewById(R.id.btnMostrarQR)
 
         btnCerrarSesion.setOnClickListener { cerrarSesion() }
 
@@ -46,10 +49,11 @@ class PanelUsuario : AppCompatActivity() {
             Log.d("Mensaje", msg)
             Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
         })
-
-        val btnMostrarQR = findViewById<Button>(R.id.btnMostrarQR)
-        btnMostrarQR.setOnClickListener{}
         mostrarAsignaciones()
+
+        btnMostrarQR.setOnClickListener {
+            fnMostrarQR()
+        }
     }
 
     override fun onStart() {
@@ -110,7 +114,7 @@ class PanelUsuario : AppCompatActivity() {
         }
     }
 
-    fun fnMostrarQR(view: View) {
+    fun fnMostrarQR() {
         val intent = Intent(this, DisplayQRActivity::class.java)
         intent.putExtra("uid", uid)
         startActivity(intent)

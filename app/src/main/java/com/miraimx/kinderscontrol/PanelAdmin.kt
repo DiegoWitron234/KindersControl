@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
+import com.google.android.gms.common.GooglePlayServicesUtil
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -33,7 +34,12 @@ class PanelAdmin : AppCompatActivity() {
         val btnRegistrarSalida = findViewById<Button>(R.id.btnRegistroSalida)
         val btnAsignarTutor = findViewById<Button>(R.id.btnAsignarTutorias)
 
-        btnRegistrarEntrada.setOnClickListener { registro("In") }
+        //btnRegistrarEntrada.setOnClickListener { registro("In") }
+        btnRegistrarEntrada.setOnClickListener {
+            val intent = Intent(this, LeerQR_Activity::class.java)
+            startActivity(intent)
+        }
+
         btnRegistrarSalida.setOnClickListener { registro("Out") }
         btnAsignarTutor.setOnClickListener { startActivity(Intent(this, Tutorizacion::class.java)) }
 
