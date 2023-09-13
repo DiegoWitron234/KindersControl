@@ -25,5 +25,6 @@ class RecyclerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             }
             onClickListener()
         }
+
     }
 }
