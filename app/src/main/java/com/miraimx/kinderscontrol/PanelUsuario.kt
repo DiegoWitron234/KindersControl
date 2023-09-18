@@ -17,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
+import kotlin.math.log
 
 
 class PanelUsuario : AppCompatActivity() {
@@ -54,6 +55,44 @@ class PanelUsuario : AppCompatActivity() {
         btnMostrarQR.setOnClickListener {
             fnMostrarQR()
         }
+
+        // Agrega un oyente a la referencia de "checkin" en la base de datos
+        val checkinRef = FirebaseDatabase.getInstance().getReference("checkin")
+
+        checkinRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // Itera a través de todos los hijos de "checkin"
+                for (childSnapshot in dataSnapshot.children) {
+                    // Obtiene el valor del atributo "tutor_id" de cada registro
+                    val tutorId = childSnapshot.child("tutor_id").getValue(String::class.java)
+
+                    // Comprueba si "tutor_id" coincide con tu variable global "uid"
+                    if (tutorId == uid) {
+                        // Si coincide, muestra un Toast y registra los datos en Logcat
+                        val checkinId = childSnapshot.child("check_id").getValue(String::class.java)
+                        val horafecha = childSnapshot.child("horafecha_check").getValue(String::class.java)
+                        val inOut = childSnapshot.child("in_out").getValue(String::class.java)
+                        val matricula = childSnapshot.child("matricula").getValue(String::class.java)
+
+                        // Muestra un Toast
+                        Toast.makeText(applicationContext, "Se agregó un registro con ID: $checkinId", Toast.LENGTH_SHORT).show()
+
+                        // Registra los datos en Logcat
+                        Log.d("Registro", "Registro agregado:")
+                        Log.d("Registro", "check_id: $checkinId")
+                        Log.d("Registro", "horafecha_check: $horafecha")
+                        Log.d("Registro", "in_out: $inOut")
+                        Log.d("Registro", "matricula: $matricula")
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Maneja errores de lectura de la base de datos
+                Log.w("Registro", "Error al leer la base de datos: $error", error.toException())
+            }
+        })
+
     }
 
     override fun onStart() {
