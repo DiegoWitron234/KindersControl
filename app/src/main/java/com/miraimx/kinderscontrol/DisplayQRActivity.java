@@ -48,4 +48,7 @@ public class DisplayQRActivity extends AppCompatActivity {
             return null;
         }
     }
+
+
+
 }

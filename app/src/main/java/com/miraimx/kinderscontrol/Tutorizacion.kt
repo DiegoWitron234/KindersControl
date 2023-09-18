@@ -48,8 +48,6 @@ class Tutorizacion : AppCompatActivity() {
         initRecyclerView(recyclerAlumnos, recyclerTutores)
         busquedas(buscarAlumnos, buscarTutores)
         btnAsignar()
-
-
     }
 
     private fun busquedas(srvAlumno: SearchView, srvTutores: SearchView) {
@@ -130,15 +128,21 @@ class Tutorizacion : AppCompatActivity() {
     private fun initRecyclerView(ryAlumnos: RecyclerView, ryTutores: RecyclerView) {
         val managerAlumnos = LinearLayoutManager(this)
         val managerTutores = LinearLayoutManager(this)
+        //val observerAlumno = AdapterObserver(ryAlumnos)
+        //val observerTutores = AdapterObserver(ryTutores)
 
         ryAlumnos.layoutManager = managerAlumnos
         recyclerAdapterAlumnos = RecyclerViewAdapter(alumnoLista) { selectLister() }
+        //recyclerAdapterAlumnos.registerAdapterDataObserver(observerAlumno)
         ryAlumnos.adapter = recyclerAdapterAlumnos
 
         ryTutores.layoutManager = managerTutores
         recyclerAdapterTutores = RecyclerViewAdapter(tutoresLista) { selectLister() }
+        //recyclerAdapterTutores.registerAdapterDataObserver(observerTutores)
         ryTutores.adapter = recyclerAdapterTutores
 
+        //recyclerAdapterAlumnos.notifyDataSetChanged()
+        //recyclerAdapterTutores.notifyDataSetChanged()
     }
 
 

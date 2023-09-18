@@ -36,8 +36,14 @@ class PanelAdmin : AppCompatActivity() {
 
         //btnRegistrarEntrada.setOnClickListener { registro("In") }
         btnRegistrarEntrada.setOnClickListener {
+            val currentUser = FirebaseAuth.getInstance().currentUser
+
             val intent = Intent(this, LeerQR_Activity::class.java)
-            startActivity(intent)
+            if (currentUser != null) {
+                intent.putExtra("id",currentUser.uid)
+                startActivity(intent)
+            }
+
         }
 
         btnRegistrarSalida.setOnClickListener { registro("Out") }
@@ -57,11 +63,7 @@ class PanelAdmin : AppCompatActivity() {
         btnCerrarSesion = findViewById(R.id.btnCerrarSesion)
 
         btnCerrarSesion.setOnClickListener { cerrarSesion() }
-
-
     }
-
-
 
     private fun verificarUsuario() {
         val currentUser = FirebaseAuth.getInstance().currentUser

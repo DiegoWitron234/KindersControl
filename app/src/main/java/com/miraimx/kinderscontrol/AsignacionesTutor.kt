@@ -28,7 +28,8 @@ class AsignacionesTutor : AppCompatActivity() {
         val manager = LinearLayoutManager(this)
         val decoracion = DividerItemDecoration(this, manager.orientation)
         lvAsignacionesTutor.layoutManager = manager
-        recyclerAsignacionAdapter = RecyclerAdapterAsignacion(alumnosAsignados)
+        recyclerAsignacionAdapter =
+            com.miraimx.kinderscontrol.RecyclerAdapterAsignacion(alumnosAsignados)
         lvAsignacionesTutor.adapter = recyclerAsignacionAdapter
         lvAsignacionesTutor.addItemDecoration(decoracion)
 
