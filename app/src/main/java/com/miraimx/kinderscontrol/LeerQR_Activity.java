@@ -1,19 +1,22 @@
 package com.miraimx.kinderscontrol;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -34,23 +37,42 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class LeerQR_Activity extends AppCompatActivity {
+    private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
+            result -> {
+                if (result.getContents() == null) {
+                    Toast.makeText(LeerQR_Activity.this, "Cancelled", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(LeerQR_Activity.this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                }
+            });
+
+    String[] tablas = new String[]{"tutores"};
+    String[] children = new String[]{"tutor_id"};
+    String[] atributos = new String[]{"nombre_tutor","telefono_tutor", "correo_tutor", "direccion_tutor"};
     Button btnScan;
     String idTutor = "8PalsQD1XmMSEELuEh8x8maxqdv2", idEmpleado;
-    EditText txtResultado;
-    private List<Tutorizacion.Usuario> alumnoLista = new ArrayList<>();
-    private RecyclerAdapter2 recyclerAdapterAlumnos;
+    TextView txtNombre, txtTelefono, txtEmail, txtDireccion;
+    private final List<Usuario> alumnoLista = new ArrayList<>();
+    //private RecyclerAdapter2 recyclerAdapterAlumnos;
+    private ArrayAdapter listViewAdapter;
     private Button btnRegistrarEntrada;
+
+    private int posAnteriorAlumno = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leer_qr);
         idEmpleado = getIntent().getStringExtra("id");
         btnScan = findViewById(R.id.btnScan);
-        txtResultado = findViewById(R.id.txtResultado);
+        txtNombre = findViewById(R.id.txtNombraTutorQR);
+        txtTelefono = findViewById(R.id.txtTelefonoTutorQR);
+        txtEmail = findViewById(R.id.txEmailTutorQR);
+        txtDireccion = findViewById(R.id.txDireccionTutorQR);
         btnRegistrarEntrada = findViewById(R.id.registrarIn);
+        btnRegistrarEntrada.setEnabled(false);
         btnRegistrarEntrada.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,20 +93,49 @@ public class LeerQR_Activity extends AppCompatActivity {
             }
         });
 
-        RecyclerView recyclerAlumnos = findViewById(R.id.rvCheckAlumno);
-        initRecyclerView(recyclerAlumnos);
+        ListView listViewAlumnos = findViewById(R.id.lsCheckAlumno);
+        listViewAdapter = new TutorizacionAdapter(this, alumnoLista);
+        listViewAlumnos.setAdapter(listViewAdapter);
+        listViewAlumnos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Usuario elementoSeleccionado = alumnoLista.get(i);
+                elementoSeleccionado.setSeleccionado(true);
+                if (posAnteriorAlumno != -1 && posAnteriorAlumno != i) {
+                    alumnoLista.get(posAnteriorAlumno).setSeleccionado(false);
+                }
+                posAnteriorAlumno = i;
+                btnRegistrarEntrada.setEnabled(true);
+            }
+        });
+
+        //initListView(recyclerAlumnos);
         cargarDatos(idTutor);
+        cFirebaseBD fbController = new cFirebaseBD(new ConsultaListener() {
+            @Override
+            public void onDataListo(List<String> resultados) {
+                // Los datos están listos para su uso
+                // Haz algo con los resultados
+                if (!resultados.isEmpty()){
+                    txtNombre.setText(resultados.get(0));
+                    txtTelefono.setText(resultados.get(1));
+                    txtEmail.setText(resultados.get(2));
+                    txtDireccion.setText(resultados.get(3));
+                }
+            }
+        });
+
+        fbController.consulta(tablas, children, atributos, idTutor);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null){
-            if (result.getContents() == null){
+        if (result != null) {
+            if (result.getContents() == null) {
                 Toast.makeText(this, "Lectura cancelada", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, result.getContents(), Toast.LENGTH_SHORT).show();
                 idTutor = result.getContents();
-                txtResultado.setText(idTutor);
                 cargarDatos(idTutor);
             }
         } else {
@@ -92,33 +143,10 @@ public class LeerQR_Activity extends AppCompatActivity {
         }
     }
 
-    private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
-            result -> {
-                if(result.getContents() == null) {
-                    Toast.makeText(LeerQR_Activity.this, "Cancelled", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(LeerQR_Activity.this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                }
-            });
-
-    private void initRecyclerView(RecyclerView ryAlumnos) {
-        LinearLayoutManager managerAlumnos = new LinearLayoutManager(this);
-
-        ryAlumnos.setLayoutManager(managerAlumnos);
-        recyclerAdapterAlumnos = new RecyclerAdapter2(alumnoLista, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectLister();
-            }
-        });
-        ryAlumnos.setAdapter(recyclerAdapterAlumnos);
-
-    }
-
     private void selectLister() {
         boolean esAlumnoSeleccionado = false;
 
-        for (Tutorizacion.Usuario alumno : alumnoLista) {
+        for (Usuario alumno : alumnoLista) {
             if (alumno.getSeleccionado()) {
                 esAlumnoSeleccionado = true;
                 break;
@@ -149,7 +177,7 @@ public class LeerQR_Activity extends AppCompatActivity {
                                     String nombreAlumno = alumno.child("nombre_alumno").getValue(String.class);
 
                                     if (nombreAlumno != null) {
-                                        Tutorizacion.Usuario usuarioDatos = new Tutorizacion.Usuario(id, nombreAlumno, false,"");
+                                        Usuario usuarioDatos = new Usuario(id, nombreAlumno, false, "");
                                         alumnoLista.add(usuarioDatos);
                                     }
                                 }
@@ -158,7 +186,7 @@ public class LeerQR_Activity extends AppCompatActivity {
 
                                 if (cantidadAlumnos[0] == snapshot.getChildrenCount()) {
                                     // Notificar al adaptador sobre los cambios
-                                    recyclerAdapterAlumnos.notifyDataSetChanged();
+                                    listViewAdapter.notifyDataSetChanged();
                                 }
                             }
 
@@ -178,7 +206,7 @@ public class LeerQR_Activity extends AppCompatActivity {
         });
     }
 
-    private void btnRegistrarEntrada(){
+    private void btnRegistrarEntrada() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         List<String> alumnoSeleccion = new ArrayList<>();
 
@@ -200,7 +228,7 @@ public class LeerQR_Activity extends AppCompatActivity {
 
                 int y = 0;
 
-                for (Tutorizacion.Usuario alumno : alumnoLista) {
+                for (Usuario alumno : alumnoLista) {
                     if (alumno.getSeleccionado()) {
                         alumnoSeleccion.add(alumno.getId());
                     }
@@ -229,7 +257,8 @@ public class LeerQR_Activity extends AppCompatActivity {
                 while (y < alumnoSeleccion.size()) {
                     alumnoLista.get(y).setSeleccionado(false);
                 }
-                recyclerAdapterAlumnos.notifyDataSetChanged();
+
+                listViewAdapter.notifyDataSetChanged();
                 btnRegistrarEntrada.setEnabled(false);
                 dialog.dismiss();
             }
@@ -239,7 +268,7 @@ public class LeerQR_Activity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Aquí puedes agregar la lógica si el usuario elige "No"
-                Toast.makeText(LeerQR_Activity.this, "No se agregó al niño al tutor", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(LeerQR_Activity.this, "No registro la entrada del niño", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });

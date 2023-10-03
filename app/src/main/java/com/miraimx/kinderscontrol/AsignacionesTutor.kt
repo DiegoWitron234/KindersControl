@@ -1,10 +1,9 @@
 package com.miraimx.kinderscontrol
 
 import android.os.Bundle
+import android.widget.ArrayAdapter
+import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -12,26 +11,17 @@ import com.google.firebase.database.ValueEventListener
 
 
 class AsignacionesTutor : AppCompatActivity() {
-    val alumnosAsignados = mutableListOf<Usuario>()
-    private lateinit var recyclerAsignacionAdapter: RecyclerAdapterAsignacion
-
-    data class Usuario(
-        val id: String,
-        val nombre: String,
-        var seleccionado: Boolean
-    )
+    val alumnosAsignadosLista = mutableListOf<Usuario>()
+    private lateinit var lsAsignacionesAdapter: ArrayAdapter<Usuario>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_asignaciones_tutor)
-        val lvAsignacionesTutor = findViewById<RecyclerView>(R.id.lvAsignacionesTutor)
-        val manager = LinearLayoutManager(this)
-        val decoracion = DividerItemDecoration(this, manager.orientation)
-        lvAsignacionesTutor.layoutManager = manager
-        recyclerAsignacionAdapter =
-            com.miraimx.kinderscontrol.RecyclerAdapterAsignacion(alumnosAsignados)
-        lvAsignacionesTutor.adapter = recyclerAsignacionAdapter
-        lvAsignacionesTutor.addItemDecoration(decoracion)
+
+        val lsAsignacionesTutor = findViewById<ListView>(R.id.lsAsignacionesTutor)
+        lsAsignacionesAdapter = TutorizacionAdapter(this, alumnosAsignadosLista)
+        lsAsignacionesTutor.adapter = lsAsignacionesAdapter
+        //lsAsignacionesAdapter = listAdapter.Adapter(this, alumnosAsignadosLista, lsAsignacionesTutor)
 
         intent.getStringExtra("currentId")?.let { cargarDatos(it) }
     }
@@ -53,17 +43,16 @@ class AsignacionesTutor : AppCompatActivity() {
                                     val nombreALumno =
                                         alumno.child("nombre_alumno").getValue(String::class.java)
                                     if (nombreALumno != null) {
-                                        val usuarioDatos = Usuario(id, nombreALumno, false)
-                                        alumnosAsignados.add(usuarioDatos)
+                                        val usuarioDatos = Usuario(id, nombreALumno, false, "")
+                                        alumnosAsignadosLista.add(usuarioDatos)
                                     }
                                 }
                                 cantidadAlumnos++
                                 if (cantidadAlumnos.toLong() == snapshot.childrenCount) {
                                     // Notificar al adaptador sobre los cambios
-                                    recyclerAsignacionAdapter.notifyDataSetChanged()
+                                    lsAsignacionesAdapter.notifyDataSetChanged()
                                 }
                             }
-
                             override fun onCancelled(error: DatabaseError) {}
                         })
                     }

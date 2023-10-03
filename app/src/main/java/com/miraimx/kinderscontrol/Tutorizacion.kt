@@ -1,54 +1,82 @@
 package com.miraimx.kinderscontrol
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.ListView
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import java.lang.Integer.min
 
 class Tutorizacion : AppCompatActivity() {
 
     private val alumnoLista = mutableListOf<Usuario>()
     private val tutoresLista = mutableListOf<Usuario>()
-    private lateinit var recyclerAdapterAlumnos: RecyclerViewAdapter
-    private lateinit var recyclerAdapterTutores: RecyclerViewAdapter
+    private lateinit var lsAlumnoAdapter: ArrayAdapter<Usuario>
+    private lateinit var lsTutoresAdapter: ArrayAdapter<Usuario>
     private lateinit var buscarAlumnos: SearchView
     private lateinit var buscarTutores: SearchView
-
     private lateinit var btnAsignar: Button
+    private var posAnteriorAlumno = -1
+    private var posAnteriorTutor = -1
 
-
-    data class Usuario(
+    /*data class Usuario(
         val id: String,
         val nombre: String,
         var seleccionado: Boolean,
         var usuario: String
-    )
+    )*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tutorizacion)
         buscarAlumnos = findViewById(R.id.buscarAlumno)
         buscarTutores = findViewById(R.id.buscarTutor)
-        val recyclerTutores: RecyclerView = findViewById(R.id.rvTutores)
-        val recyclerAlumnos: RecyclerView = findViewById(R.id.rvAlumnos)
 
         btnAsignar = findViewById(R.id.btnAsignar)
         btnAsignar.isEnabled = false
 
-        initRecyclerView(recyclerAlumnos, recyclerTutores)
+        configListView()
         busquedas(buscarAlumnos, buscarTutores)
         btnAsignar()
     }
+
+    private fun configListView() {
+        val listAlumno: ListView = findViewById(R.id.spAlumnos)
+        val listTutores: ListView = findViewById(R.id.spTutores)
+        lsAlumnoAdapter = TutorizacionAdapter(this, alumnoLista)
+        lsTutoresAdapter = TutorizacionAdapter(this, tutoresLista)
+        listAlumno.adapter = lsAlumnoAdapter
+        listTutores.adapter = lsTutoresAdapter
+        listAlumno.setOnItemClickListener { _, view, i, _ ->
+            val elementoSeleccionado = alumnoLista[i]
+            elementoSeleccionado.seleccionado = true
+
+            if (posAnteriorAlumno != -1 && posAnteriorAlumno != i) {
+                alumnoLista[posAnteriorAlumno].seleccionado = false
+            }
+            posAnteriorAlumno = i
+            selectLister()
+        }
+
+        listTutores.setOnItemClickListener { _, view, i, l ->
+            val elementoSeleccionado = tutoresLista[i]
+            elementoSeleccionado.seleccionado = true
+            if (posAnteriorTutor != -1 && posAnteriorTutor != i) {
+                tutoresLista[posAnteriorTutor].seleccionado = false
+            }
+            posAnteriorTutor = i
+            selectLister()
+        }
+    }
+
 
     private fun busquedas(srvAlumno: SearchView, srvTutores: SearchView) {
         srvAlumno.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -82,17 +110,18 @@ class Tutorizacion : AppCompatActivity() {
         srvAlumno.setOnCloseListener {
             // Borrar la lista de alumnos y notificar al adaptador
             alumnoLista.clear()
-            recyclerAdapterAlumnos.notifyDataSetChanged()
+            lsAlumnoAdapter.notifyDataSetChanged()
             true
         }
 
         srvTutores.setOnCloseListener {
             // Borrar la lista de tutores y notificar al adaptador
             tutoresLista.clear()
-            recyclerAdapterTutores.notifyDataSetChanged()
+            lsTutoresAdapter.notifyDataSetChanged()
             true
         }
     }
+
     private fun consulta(
         tabla: String,
         nombre: String,
@@ -109,14 +138,15 @@ class Tutorizacion : AppCompatActivity() {
                     lista.clear() // Borra la lista antes de agregar nuevos resultados
                     for (usuario in snapshot.children) {
                         val id = usuario.child(atributoId).getValue(String::class.java)
-                        val nombreUsuario = usuario.child(atributoNombre).getValue(String::class.java)
+                        val nombreUsuario =
+                            usuario.child(atributoNombre).getValue(String::class.java)
                         if (nombreUsuario != null && id != null) {
                             val usuarioDatos = Usuario(id, nombreUsuario, false, tabla)
                             lista.add(usuarioDatos)
                         }
                     }
-                    recyclerAdapterAlumnos.notifyDataSetChanged()
-                    recyclerAdapterTutores.notifyDataSetChanged()
+                    lsTutoresAdapter.notifyDataSetChanged()
+                    lsAlumnoAdapter.notifyDataSetChanged()
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -124,27 +154,6 @@ class Tutorizacion : AppCompatActivity() {
             })
         }
     }
-
-    private fun initRecyclerView(ryAlumnos: RecyclerView, ryTutores: RecyclerView) {
-        val managerAlumnos = LinearLayoutManager(this)
-        val managerTutores = LinearLayoutManager(this)
-        //val observerAlumno = AdapterObserver(ryAlumnos)
-        //val observerTutores = AdapterObserver(ryTutores)
-
-        ryAlumnos.layoutManager = managerAlumnos
-        recyclerAdapterAlumnos = RecyclerViewAdapter(alumnoLista) { selectLister() }
-        //recyclerAdapterAlumnos.registerAdapterDataObserver(observerAlumno)
-        ryAlumnos.adapter = recyclerAdapterAlumnos
-
-        ryTutores.layoutManager = managerTutores
-        recyclerAdapterTutores = RecyclerViewAdapter(tutoresLista) { selectLister() }
-        //recyclerAdapterTutores.registerAdapterDataObserver(observerTutores)
-        ryTutores.adapter = recyclerAdapterTutores
-
-        //recyclerAdapterAlumnos.notifyDataSetChanged()
-        //recyclerAdapterTutores.notifyDataSetChanged()
-    }
-
 
     private fun mostrarConfirmacion() {
         val builder = AlertDialog.Builder(this)
@@ -191,10 +200,10 @@ class Tutorizacion : AppCompatActivity() {
                     ).show()
                 }
             }
-           alumnoLista.clear()
+            alumnoLista.clear()
             tutoresLista.clear()
-            recyclerAdapterAlumnos.notifyDataSetChanged()
-            recyclerAdapterTutores.notifyDataSetChanged()
+            lsTutoresAdapter.notifyDataSetChanged()
+            lsAlumnoAdapter.notifyDataSetChanged()
             btnAsignar.isEnabled = false
             buscarAlumnos.setQuery("", false)
             buscarTutores.setQuery("", false)
@@ -215,10 +224,6 @@ class Tutorizacion : AppCompatActivity() {
         val esAlumnoSeleccionado = alumnoLista.any { it.seleccionado }
         val esTutorSeleccionado = tutoresLista.any { it.seleccionado }
         btnAsignar.isEnabled = esAlumnoSeleccionado && esTutorSeleccionado
-    }
-
-    private fun eliminarTutorizacion(){
-       // val database = FirebaseDatabase.getInstance().reference.child(tabla)
     }
 
     private fun btnAsignar() {

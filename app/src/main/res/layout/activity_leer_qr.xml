@@ -14,30 +14,39 @@
         android:layout_marginTop="40dp"
         android:text="Escanear QR"
         android:layout_gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txtResultado"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="36dp"
-        android:ems="10"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:hint="ID del tutor"
-        app:layout_constraintTop_toBottomOf="@+id/btnScan" />
+        android:id="@+id/txtNombraTutorQR"
+        android:hint="Nombre del tutor"
+        style="@style/tvCuerpo1"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCheckAlumno"
+    <TextView
+        android:id="@+id/txtTelefonoTutorQR"
+        android:hint="Telefono"
+        style="@style/tvCuerpo1"/>
+
+    <TextView
+        android:id="@+id/txEmailTutorQR"
+        android:hint="Correo electrónico"
+        style="@style/tvCuerpo1"/>
+
+    <TextView
+        android:id="@+id/txDireccionTutorQR"
+        android:hint="Dirección"
+        style="@style/tvCuerpo1"/>
+
+    <ListView
+        android:id="@+id/lsCheckAlumno"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="200dp"
+        android:listSelector="#0f0"
+        />
     <Button
         android:id="@+id/registrarIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         style="@style/boton"
         android:layout_gravity="center"
         android:text="Registrar entrada"

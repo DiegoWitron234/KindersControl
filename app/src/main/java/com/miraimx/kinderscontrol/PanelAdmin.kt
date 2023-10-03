@@ -43,7 +43,6 @@ class PanelAdmin : AppCompatActivity() {
                 intent.putExtra("id",currentUser.uid)
                 startActivity(intent)
             }
-
         }
 
         btnRegistrarSalida.setOnClickListener { registro("Out") }

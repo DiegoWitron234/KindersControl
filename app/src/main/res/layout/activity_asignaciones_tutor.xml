@@ -11,8 +11,8 @@
         android:text="Niños asignados"
         style="@style/tvTitulos1"
         />
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/lvAsignacionesTutor"
+    <ListView
+        android:id="@+id/lsAsignacionesTutor"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         />

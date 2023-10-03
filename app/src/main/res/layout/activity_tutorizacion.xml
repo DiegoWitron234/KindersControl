@@ -15,70 +15,73 @@
             style="@style/tvTitulos1"
             android:text="Asignar tutor" />
 
-
         <TextView
             style="@style/tvTitulos2"
-            android:text="Buscar tutor"
-            />
-
+            android:text="Buscar tutor" />
 
         <SearchView
             android:id="@+id/buscarTutor"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:queryHint="Nombre"/>
+            android:queryHint="Nombre" />
+
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:maxHeight="200dp"
-            >
+            android:layout_height="200dp"
+            android:maxHeight="200dp">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvTutores"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+            <ListView
+                android:id="@+id/spTutores"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:listSelector="#0f0"/>
         </RelativeLayout>
 
         <TextView
             style="@style/tvTitulos2"
-            android:text="Bucar alumno"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="20dp"
+            android:text="Bucar alumno" />
 
         <SearchView
             android:id="@+id/buscarAlumno"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:queryHint="Matricula o nombre"/>
-        
+            android:queryHint="Matricula o nombre" />
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxHeight="200dp"
-            >
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvAlumnos"
-                android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
+            android:layout_height="200dp"
+            android:maxHeight="200dp">
+
+            <ListView
+                android:id="@+id/spAlumnos"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:listSelector="#0f0"
                 />
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            >
+
             <Button
                 android:id="@+id/btnAsignar"
+                style="@style/boton"
                 android:layout_gravity="center"
-                android:text="Asignar"
                 android:layout_marginVertical="50dp"
                 android:layout_marginRight="20dp"
-                style="@style/boton"/>
+                android:text="Asignar" />
+
             <Button
                 android:id="@+id/btnDeasignar"
+                style="@style/boton"
                 android:layout_gravity="center"
-                android:text="Designar"
                 android:layout_marginVertical="50dp"
-                style="@style/boton"/>
+                android:text="Designar" />
         </LinearLayout>
 
     </LinearLayout>
