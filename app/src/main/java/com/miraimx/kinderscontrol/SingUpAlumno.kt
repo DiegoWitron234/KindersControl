@@ -101,21 +101,21 @@ class SingUpAlumno : AppCompatActivity() {
         svSangre = findViewById(R.id.svAlumnoSangre)
         svGrado = findViewById(R.id.svAlumnoGrado)
         svGrupo = findViewById(R.id.svAlumnoGrupo)
-        val datosEdad = listOf("1", "2", "3", "4")
+        val datosEdad = listOf("3", "4","5","6","7")
         val datosSangre = listOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-")
         val grupo = listOf("A", "B")
         val grado = listOf("1", "2", "3")
 
         adapterScroll(svEdad, datosEdad)
         adapterScroll(svSangre, datosSangre)
-        adapterScroll(svGrado, grupo)
-        adapterScroll(svGrupo, grado)
+        adapterScroll(svGrado, grado)
+        adapterScroll(svGrupo, grupo)
 
     }
 
     private fun adapterScroll(vista: Spinner, lista: List<String>) {
         val arrayAdapter =
-            ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, lista)
+            ArrayAdapter(this, android.R.layout.simple_list_item_1, lista)
         vista.adapter = arrayAdapter
     }
 }

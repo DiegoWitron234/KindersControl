@@ -16,7 +16,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
             android:layout_marginBottom="30dp"
             android:gravity="center"
             >
@@ -142,6 +141,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/lblRegistrarse"
                 android:textSize="20sp"
+                android:layout_marginBottom="70dp"
                 android:background="@drawable/redondeado_completo"
                 android:layout_gravity="center"/>
         </LinearLayout>
