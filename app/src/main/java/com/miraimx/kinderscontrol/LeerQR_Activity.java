@@ -43,20 +43,23 @@ public class LeerQR_Activity extends AppCompatActivity {
                     Toast.makeText(LeerQR_Activity.this, "Cancelled", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(LeerQR_Activity.this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                    //idTutor = result.getContents();
+                    cargarDatos(result.getContents());
+                    cargarDatosTutor(result.getContents());
+
                 }
             });
-
-    String[] tablas = new String[]{"tutores"};
-    String[] children = new String[]{"tutor_id"};
-    String[] atributos = new String[]{"nombre_tutor","telefono_tutor", "correo_tutor", "direccion_tutor"};
     Button btnScan;
-    String idTutor = "8PalsQD1XmMSEELuEh8x8maxqdv2", idEmpleado;
+    String idEmpleado, idTutor;
+    //idTutor = "8PalsQD1XmMSEELuEh8x8maxqdv2",
     TextView txtNombre, txtTelefono, txtEmail, txtDireccion;
     private final List<Usuario> alumnoLista = new ArrayList<>();
     //private RecyclerAdapter2 recyclerAdapterAlumnos;
     private ArrayAdapter listViewAdapter;
 
     private ListView listViewAlumnos;
+
+    ControlFirebaseBD fbController;
     private Button btnRegistrarEntrada;
 
     private int posAnteriorAlumno = -1;
@@ -111,8 +114,8 @@ public class LeerQR_Activity extends AppCompatActivity {
         });
 
         //initListView(recyclerAlumnos);
-        cargarDatos(idTutor);
-        ControlFirebaseBD fbController = new ControlFirebaseBD(new ConsultaListener() {
+
+        /*ControlFirebaseBD fbController = new ControlFirebaseBD(new ConsultaListener() {
             @Override
             public void onDataListo(List<String> resultados) {
                 // Los datos están listos para su uso
@@ -124,9 +127,9 @@ public class LeerQR_Activity extends AppCompatActivity {
                     txtDireccion.setText(resultados.get(3));
                 }
             }
-        });
+        });*/
 
-        fbController.consultaEspecifica(tablas, children, atributos, idTutor);
+
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -156,10 +159,41 @@ public class LeerQR_Activity extends AppCompatActivity {
         btnRegistrarEntrada.setEnabled(esAlumnoSeleccionado);
     }
 
-    private void cargarDatos(final String cUserId) {
+    private void cargarDatosTutor(String cUserId){
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        Query query = database.child("tutores").orderByChild("tutor_id").equalTo(cUserId);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot datos: snapshot.getChildren()){
+                    String nombreTutor = datos.child("nombre_tutor").getValue(String.class);
+                    String telefono = datos.child("telefono_tutor").getValue(String.class);
+                    String correo = datos.child("correo_tutor").getValue(String.class);
+                    String direccion = datos.child("direccion_tutor").getValue(String.class);
+                    if (nombreTutor != null && telefono != null && correo != null && direccion != null){
+                        txtNombre.setText(nombreTutor);
+                        txtTelefono.setText(telefono);
+                        txtEmail.setText(correo);
+                        txtDireccion.setText(direccion);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void cargarDatos(String cUserId) {
+        alumnoLista.clear();
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         Query query = database.child("tutorizacion").orderByChild("tutor_id").equalTo(cUserId);
-
+        /*String[] tablas = new String[]{"tutores"};
+        String[] children = new String[]{"tutor_id"};
+        String[] atributos = new String[]{"nombre_tutor","telefono_tutor", "correo_tutor", "direccion_tutor"};
+        fbController.consultaEspecifica(tablas, children, atributos, cUserId);*/
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

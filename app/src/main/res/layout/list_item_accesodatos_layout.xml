@@ -9,12 +9,14 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textSize="25sp"
+        android:textColor="@color/black"
         />
     <TextView
         android:id="@+id/tvAccesoDatosTiempo"
         android:layout_width="133dp"
         android:layout_height="wrap_content"
         android:textSize="25sp"
+        android:textColor="@color/black"
         />
     <TextView
         android:id="@+id/tvAccesoDatosEstatus"
@@ -22,5 +24,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="25sp"
+        android:textColor="@color/black"
         />
 </LinearLayout>
