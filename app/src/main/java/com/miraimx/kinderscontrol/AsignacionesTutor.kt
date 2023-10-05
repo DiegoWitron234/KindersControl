@@ -3,8 +3,8 @@ package com.miraimx.kinderscontrol
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.ListView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -23,6 +23,11 @@ class AsignacionesTutor : AppCompatActivity() {
 
         lsAccesoAlumnoAdapter = ListViewAccesoAdapter(this, alumnosAccesoLista)
         lsAsignacionesTutor.adapter = lsAccesoAlumnoAdapter
+
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null){
+            cargarDatos(currentUser.uid)
+        }
 
         intent.getStringExtra("currentId")?.let { cargarDatos(it) }
     }

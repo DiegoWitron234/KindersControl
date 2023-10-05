@@ -59,9 +59,11 @@ class PanelUsuario : AppCompatActivity() {
                     if (tutorId == uid) {
                         // Si coincide, muestra un Toast y registra los datos en Logcat
                         val checkinId = childSnapshot.child("check_id").getValue(String::class.java)
-                        val horafecha = childSnapshot.child("horafecha_check").getValue(String::class.java)
+                        val horafecha =
+                            childSnapshot.child("horafecha_check").getValue(String::class.java)
                         val inOut = childSnapshot.child("in_out").getValue(String::class.java)
-                        val matricula = childSnapshot.child("matricula").getValue(String::class.java)
+                        val matricula =
+                            childSnapshot.child("matricula").getValue(String::class.java)
 
                         // Muestra un Toast
                         //Toast.makeText(applicationContext, "Se agregó un registro con ID: $checkinId", Toast.LENGTH_SHORT).show()
@@ -89,13 +91,12 @@ class PanelUsuario : AppCompatActivity() {
     }
 
     private fun mostrarAsignaciones() {
-        val cUserId = currentUser.uid
         findViewById<Button>(R.id.btnMostrarNinos).setOnClickListener {
             startActivity(
                 Intent(
                     this@PanelUsuario,
                     AsignacionesTutor::class.java
-                ).putExtra("currentId", cUserId)
+                )
             )
         }
     }
