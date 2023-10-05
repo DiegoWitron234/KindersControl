@@ -4,17 +4,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/fondokinder"
     tools:context=".Login">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/logokinder"
+        />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/lblIniciarSesion"
         android:layout_gravity="center"
+        android:textColor="@color/textColor"
         android:layout_marginBottom="30dp"
         android:textSize="40sp"
         android:textStyle="bold"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         />
 
     <EditText
@@ -22,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="96dp"
+        android:textColor="@color/textColor"
         android:hint="@string/hintCorreo"
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true"
@@ -33,6 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
+        android:textColor="@color/textColor"
         android:hint="@string/hintContrasena"
         android:inputType="textPassword"
         android:selectAllOnFocus="true"

@@ -5,15 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="20dp"
+    android:background="@drawable/fondokinder"
+
     tools:context=".AsignacionesTutor">
     <TextView
         android:text="Niños asignados"
+        android:textColor="@color/textColor"
         style="@style/tvTitulos1"
+        android:layout_margin="20dp"
         />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/lvAsignacionesTutor"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:layout_margin="20dp"
         />
 </LinearLayout>
