@@ -55,6 +55,8 @@ public class LeerQR_Activity extends AppCompatActivity {
     private final List<Usuario> alumnoLista = new ArrayList<>();
     //private RecyclerAdapter2 recyclerAdapterAlumnos;
     private ArrayAdapter listViewAdapter;
+
+    private ListView listViewAlumnos;
     private Button btnRegistrarEntrada;
 
     private int posAnteriorAlumno = -1;
@@ -71,6 +73,7 @@ public class LeerQR_Activity extends AppCompatActivity {
         txtDireccion = findViewById(R.id.txDireccionTutorQR);
         btnRegistrarEntrada = findViewById(R.id.registrarIn);
         btnRegistrarEntrada.setEnabled(false);
+
         btnRegistrarEntrada.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,7 +94,7 @@ public class LeerQR_Activity extends AppCompatActivity {
             }
         });
 
-        ListView listViewAlumnos = findViewById(R.id.lsCheckAlumno);
+        listViewAlumnos = findViewById(R.id.lsCheckAlumno);
         listViewAdapter = new ListViewUsuarioAdapter(this, alumnoLista);
         listViewAlumnos.setAdapter(listViewAdapter);
         listViewAlumnos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -257,6 +260,7 @@ public class LeerQR_Activity extends AppCompatActivity {
                 }
 
                 listViewAdapter.notifyDataSetChanged();
+
                 btnRegistrarEntrada.setEnabled(false);
                 dialog.dismiss();
             }

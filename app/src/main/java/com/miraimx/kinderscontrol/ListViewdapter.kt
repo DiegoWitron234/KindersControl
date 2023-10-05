@@ -39,16 +39,19 @@ class ListViewAccesoAdapter(
         val estatus = listaUsuario[position].estatus
         val tiempo = listaUsuario[position].tiempo
 
-
         val tvNombre = view.findViewById<TextView>(R.id.tvAccesoDatosNombre)
         val tvEstatus = view.findViewById<TextView>(R.id.tvAccesoDatosEstatus)
         val tvTiempo = view.findViewById<TextView>(R.id.tvAccesoDatosTiempo)
 
         tvNombre.text = nombre
-        tvEstatus.text = estatus
         tvTiempo.text = tiempo
-
+        if(estatus == "in"){
+            tvEstatus.text = "Ingresó"
+        }else{
+            tvEstatus.text = "Salió"
+        }
         return view
     }
+
 
 }

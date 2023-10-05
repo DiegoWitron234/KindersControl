@@ -1,108 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondokinder"
-    android:orientation="vertical"
     tools:context=".PanelAdmin">
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_gravity="center">
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:src="@drawable/logokinder"
-            app:layout_constraintBottom_toBottomOf="parent" />
-    </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/lblAdministracion"
-        android:layout_gravity="center"
-        android:textColor="@color/textColor"
-        android:layout_marginBottom="30dp"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        />
-
-    <TableLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:stretchColumns="1"
-        android:layout_margin="20dp"
+        android:orientation="vertical"
         >
-        <TableRow
+        <androidx.cardview.widget.CardView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_gravity="center">
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@drawable/logokinder"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lblAdministracion"
+            android:layout_gravity="center"
+            android:textColor="@color/textColor"
+            android:layout_marginBottom="30dp"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            />
+
+        <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:stretchColumns="1"
+            android:layout_margin="20dp"
             >
-            <Button
-                android:id="@+id/btnAgregarEmpleado"
-                android:text="Agregar Empleado"
-                android:layout_width="200dp"
-                android:textSize="20sp"
-                android:layout_gravity="center"
-                android:layout_weight="0.5"
-                />
-            <Button
-                android:id="@+id/btnAgregarNino"
-                android:layout_height="match_parent"
-                android:layout_width="200dp"
-                android:textSize="20sp"
-                android:text="@string/agregar_ni_o"
-                android:layout_gravity="center"
-                android:layout_weight="0.1"
-                />
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            >
-            <Button
-                android:id="@+id/btnRegistroEntrada"
-                android:layout_height="match_parent"
-                android:layout_width="200dp"
-                android:layout_weight="0.5"
-                android:textSize="20sp"
-                android:text="@string/registrar_entrada"
-                android:layout_gravity="center"
-                />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                >
+                <Button
+                    android:id="@+id/btnAgregarEmpleado"
+                    android:text="Agregar Empleado"
+                    android:layout_width="200dp"
+                    android:textSize="20sp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    />
+                <Button
+                    android:id="@+id/btnAgregarNino"
+                    android:layout_height="match_parent"
+                    android:layout_width="200dp"
+                    android:textSize="20sp"
+                    android:text="@string/agregar_ni_o"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.1"
+                    />
+            </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                >
+                <Button
+                    android:id="@+id/btnRegistroEntrada"
+                    android:layout_height="match_parent"
+                    android:layout_width="200dp"
+                    android:layout_weight="0.5"
+                    android:textSize="20sp"
+                    android:text="@string/registrar_entrada"
+                    android:layout_gravity="center"
+                    />
 
-            <Button
-                android:id="@+id/btnRegistroSalida"
-                android:layout_width="160dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="0.1"
-                android:text="@string/entrada_salida"
-                android:textSize="20sp" />
-        </TableRow>
-    </TableLayout>
+                <Button
+                    android:id="@+id/btnRegistroSalida"
+                    android:layout_width="160dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.1"
+                    android:text="@string/entrada_salida"
+                    android:textSize="20sp" />
+            </TableRow>
+        </TableLayout>
 
-    <Button
-        android:id="@+id/btnAsignarTutorias"
-        style="@style/botonMenu"
-        android:layout_marginTop="20dp"
-        android:layout_width="200dp"
-        android:text="Administrar tutorias"
-        android:layout_gravity="center"
-        />
+        <Button
+            android:id="@+id/btnAsignarTutorias"
+            style="@style/botonMenu"
+            android:layout_marginTop="20dp"
+            android:layout_width="200dp"
+            android:text="Administrar tutorias"
+            android:layout_gravity="center"
+            />
 
-    <Button
-        android:id="@+id/btnCerrarSesion"
-        style="@style/botonMenu"
-        android:layout_marginTop="20dp"
-        android:text="Cerrar Sesión"
-        android:layout_gravity="center"
-        />
+        <Button
+            android:id="@+id/btnCerrarSesion"
+            style="@style/botonMenu"
+            android:layout_marginTop="20dp"
+            android:text="Cerrar Sesión"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            />
+    </LinearLayout>
 
-</LinearLayout>
+
+
+</ScrollView>

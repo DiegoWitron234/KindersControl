@@ -39,27 +39,8 @@ class PanelUsuario : AppCompatActivity() {
         btnCerrarSesion.setOnClickListener { cerrarSesion() }
 
         currentUser = FirebaseAuth.getInstance().currentUser!!
-        /*
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w("Mensaje", "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
 
-            // Get new FCM registration token
-            val token = task.result
-
-            // Log and toast
-            val msg = "Token: $token"
-            Log.d("Mensaje", msg)
-            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-        })
-         */
         mostrarAsignaciones()
-
-        btnQR()
-
-        //btnVerAccesoALumnos()
 
         btnMostrarQR.setOnClickListener {
             fnMostrarQR()
@@ -137,8 +118,6 @@ class PanelUsuario : AppCompatActivity() {
                 ).putExtra("currentId", cUserId)
             )
         }
-
-
     }
 
     private fun cerrarSesion() {
@@ -185,12 +164,4 @@ class PanelUsuario : AppCompatActivity() {
         startActivity(intent)
     }
 
-    /*private fun btnVerAccesoALumnos(){
-        val btnVerAccesoAlumno = findViewById<Button>(R.id.btnVerAccesoAlumnos)
-        btnVerAccesoAlumno.setOnClickListener {
-            val intent = Intent(this@PanelUsuario, CheckTutorAlumno::class.java)
-            intent.putExtra("uid",currentUser.uid)
-            startActivity(intent)
-        }
-    }*/
 }
