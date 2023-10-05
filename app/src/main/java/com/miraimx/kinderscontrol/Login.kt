@@ -182,6 +182,7 @@ class Login : AppCompatActivity() {
 
                 override fun onCancelled(databaseError: DatabaseError) {
                     // Manejar errores de lectura de la base de datos
+                    Toast.makeText(this@Login, "Error al leer la RTDB", Toast.LENGTH_SHORT).show()
                 }
             })
         }
