@@ -34,6 +34,7 @@
         android:layout_marginTop="96dp"
         android:textColor="@color/textColor"
         android:hint="@string/hintCorreo"
+        android:textColorHint="@color/gris"
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true"
         android:layout_margin="20dp"
@@ -46,6 +47,7 @@
         android:layout_marginTop="8dp"
         android:textColor="@color/textColor"
         android:hint="@string/hintContrasena"
+        android:textColorHint="@color/gris"
         android:inputType="textPassword"
         android:selectAllOnFocus="true"
         android:layout_margin="20dp"
@@ -69,7 +71,8 @@
         android:layout_marginBottom="64dp"
         android:layout_margin="20dp"
         android:text="@string/lblIniciarSesion"
-        android:background="@drawable/boton_login"
+        android:textColor="@color/white"
+        android:background="@drawable/estilos_boton"
         />
 
     <TextView

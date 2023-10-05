@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Estado normal (habilitado) -->
+    <item android:drawable="@drawable/boton_login" android:state_enabled="true" />
+
+    <!-- Estado inhabilitado -->
+    <item android:drawable="@drawable/boton_login_inhabilitado" android:state_enabled="false" />
+</selector>

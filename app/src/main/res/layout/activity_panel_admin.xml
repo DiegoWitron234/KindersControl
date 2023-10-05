@@ -46,7 +46,7 @@
             >
             <Button
                 android:id="@+id/btnAgregarEmpleado"
-                android:text="Agregar Empleado"
+                android:text="@string/btn_agregar_empleado"
                 android:layout_width="200dp"
                 android:textSize="20sp"
                 android:layout_gravity="center"
@@ -93,7 +93,7 @@
         style="@style/botonMenu"
         android:layout_marginTop="20dp"
         android:layout_width="200dp"
-        android:text="Administrar tutorias"
+        android:text="@string/btn_administrar_tutorias"
         android:layout_gravity="center"
         />
 
@@ -101,7 +101,7 @@
         android:id="@+id/btnCerrarSesion"
         style="@style/botonMenu"
         android:layout_marginTop="20dp"
-        android:text="Cerrar Sesión"
+        android:text="@string/cerrar_sesion"
         android:layout_gravity="center"
         />
 

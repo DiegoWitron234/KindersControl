@@ -37,4 +37,7 @@
     <string name="lblAdministracion">Administración</string>
     <string name="entrada_salida">Entrada Salida</string>
     <string name="agregar_ni_o">Agregar Niño</string>
+    <string name="btn_agregar_empleado">Agregar Empleado</string>
+    <string name="btn_administrar_tutorias">Administrar tutorias</string>
+    <string name="cerrar_sesion">Cerrar Sesión</string>
 </resources>
