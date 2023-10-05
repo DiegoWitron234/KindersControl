@@ -7,7 +7,6 @@ import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -16,8 +15,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
-import kotlin.math.log
 
 
 class PanelUsuario : AppCompatActivity() {
@@ -67,7 +64,7 @@ class PanelUsuario : AppCompatActivity() {
                         val matricula = childSnapshot.child("matricula").getValue(String::class.java)
 
                         // Muestra un Toast
-                        Toast.makeText(applicationContext, "Se agregó un registro con ID: $checkinId", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(applicationContext, "Se agregó un registro con ID: $checkinId", Toast.LENGTH_SHORT).show()
 
                         // Registra los datos en Logcat
                         Log.d("Registro", "Registro agregado:")
@@ -89,23 +86,6 @@ class PanelUsuario : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         verificarUsuario()
-    }
-
-    private fun btnQR(){
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w("Mensaje", "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
-
-            // Get new FCM registration token
-            val token = task.result
-
-            // Log and toast
-            val msg = "Token: $token"
-            Log.d("Mensaje", msg)
-            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-        })
     }
 
     private fun mostrarAsignaciones() {
@@ -145,10 +125,6 @@ class PanelUsuario : AppCompatActivity() {
                     val intent = Intent(this@PanelUsuario, SingUpTutor::class.java)
                     intent.putExtra("correo", currentUser.email)
                     startActivity(intent)
-                    Toast.makeText(this@PanelUsuario, "Registrando Tutor", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    Toast.makeText(this@PanelUsuario, "Existe", Toast.LENGTH_SHORT).show()
                 }
             }
 
