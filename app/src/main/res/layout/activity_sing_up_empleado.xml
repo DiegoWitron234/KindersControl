@@ -9,49 +9,68 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="30dp"
         android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            >
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/logokinder"
+                />
+            <TextView
+                style="@style/tvTitulos1"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:text="@string/registrar_empleado" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="25dp"
+            >
+            <TextView
+                style="@style/tvTitulos2"
+                android:text="@string/nombre" />
 
-        <TextView
-            style="@style/tvTitulos1"
-            android:text="@string/registrar_empleado" />
+            <EditText
+                android:id="@+id/edEmpleadoNombre"
+                android:inputType="textPersonName"
+                style="@style/etTitulos"
+                android:hint="@string/nombre" />
 
-        <TextView
-            style="@style/tvTitulos2"
-            android:text="@string/nombre" />
+            <TextView
+                style="@style/tvTitulos2"
+                android:text="@string/puesto" />
 
-        <EditText
-            android:id="@+id/edEmpleadoNombre"
-            android:inputType="textPersonName"
-            style="@style/etTitulos"
-            android:hint="@string/nombre" />
+            <EditText
+                android:id="@+id/edEmpleadoPuesto"
+                android:inputType="textPersonName"
+                style="@style/etTitulos"
+                android:hint="@string/puesto" />
 
-        <TextView
-            style="@style/tvTitulos2"
-            android:text="@string/puesto" />
+            <TextView
+                style="@style/tvTitulos2"
+                android:text="@string/lblCorreo" />
 
-        <EditText
-            android:id="@+id/edEmpleadoPuesto"
-            android:inputType="textPersonName"
-            style="@style/etTitulos"
-            android:hint="@string/puesto" />
+            <EditText
+                android:id="@+id/edEmpleadoCorreo"
+                android:inputType="textEmailAddress"
+                style="@style/etTitulos"
+                android:hint="@string/hintCorreo" />
 
-        <TextView
-            style="@style/tvTitulos2"
-            android:text="@string/lblCorreo" />
-
-        <EditText
-            android:id="@+id/edEmpleadoCorreo"
-            android:inputType="textEmailAddress"
-            style="@style/etTitulos"
-            android:hint="@string/hintCorreo" />
-
-        <Button
-            android:id="@+id/btnRegEmpleado"
-            android:layout_gravity="center"
-            android:text="@string/registrar"
-            android:layout_marginBottom="70dp"
-            style="@style/boton"
-        />
+            <Button
+                android:id="@+id/btnRegEmpleado"
+                android:layout_gravity="center"
+                android:text="@string/registrar"
+                android:layout_marginBottom="70dp"
+                style="@style/boton"
+                />
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

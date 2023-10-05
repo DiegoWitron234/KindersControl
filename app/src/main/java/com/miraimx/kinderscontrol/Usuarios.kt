@@ -6,3 +6,10 @@ data class Usuario(
     var seleccionado: Boolean,
     var usuario: String
 )
+
+data class AccesoAlumno(
+    val nombre: String,
+    val tiempo: String,
+    val estatus: String,
+    var matricula: String,
+)

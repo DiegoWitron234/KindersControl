@@ -9,72 +9,90 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="30dp"
         android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            >
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/logokinder"
+                />
+            <TextView
+                style="@style/tvTitulos1"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:text="@string/registrar_tutor" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="25dp"
+            >
+            <TextView
+                style="@style/tvTitulos2"
+                android:text="@string/nombre" />
 
-        <TextView
-            android:text="@string/registrar_tutor"
-            style="@style/tvTitulos1"
-             />
+            <EditText
+                android:id="@+id/edTutorNombre"
+                android:inputType="textPersonName"
+                style="@style/etTitulos"
+                android:hint="@string/nombre" />
 
-        <TextView
-            style="@style/tvTitulos2"
-            android:text="@string/nombre" />
+            <TextView
+                style="@style/tvTitulos2"
+                android:text="@string/edad" />
 
-        <EditText
-            android:id="@+id/edTutorNombre"
-            android:inputType="textPersonName"
-            style="@style/etTitulos"
-            android:hint="@string/nombre" />
+            <EditText
+                android:id="@+id/edTutorEdad"
+                android:inputType="number"
+                android:maxLength="4"
+                style="@style/etTitulos"
+                android:hint="@string/edad" />
 
-        <TextView
-            style="@style/tvTitulos2"
-            android:text="@string/edad" />
+            <TextView
+                style="@style/tvTitulos2"
+                android:text="@string/telefono" />
 
-        <EditText
-            android:id="@+id/edTutorEdad"
-            android:inputType="number"
-            android:maxLength="4"
-            style="@style/etTitulos"
-            android:hint="@string/edad" />
+            <EditText
+                android:id="@+id/edTutorTelefono"
+                android:inputType="phone"
+                android:maxLength="15"
+                style="@style/etTitulos"
+                android:hint="@string/telefono" />
 
-        <TextView
-            style="@style/tvTitulos2"
-            android:text="@string/telefono" />
+            <TextView
+                style="@style/tvTitulos2"
+                android:text="@string/lblCorreo" />
 
-        <EditText
-            android:id="@+id/edTutorTelefono"
-            android:inputType="phone"
-            android:maxLength="15"
-            style="@style/etTitulos"
-            android:hint="@string/telefono" />
+            <EditText
+                android:id="@+id/edTutorCorreo"
+                android:inputType="textEmailAddress"
+                style="@style/etTitulos"
+                android:hint="@string/hintCorreo" />
 
-        <TextView
-            style="@style/tvTitulos2"
-            android:text="@string/lblCorreo" />
+            <TextView
+                style="@style/tvTitulos2"
+                android:text="@string/direccion" />
 
-        <EditText
-            android:id="@+id/edTutorCorreo"
-            android:inputType="textEmailAddress"
-            style="@style/etTitulos"
-            android:hint="@string/hintCorreo" />
+            <EditText
+                android:id="@+id/edTutorDireccion"
+                android:inputType="text"
+                style="@style/etTitulos"
+                android:hint="@string/direccion" />
 
-        <TextView
-            style="@style/tvTitulos2"
-            android:text="@string/direccion" />
-
-        <EditText
-            android:id="@+id/edTutorDireccion"
-            android:inputType="text"
-            style="@style/etTitulos"
-            android:hint="@string/direccion" />
-        
-        <Button
-            android:id="@+id/btnRegTutor"
-            android:text="@string/registrar"
-            android:layout_marginBottom="70dp"
-            android:layout_gravity="center"
-            style="@style/boton"
-            />
+            <Button
+                android:id="@+id/btnRegTutor"
+                android:text="@string/registrar"
+                android:layout_marginBottom="70dp"
+                android:layout_gravity="center"
+                style="@style/boton"
+                />
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

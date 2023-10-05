@@ -11,157 +11,139 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_margin="20dp"
+        android:layout_margin="30dp"
         >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/lblRegistrarNuevoUsuario"
-            android:gravity="center"
-            android:textColor="@color/textColor"
-            android:layout_gravity="center"
-            android:layout_marginBottom="30dp"
-            android:textSize="40dp"
-            android:textStyle="bold"
-            android:layout_marginTop="10dp"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/lblCorreo"
-            android:textColor="@color/textColor"
-            android:textSize="25sp"
-            android:layout_marginBottom="15dp"
-            />
-
-        <EditText
-            android:id="@+id/campoNuevoCorreo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:textSize="20sp"
-            android:textColor="@color/textColor"
-            android:layout_marginBottom="30dp"
-            android:hint="Correo Electrónico"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/lblNuevaContra"
-            android:textColor="@color/textColor"
-            android:textSize="25sp"
-            android:layout_marginBottom="15dp"
-            />
-
-        <EditText
-            android:id="@+id/campoNuevaContraseña"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textColor="@color/textColor"
-            android:inputType="textPassword"
-            android:layout_marginBottom="30dp"
-            android:hint="Contraseña"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/lblConfirmaContra"
-            android:textSize="25sp"
-            android:textColor="@color/textColor"
-            android:layout_marginBottom="15dp"
-            />
-
-        <EditText
-            android:id="@+id/campoConfirmarContraseña"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:textColor="@color/textColor"
-            android:inputType="textPassword"
-            android:textSize="20sp"
-            android:hint="Contraseña"
-            />
-
-        <TextView
-            android:id="@+id/txtCorreoValido"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/rojo"
-            android:textSize="15sp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="15dp"
-            />
-
-        <TextView
-            android:id="@+id/txtContraseñaValida"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/rojo"
-            android:textSize="15sp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="15dp"
-            />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="30dp"
+            android:gravity="center"
             >
-            <CheckBox
-                android:id="@+id/checkboxAceptar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/logokinder"
                 />
             <TextView
-                android:id="@+id/termsAndPrivacyTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:autoLink="web"
-                android:textColor="@color/textColor"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                style="@style/tvTitulos1"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:layout_marginTop="30dp"
+                android:text="@string/lblRegistrarNuevoUsuario"/>
         </LinearLayout>
-
-        <!--
-        <RadioGroup
-            android:id="@+id/radioGroup"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:checkedButton="@id/radioButtonUsuario"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/radioButtonAdmin"
+            android:layout_marginHorizontal="25dp"
+            android:orientation="vertical"
+            >
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Admin" />
+                android:text="@string/lblCorreo"
+                android:textColor="@color/textColor"
+                android:textSize="25sp"
+                android:layout_marginBottom="15dp"
+                />
 
-            <RadioButton
-                android:id="@+id/radioButtonUsuario"
+            <EditText
+                android:id="@+id/campoNuevoCorreo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:textSize="20sp"
+                android:textColor="@color/textColor"
+                android:layout_marginBottom="30dp"
+                android:hint="Correo Electrónico"
+                />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Usuario" />
+                android:text="@string/lblNuevaContra"
+                android:textColor="@color/textColor"
+                android:textSize="25sp"
+                android:layout_marginBottom="15dp"
+                />
 
-        </RadioGroup>
-        -->
+            <EditText
+                android:id="@+id/campoNuevaContraseña"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/textColor"
+                android:inputType="textPassword"
+                android:layout_marginBottom="30dp"
+                android:hint="Contraseña"
+                />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lblConfirmaContra"
+                android:textSize="25sp"
+                android:textColor="@color/textColor"
+                android:layout_marginBottom="15dp"
+                />
 
-        <Button
-            android:id="@+id/btnRegistrarse"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/lblRegistrarse"
-            android:textSize="20sp"
-            android:background="@drawable/redondeado_completo"
-            android:layout_gravity="center"/>
+            <EditText
+                android:id="@+id/campoConfirmarContraseña"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/textColor"
+                android:inputType="textPassword"
+                android:textSize="20sp"
+                android:hint="Contraseña"
+                />
 
+            <TextView
+                android:id="@+id/txtCorreoValido"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/rojo"
+                android:textSize="15sp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="15dp"
+                />
 
+            <TextView
+                android:id="@+id/txtContraseñaValida"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/rojo"
+                android:textSize="15sp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="15dp"
+                />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                >
+                <CheckBox
+                    android:id="@+id/checkboxAceptar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <TextView
+                    android:id="@+id/termsAndPrivacyTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoLink="web"
+                    android:textColor="@color/textColor"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+            </LinearLayout>
+            <Button
+                android:id="@+id/btnRegistrarse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lblRegistrarse"
+                android:textSize="20sp"
+                android:background="@drawable/redondeado_completo"
+                android:layout_gravity="center"/>
+        </LinearLayout>
     </LinearLayout>
-
 </ScrollView>

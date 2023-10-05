@@ -15,8 +15,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -94,7 +92,7 @@ public class LeerQR_Activity extends AppCompatActivity {
         });
 
         ListView listViewAlumnos = findViewById(R.id.lsCheckAlumno);
-        listViewAdapter = new TutorizacionAdapter(this, alumnoLista);
+        listViewAdapter = new ListViewUsuarioAdapter(this, alumnoLista);
         listViewAlumnos.setAdapter(listViewAdapter);
         listViewAlumnos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -111,7 +109,7 @@ public class LeerQR_Activity extends AppCompatActivity {
 
         //initListView(recyclerAlumnos);
         cargarDatos(idTutor);
-        cFirebaseBD fbController = new cFirebaseBD(new ConsultaListener() {
+        ControlFirebaseBD fbController = new ControlFirebaseBD(new ConsultaListener() {
             @Override
             public void onDataListo(List<String> resultados) {
                 // Los datos están listos para su uso
@@ -125,7 +123,7 @@ public class LeerQR_Activity extends AppCompatActivity {
             }
         });
 
-        fbController.consulta(tablas, children, atributos, idTutor);
+        fbController.consultaEspecifica(tablas, children, atributos, idTutor);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

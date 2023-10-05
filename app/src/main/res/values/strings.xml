@@ -3,7 +3,7 @@
     <string name="lblIniciarSesion">Iniciar sesión</string>
     <string name="hintCorreo">Correo electrónico</string>
     <string name="hintContrasena">Contraseña</string>
-    <string name="lblRegistrarNuevoUsuario">Registrar nuevo usuario</string>
+    <string name="lblRegistrarNuevoUsuario">Nuevo usuario</string>
     <string name="lblCorreo">Correo electrónico:</string>
     <string name="lblNuevaContra">Nueva contraseña:</string>
     <string name="lblConfirmaContra">Confirma tu contraseña:</string>
@@ -17,12 +17,13 @@
     <string name="registrarse">Registrarse</string>
     <string name="puesto">Puesto</string>
     <string name="tipo_de_sangre">Tipo de sangre</string>
-    <string name="grado_y_grupo">Grado y grupo</string>
+    <string name="grado">Grado</string>
+    <string name="grupo">Grupo</string>
     <string name="matricula">Matrícula</string>
-    <string name="registrar_empleado">Registrar Empleado</string>
+    <string name="registrar_empleado">Registrar nuevo empleado</string>
     <string name="registrar">Registrar</string>
-    <string name="registrar_tutor">Registrar tutor</string>
-    <string name="registrar_alumno">Registrar alumno</string>
+    <string name="registrar_tutor">Registrar nuevo tutor</string>
+    <string name="registrar_alumno">Registrar nuevo alumno</string>
     <string name="title_activity_qr">QR</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -34,4 +35,6 @@
     <string name="login_failed">"Login failed"</string>
     <string name="registrar_entrada">Registrar Entrada</string>
     <string name="lblAdministracion">Administración</string>
+    <string name="entrada_salida">Entrada Salida</string>
+    <string name="agregar_ni_o">Agregar Niño</string>
 </resources>

@@ -1,9 +1,7 @@
 package com.miraimx.kinderscontrol
 
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
@@ -51,8 +49,8 @@ class Tutorizacion : AppCompatActivity() {
     private fun configListView() {
         val listAlumno: ListView = findViewById(R.id.spAlumnos)
         val listTutores: ListView = findViewById(R.id.spTutores)
-        lsAlumnoAdapter = TutorizacionAdapter(this, alumnoLista)
-        lsTutoresAdapter = TutorizacionAdapter(this, tutoresLista)
+        lsAlumnoAdapter = ListViewUsuarioAdapter(this, alumnoLista)
+        lsTutoresAdapter = ListViewUsuarioAdapter(this, tutoresLista)
         listAlumno.adapter = lsAlumnoAdapter
         listTutores.adapter = lsTutoresAdapter
         listAlumno.setOnItemClickListener { _, view, i, _ ->

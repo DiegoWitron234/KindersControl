@@ -10,73 +10,116 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="30dp"
         android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            >
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/logokinder"
+                />
+            <TextView
+                style="@style/tvTitulos1"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:text="@string/registrar_alumno" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="25dp"
+            >
+            <TextView
+                style="@style/tvTitulos2"
+                android:text="@string/matricula" />
 
-        <TextView
-            style="@style/tvTitulos1"
-            android:text="@string/registrar_alumno" />
+            <EditText
+                android:id="@+id/matricula"
+                android:inputType="text"
+                style="@style/etTitulos"
+                android:hint="@string/matricula" />
 
-        <TextView
-            style="@style/tvTitulos2"
-            android:text="@string/matricula" />
+            <TextView
+                style="@style/tvTitulos2"
+                android:text="@string/nombre" />
 
-        <EditText
-            android:id="@+id/matricula"
-            android:inputType="text"
-            style="@style/etTitulos"
-            android:hint="@string/matricula" />
+            <EditText
+                android:id="@+id/edAluNombre"
+                android:inputType="textPersonName"
+                style="@style/etTitulos"
+                android:hint="@string/nombre" />
 
-        <TextView
-            style="@style/tvTitulos2"
-            android:text="@string/nombre" />
+            <TextView
+                style="@style/tvTitulos2"
+                android:text="@string/edad" />
 
-        <EditText
-            android:id="@+id/edAluNombre"
-            android:inputType="textPersonName"
-            style="@style/etTitulos"
-            android:hint="@string/nombre" />
+            <Spinner
+                android:id="@+id/svAlumnoEdad"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="30dp"
+                />
 
-        <TextView
-            style="@style/tvTitulos2"
-            android:text="@string/edad" />
+            <TextView
+                style="@style/tvTitulos2"
+                android:text="@string/tipo_de_sangre" />
 
-        <EditText
-            android:id="@+id/edAluEdad"
-            android:inputType="number"
-            android:maxLength="4"
-            style="@style/etTitulos"
-            android:hint="@string/edad" />
+            <Spinner
+                android:id="@+id/svAlumnoSangre"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="30dp"
+                />
 
-        <TextView
-            style="@style/tvTitulos2"
-            android:text="@string/tipo_de_sangre" />
 
-        <EditText
-            android:id="@+id/edAluSangre"
-            android:inputType="textCapCharacters|text"
-            android:maxLength="4"
-            style="@style/etTitulos"
-            android:hint="@string/tipo_de_sangre" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:gravity="center"
+                >
+                <TextView
+                    android:id="@+id/tvSAlumnoGrado"
+                    style="@style/tvTitulos2"
+                    android:text="@string/grado"
+                    />
+                <Spinner
+                    android:id="@+id/svAlumnoGrado"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@+id/tvSAlumnoGrado"
+                    />
 
-        <TextView
-            style="@style/tvTitulos2"
-            android:text="@string/grado_y_grupo" />
+                <TextView
+                    android:id="@+id/tvSAlumnoGrupo"
+                    style="@style/tvTitulos2"
+                    android:layout_marginStart="100dp"
+                    android:layout_toEndOf="@+id/tvSAlumnoGrado"
+                    android:text="@string/grupo" />
 
-        <EditText
-            android:id="@+id/edAluGradoGrupo"
-            style="@style/etTitulos"
-            android:hint="@string/grado_y_grupo"
-            android:inputType="textCapCharacters|text"
-            android:maxLength="4" />
+                <Spinner
+                    android:id="@+id/svAlumnoGrupo"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/tvSAlumnoGrupo"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toEndOf="@id/svAlumnoGrado" />
 
-        <Button
-            android:id="@+id/btnRegAlumno"
-            android:text="@string/registrar"
-            android:layout_gravity="center"
-            android:layout_marginBottom="70dp"
-            style="@style/boton"
-            />
+            </RelativeLayout>
 
+            <Button
+                android:id="@+id/btnRegAlumno"
+                android:text="@string/registrar"
+                android:layout_gravity="center"
+                android:layout_marginBottom="70dp"
+                style="@style/boton"
+                />
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>
