@@ -13,12 +13,12 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 
-class SingUpEmpleado : AppCompatActivity() {
+class SingUpEmpleado : AppCompatActivity(), ModoOscuro {
     private var esUsuarioActual: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sing_up_empleado)
-
+        cancelarModoOscuro(this)
         val btnRegEmpleado = findViewById<Button>(R.id.btnRegEmpleado)
         val edCorreo = findViewById<EditText>(R.id.edEmpleadoCorreo)
 

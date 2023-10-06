@@ -23,7 +23,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.KindersControl"
+        android:theme="@style/Base.Theme.KindersControl"
         tools:targetApi="31" >
         <activity
             android:name=".LeerQR_Activity"
@@ -36,9 +36,6 @@
             android:exported="false" />
         <activity
             android:name=".Tutorizacion"
-            android:exported="false" />
-        <activity
-            android:name=".QR"
             android:exported="false" />
         <activity
             android:name=".PanelUsuario"

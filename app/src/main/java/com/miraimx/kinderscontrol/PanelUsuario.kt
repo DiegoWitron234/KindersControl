@@ -17,7 +17,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 
 
-class PanelUsuario : AppCompatActivity() {
+class PanelUsuario : AppCompatActivity(), ModoOscuro {
 
     private lateinit var btnCerrarSesion: Button
     private lateinit var uid: String
@@ -28,7 +28,7 @@ class PanelUsuario : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_panel_usuario)
-
+        cancelarModoOscuro(this)
         btnCerrarSesion = findViewById(R.id.btnCerrarSesion)
 
         btnMostrarQR = findViewById(R.id.btnMostrarQR)

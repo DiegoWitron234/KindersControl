@@ -11,7 +11,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.FirebaseDatabase
 
-class SingUpAlumno : AppCompatActivity() {
+class SingUpAlumno : AppCompatActivity(), ModoOscuro {
     private lateinit var svEdad: Spinner
     private lateinit var svSangre: Spinner
     private lateinit var svGrado: Spinner
@@ -20,7 +20,7 @@ class SingUpAlumno : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sing_up_alumno)
-
+        cancelarModoOscuro(this)
         scrollDatos()
         val btnRegEmpleado = findViewById<Button>(R.id.btnRegAlumno)
 
@@ -103,7 +103,7 @@ class SingUpAlumno : AppCompatActivity() {
         svGrupo = findViewById(R.id.svAlumnoGrupo)
         val datosEdad = listOf("3", "4","5","6","7")
         val datosSangre = listOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-")
-        val grupo = listOf("A", "B")
+        val grupo = listOf("A", "B", "C")
         val grado = listOf("1", "2", "3")
 
         adapterScroll(svEdad, datosEdad)

@@ -3,6 +3,7 @@ package com.miraimx.kinderscontrol
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -13,6 +14,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -21,7 +23,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 
-class Login : AppCompatActivity() {
+class Login : AppCompatActivity(), ModoOscuro {
 
     private lateinit var auth: FirebaseAuth
 
@@ -34,7 +36,7 @@ class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
+        cancelarModoOscuro(this)
         /*val actionBar: ActionBar? = supportActionBar
         if (actionBar != null) {
             //Poner el ícono al ActionBar
@@ -96,7 +98,15 @@ class Login : AppCompatActivity() {
             startActivity(intent)
         }
     }
-
+    private fun ModoOscuro() {
+        val nightModeFlags: Int =
+            this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        when (nightModeFlags) {
+            Configuration.UI_MODE_NIGHT_YES ->         /* si está activo el modo oscuro lo desactiva */AppCompatDelegate.setDefaultNightMode(
+                AppCompatDelegate.MODE_NIGHT_NO
+            )
+        }
+    }
     override fun onStart() {
         super.onStart()
         verificacionRol()

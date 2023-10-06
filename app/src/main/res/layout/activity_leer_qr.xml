@@ -1,58 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/fondokinder"
+
     tools:context=".LeerQR_Activity">
-
-    <Button
-        android:id="@+id/btnScan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Escanear QR"
-        android:backgroundTint="@color/botones"
-        android:layout_gravity="center"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/txtNombraTutorQR"
-        android:hint="Nombre del tutor"
-        style="@style/tvCuerpo1"/>
-
-    <TextView
-        android:id="@+id/txtTelefonoTutorQR"
-        android:hint="Telefono"
-        style="@style/tvCuerpo1"/>
-
-    <TextView
-        android:id="@+id/txEmailTutorQR"
-        android:hint="Correo electrónico"
-        style="@style/tvCuerpo1"/>
-
-    <TextView
-        android:id="@+id/txDireccionTutorQR"
-        android:hint="Dirección"
-        style="@style/tvCuerpo1"/>
-
-    <ListView
-        android:id="@+id/lsCheckAlumno"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:listSelector="#0f0"
-        />
-
-    <Button
-        android:id="@+id/registrarIn"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        style="@style/boton"
-        android:layout_gravity="center"
-        android:text="Registrar entrada"
-        android:backgroundTint="@color/botones"
-        />
-</LinearLayout>
+        android:orientation="vertical"
+        android:layout_margin="20dp"
+        >
+        <Button
+            android:id="@+id/btnScan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="20dp"
+            android:text="Escanear QR"
+            android:backgroundTint="@color/botones"
+            android:layout_gravity="center"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtNombraTutorQR"
+            android:hint="Nombre del tutor"
+            style="@style/tvCuerpo1"/>
+
+        <TextView
+            android:id="@+id/txtTelefonoTutorQR"
+            android:hint="Telefono"
+            style="@style/tvCuerpo1"/>
+
+        <TextView
+            android:id="@+id/txEmailTutorQR"
+            android:hint="Correo electrónico"
+            style="@style/tvCuerpo1"/>
+
+        <TextView
+            android:id="@+id/txDireccionTutorQR"
+            android:hint="Dirección"
+            style="@style/tvCuerpo1"/>
+
+        <ListView
+            android:id="@+id/lsCheckAlumno"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:listSelector="#0f0"
+            />
+
+        <Button
+            android:id="@+id/registrarIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            style="@style/boton"
+            android:layout_gravity="center"
+            android:text="registrar"
+            android:backgroundTint="@color/botones"
+            />
+    </LinearLayout>
+</ScrollView>

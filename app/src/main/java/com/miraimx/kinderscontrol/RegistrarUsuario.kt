@@ -24,7 +24,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 
-class RegistrarUsuario : AppCompatActivity() {
+class RegistrarUsuario : AppCompatActivity(), ModoOscuro {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var campoNuevoCorreo: EditText
@@ -38,7 +38,7 @@ class RegistrarUsuario : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registrar_usuario)
-
+        cancelarModoOscuro(this)
         val rol = intent.getStringExtra("rol")
         if (rol == null) {
             Toast.makeText(this, "El rol es desconocido", Toast.LENGTH_LONG).show()

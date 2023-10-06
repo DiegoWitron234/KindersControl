@@ -33,11 +33,14 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <string name="registrar_entrada">Registrar Entrada</string>
+    <string name="registrar_entrada">Entrada</string>
     <string name="lblAdministracion">Administración</string>
-    <string name="entrada_salida">Entrada Salida</string>
-    <string name="agregar_ni_o">Agregar Niño</string>
-    <string name="btn_agregar_empleado">Agregar Empleado</string>
+    <string name="entrada_salida">Salida</string>
+    <string name="agregar_ni_o">Niño</string>
+    <string name="btn_agregar_empleado">Empleado</string>
     <string name="btn_administrar_tutorias">Administrar tutorias</string>
     <string name="cerrar_sesion">Cerrar Sesión</string>
+    <style name="AppTheme" parent="TextAppearance.AppCompat">
+
+    </style>
 </resources>

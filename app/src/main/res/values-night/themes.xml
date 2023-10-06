@@ -1,10 +1,15 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Base.Theme.KindersControl" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.KindersControl" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Customize your dark theme here. -->
         <item name="colorPrimary">@color/botones</item>
+        <item name="colorPrimaryVariant">@color/botones</item>
+        <item name="colorOnPrimary">@color/black</item>
         <item name="colorSecondary">@color/textColor</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/botones</item>
         <item name="colorOnSecondary">@color/black</item>
+        <item name="android:textColorHint">@color/black</item>
+        <item name="colorAccent">@color/botones</item>
+        <item name="android:textColor">@color/textColor</item>
     </style>
 </resources>

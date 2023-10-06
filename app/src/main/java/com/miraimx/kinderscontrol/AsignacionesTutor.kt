@@ -11,14 +11,13 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 
-class AsignacionesTutor : AppCompatActivity() {
+class AsignacionesTutor : AppCompatActivity(), ModoOscuro {
     val alumnosAccesoLista = mutableListOf<AccesoAlumno>()
     private lateinit var lsAccesoAlumnoAdapter: ArrayAdapter<AccesoAlumno>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_asignaciones_tutor)
-
         val lsAsignacionesTutor = findViewById<ListView>(R.id.lsAsignacionesTutor)
 
         lsAccesoAlumnoAdapter = ListViewAccesoAdapter(this, alumnosAccesoLista)
@@ -30,6 +29,8 @@ class AsignacionesTutor : AppCompatActivity() {
         }
 
         intent.getStringExtra("currentId")?.let { cargarDatos(it) }
+
+        cancelarModoOscuro(this)
     }
 
     private fun cargarDatos(cUserId: String) {
@@ -92,6 +93,7 @@ class AsignacionesTutor : AppCompatActivity() {
             override fun onCancelled(error: DatabaseError) {}
         })
     }
+
 }
 
 

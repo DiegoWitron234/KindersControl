@@ -54,28 +54,42 @@
                 style="@style/etTitulos"
                 android:hint="@string/nombre" />
 
-            <TextView
-                style="@style/tvTitulos2"
-                android:text="@string/edad" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                >
+                <TextView
+                    android:id="@+id/txEdad"
+                    style="@style/tvTitulos2"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/edad" />
 
-            <Spinner
-                android:id="@+id/svAlumnoEdad"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="30dp"
-                />
+                <Spinner
+                    android:id="@+id/svAlumnoEdad"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_below="@id/txEdad"
+                    android:layout_marginTop="10dp"
+                    />
 
-            <TextView
-                style="@style/tvTitulos2"
-                android:text="@string/tipo_de_sangre" />
+                <TextView
+                    android:id="@+id/txSangre"
+                    style="@style/tvTitulos2"
+                    android:text="@string/tipo_de_sangre"
+                    android:layout_marginLeft="100dp"
+                    android:layout_toEndOf="@id/txEdad"/>
 
-            <Spinner
-                android:id="@+id/svAlumnoSangre"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="30dp"
-                />
-
+                <Spinner
+                    android:id="@+id/svAlumnoSangre"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_below="@id/txEdad"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@id/svAlumnoEdad"
+                    />
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"

@@ -13,7 +13,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class Tutorizacion : AppCompatActivity() {
+class Tutorizacion : AppCompatActivity(), ModoOscuro {
 
     private val alumnoLista = mutableListOf<Usuario>()
     private val tutoresLista = mutableListOf<Usuario>()
@@ -35,9 +35,11 @@ class Tutorizacion : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tutorizacion)
+
+        cancelarModoOscuro(this)
+
         buscarAlumnos = findViewById(R.id.buscarAlumno)
         buscarTutores = findViewById(R.id.buscarTutor)
-
         btnAsignar = findViewById(R.id.btnAsignar)
         btnAsignar.isEnabled = false
 
