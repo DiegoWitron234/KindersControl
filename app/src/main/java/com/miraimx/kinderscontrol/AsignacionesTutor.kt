@@ -52,7 +52,7 @@ class AsignacionesTutor : AppCompatActivity(), ModoOscuro {
                                 if (nombreAlumno != null) {
                                     val queryCheckin =
                                         database.child("checkin").orderByChild("matricula")
-                                            .equalTo(matricula).limitToFirst(1)
+                                            .equalTo(matricula).limitToLast(1)
                                     queryCheckin.addListenerForSingleValueEvent(object :
                                         ValueEventListener {
                                         override fun onDataChange(checkinSnapshot: DataSnapshot) {

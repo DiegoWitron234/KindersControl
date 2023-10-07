@@ -17,8 +17,10 @@
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
             android:layout_gravity="center"
-            android:layout_marginTop="40dp">
+            app:cardCornerRadius="20dp"
+            >
 
             <ImageView
                 android:layout_width="150dp"
@@ -99,27 +101,27 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <Button
-                android:id="@+id/btnRegistroEntrada"
+                android:id="@+id/btnRegistroSalida"
                 android:layout_width="170dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:background="@drawable/estilos_boton"
-                android:text="@string/registrar_entrada"
+                android:text="@string/entrada_salida"
                 android:textSize="20sp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/btnRegistroSalida"
+                app:layout_constraintBaseline_toBaselineOf="@+id/btnRegistroEntrada"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline" />
 
             <Button
-                android:id="@+id/btnRegistroSalida"
+                android:id="@+id/btnRegistroEntrada"
                 android:layout_width="170dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/estilos_boton"
-                android:text="@string/entrada_salida"
+                android:text="@string/registrar_entrada"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
@@ -133,7 +135,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="185dp" />
+                app:layout_constraintGuide_percent="0.49865228" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button

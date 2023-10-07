@@ -66,6 +66,7 @@ public class LeerQR_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_leer_qr);
         idEmpleado = getIntent().getStringExtra("id");
         estatusRegistro = getIntent().getStringExtra("estatus");
+
         btnScan = findViewById(R.id.btnScan);
         txtNombre = findViewById(R.id.txtNombraTutorQR);
         txtTelefono = findViewById(R.id.txtTelefonoTutorQR);
@@ -73,11 +74,15 @@ public class LeerQR_Activity extends AppCompatActivity {
         txtDireccion = findViewById(R.id.txDireccionTutorQR);
         btnRegistrarEntrada = findViewById(R.id.registrarIn);
         btnRegistrarEntrada.setEnabled(false);
+        TextView txtTitulo = findViewById(R.id.tvRegistroActivity);
+
         modoOscuro();
         if (estatusRegistro.equals("In")){
-            btnRegistrarEntrada.setText("Registrar Entrada");
+            btnRegistrarEntrada.setText("Registrar entrada");
+            txtTitulo.setText("Registro de entrada");
         }else{
-            btnRegistrarEntrada.setText("Registrar Salida");
+            btnRegistrarEntrada.setText("Registrar salida");
+            txtTitulo.setText("Registro de salida");
         }
 
         btnRegistrarEntrada.setOnClickListener(view -> btnRegistrarEntrada());

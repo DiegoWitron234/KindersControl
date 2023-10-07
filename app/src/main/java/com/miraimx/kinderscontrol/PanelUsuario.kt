@@ -2,11 +2,14 @@ package com.miraimx.kinderscontrol
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -25,10 +28,19 @@ class PanelUsuario : AppCompatActivity(), ModoOscuro {
     private lateinit var currentUser: FirebaseUser
     private lateinit var serviceIntent: Intent
 
+    companion object {
+        val PERMISOS = arrayListOf(
+            "android.permission.POST_NOTIFICATIONS"
+        ).toTypedArray()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_panel_usuario)
+
         cancelarModoOscuro(this)
+        verificarPermisos()
+        shouldShowRequestPermissionRationale("android.permission.POST_NOTIFICATIONS")
         btnCerrarSesion = findViewById(R.id.btnCerrarSesion)
 
         btnMostrarQR = findViewById(R.id.btnMostrarQR)
@@ -43,8 +55,11 @@ class PanelUsuario : AppCompatActivity(), ModoOscuro {
             fnMostrarQR()
         }
 
-        serviceIntent = Intent(this, ServicioOyente::class.java)
-        startService(serviceIntent)
+        if (tienePermisos()) {
+            serviceIntent = Intent(this, ServicioOyente::class.java)
+            startService(serviceIntent)
+        }
+
         // Agrega un oyente a la referencia de "checkin" en la base de datos
         val checkinRef = FirebaseDatabase.getInstance().getReference("checkin")
 
@@ -107,7 +122,9 @@ class PanelUsuario : AppCompatActivity(), ModoOscuro {
             .setPositiveButton("Salir") { _, _ -> // Acción de confirmación
                 Firebase.auth.signOut()
                 Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show()
-                stopService(serviceIntent)
+                if (tienePermisos()) {
+                    stopService(serviceIntent)
+                }
                 val intent = Intent(this, Login::class.java)
                 startActivity(intent)
                 finish()
@@ -140,5 +157,43 @@ class PanelUsuario : AppCompatActivity(), ModoOscuro {
         intent.putExtra("uid", uid)
         startActivity(intent)
     }
+
+    private fun tienePermisos(): Boolean {
+        return PERMISOS.all {
+            return ContextCompat.checkSelfPermission(
+                this,
+                it
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    private fun verificarPermisos() {
+        if (!tienePermisos()) {
+
+            val intent = Intent()
+            intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
+
+            //for Android 5-7
+            intent.putExtra("app_package", packageName)
+            intent.putExtra("app_uid", applicationInfo.uid)
+
+            // for Android 8 and above
+            intent.putExtra("android.provider.extra.APP_PACKAGE", packageName)
+            startActivity(intent)
+        }
+
+    }
+
+    private fun permisos() {
+        val requestPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            if (isGranted) {
+
+            }
+        }
+        requestPermissionLauncher.launch("android.permission.POST_NOTIFICATIONS")
+    }
+
 
 }

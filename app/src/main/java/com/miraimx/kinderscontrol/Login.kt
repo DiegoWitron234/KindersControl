@@ -98,15 +98,6 @@ class Login : AppCompatActivity(), ModoOscuro {
             startActivity(intent)
         }
     }
-    private fun ModoOscuro() {
-        val nightModeFlags: Int =
-            this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        when (nightModeFlags) {
-            Configuration.UI_MODE_NIGHT_YES ->         /* si está activo el modo oscuro lo desactiva */AppCompatDelegate.setDefaultNightMode(
-                AppCompatDelegate.MODE_NIGHT_NO
-            )
-        }
-    }
     override fun onStart() {
         super.onStart()
         verificacionRol()

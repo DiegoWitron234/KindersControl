@@ -15,11 +15,33 @@
         android:orientation="vertical"
         android:layout_margin="20dp"
         >
+        <androidx.cardview.widget.CardView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:cardCornerRadius="20dp">
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@drawable/logokinder"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvRegistroActivity"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            style="@style/tvTitulos1"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="Registro"
+            />
         <Button
             android:id="@+id/btnScan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
             android:layout_marginBottom="20dp"
             android:text="Escanear QR"
             android:backgroundTint="@color/botones"
@@ -50,7 +72,7 @@
             android:id="@+id/lsCheckAlumno"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:listSelector="#0f0"
+            android:listSelector="#49688D"
             />
 
         <Button
@@ -62,6 +84,7 @@
             android:layout_gravity="center"
             android:text="registrar"
             android:backgroundTint="@color/botones"
+            android:layout_marginBottom="70dp"
             />
     </LinearLayout>
 </ScrollView>

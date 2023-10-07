@@ -40,7 +40,7 @@
         <TextView
             style="@style/tvTitulos2"
             android:layout_marginTop="20dp"
-            android:text="Bucar alumno" />
+            android:text="@string/buscar_alumno" />
 
         <SearchView
             android:id="@+id/buscarAlumno"

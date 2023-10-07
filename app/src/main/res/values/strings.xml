@@ -40,6 +40,8 @@
     <string name="btn_agregar_empleado">Empleado</string>
     <string name="btn_administrar_tutorias">Administrar tutorias</string>
     <string name="cerrar_sesion">Cerrar Sesión</string>
+    <string name="buscar_alumno">Buscar alumno</string>
+
     <style name="AppTheme" parent="TextAppearance.AppCompat">
 
     </style>
