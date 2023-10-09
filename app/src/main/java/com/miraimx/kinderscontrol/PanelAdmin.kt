@@ -29,6 +29,8 @@ class PanelAdmin : AppCompatActivity(), ModoOscuro {
         val btnRegistrarSalida = findViewById<Button>(R.id.btnRegistroSalida)
         val btnAsignarTutor = findViewById<Button>(R.id.btnAsignarTutorias)
 
+        botonDimensiones(btnAgregarAlumno, btnRegistrarEntrada, btnRegistrarSalida)
+
         btnRegistrarEntrada.setOnClickListener {
             registro("In")
         }
@@ -79,7 +81,6 @@ class PanelAdmin : AppCompatActivity(), ModoOscuro {
                         startActivity(intent)
                         Toast.makeText(this@PanelAdmin, "Registrando Empleado", Toast.LENGTH_SHORT)
                             .show()
-                    } else {
                     }
                 }
 
@@ -108,5 +109,26 @@ class PanelAdmin : AppCompatActivity(), ModoOscuro {
     override fun onStart() {
         super.onStart()
         verificarUsuario()
+    }    private fun botonDimensiones(
+        btnAgregarAlumno: Button,
+        btnRegistrarEntrada: Button,
+        btnRegistrarSalida: Button,
+    ) {
+        val buttons = arrayOf(btnAgregarEmpleado, btnAgregarAlumno, btnRegistrarSalida, btnRegistrarEntrada)
+        var minTextSize = Float.MAX_VALUE
+
+        for (button in buttons) {
+            val textSize = button.textSize
+            if (textSize < minTextSize) {
+                minTextSize = textSize
+            }
+        }
+
+        for (button in buttons) {
+            button.textSize = minTextSize
+        }
     }
+
+
+
 }

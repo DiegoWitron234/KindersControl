@@ -86,7 +86,10 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
 
             override fun onQueryTextChange(p0: String?): Boolean {
                 if (p0 != null) {
-                    consulta("alumnos", p0, "matricula", "nombre_alumno", alumnoLista)
+                    consulta("alumnos", p0, "matricula", "nombre_alumno", alumnoLista, false)
+                    if (lsAlumnoAdapter.count == 0){
+                        consulta("alumnos", p0, "nombre_alumno", "matricula", alumnoLista, true)
+                    }
                 }
                 return true
             }
@@ -100,7 +103,7 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
 
             override fun onQueryTextChange(p0: String?): Boolean {
                 if (p0 != null) {
-                    consulta("tutores", p0, "tutor_id", "nombre_tutor", tutoresLista)
+                    consulta("tutores", p0, "tutor_id", "nombre_tutor", tutoresLista, false)
                 }
                 return true
             }
@@ -127,7 +130,8 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
         nombre: String,
         atributoId: String,
         atributoNombre: String,
-        lista: MutableList<Usuario>
+        lista: MutableList<Usuario>,
+        orden : Boolean
     ) {
         if (nombre.isNotBlank()) {
             val database = FirebaseDatabase.getInstance().reference.child(tabla)
@@ -141,7 +145,11 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
                         val nombreUsuario =
                             usuario.child(atributoNombre).getValue(String::class.java)
                         if (nombreUsuario != null && id != null) {
-                            val usuarioDatos = Usuario(id, nombreUsuario, false, tabla)
+                            val usuarioDatos = if (orden) {
+                                Usuario(nombreUsuario, id, false, tabla)
+                            } else {
+                                Usuario(id, nombreUsuario, false, tabla)
+                            }
                             lista.add(usuarioDatos)
                         }
                     }
