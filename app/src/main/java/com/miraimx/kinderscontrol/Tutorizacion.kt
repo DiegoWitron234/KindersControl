@@ -87,9 +87,9 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
 
             override fun onQueryTextChange(p0: String?): Boolean {
                 if (p0 != null) {
-                    if (!p0.isDigitsOnly()){
+                    if (!p0.isDigitsOnly()) {
                         consulta("alumnos", p0, "matricula", "nombre_alumno", alumnoLista, false)
-                    }else{
+                    } else {
                         consulta("alumnos", p0, "nombre_alumno", "matricula", alumnoLista, true)
                     }
                 }
@@ -242,4 +242,3 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
         }
     }
 }
-
