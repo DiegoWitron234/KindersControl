@@ -55,7 +55,7 @@
 
         <TextView
             android:id="@+id/txtTelefonoTutorQR"
-            android:hint="Telefono"
+            android:hint="Teléfono"
             style="@style/tvCuerpo1"/>
 
         <TextView
@@ -72,7 +72,7 @@
             android:id="@+id/lsCheckAlumno"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:listSelector="#49688D"
+            android:listSelector="#0f0"
             />
 
         <Button

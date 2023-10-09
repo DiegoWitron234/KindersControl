@@ -41,6 +41,11 @@
     <string name="btn_administrar_tutorias">Administrar tutorias</string>
     <string name="cerrar_sesion">Cerrar Sesión</string>
     <string name="buscar_alumno">Buscar alumno</string>
+    <string name="cerrar_sesi_n">Cerrar Sesión</string>
+    <string name="administrar_tutorias">Administrar tutorias</string>
+    <string name="registrarBoton">Registrar</string>
+    <string name="agregar">Agregar</string>
+    <string name="imagenkinderscontrol">imagenKindersControl</string>
 
     <style name="AppTheme" parent="TextAppearance.AppCompat">
 

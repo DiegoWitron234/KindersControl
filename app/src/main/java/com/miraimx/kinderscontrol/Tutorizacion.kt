@@ -8,6 +8,7 @@ import android.widget.ListView
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.text.isDigitsOnly
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -86,8 +87,9 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
 
             override fun onQueryTextChange(p0: String?): Boolean {
                 if (p0 != null) {
-                    consulta("alumnos", p0, "matricula", "nombre_alumno", alumnoLista, false)
-                    if (lsAlumnoAdapter.count == 0){
+                    if (!p0.isDigitsOnly()){
+                        consulta("alumnos", p0, "matricula", "nombre_alumno", alumnoLista, false)
+                    }else{
                         consulta("alumnos", p0, "nombre_alumno", "matricula", alumnoLista, true)
                     }
                 }
