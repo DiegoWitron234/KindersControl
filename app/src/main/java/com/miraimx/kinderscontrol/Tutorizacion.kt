@@ -146,12 +146,14 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
                         val id = usuario.child(atributoId).getValue(String::class.java)
                         val nombreUsuario =
                             usuario.child(atributoNombre).getValue(String::class.java)
+
                         if (nombreUsuario != null && id != null) {
-                            val usuarioDatos = if (orden) {
-                                Usuario(nombreUsuario, id, false, tabla)
-                            } else {
-                                Usuario(id, nombreUsuario, false, tabla)
-                            }
+                            val usuarioDatos = Usuario(
+                                if (orden) nombreUsuario else id,
+                                if (orden) id else nombreUsuario,
+                                false,
+                                tabla
+                            )
                             lista.add(usuarioDatos)
                         }
                     }
@@ -167,57 +169,71 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
 
     private fun mostrarConfirmacion() {
         val builder = AlertDialog.Builder(this)
-        val alumnoSeleccion = mutableListOf<String>()
-        val tutorSeleccion = mutableListOf<String>()
+        //val alumnoSeleccion = mutableListOf<String>()
+        //val tutorSeleccion = mutableListOf<String>()
+        lateinit var tutorSeleccion:String
+        lateinit var alumnoSeleccion: String
         builder.setTitle("Confirmación")
         builder.setMessage("¿Desea realizar la asignacion de los alumnos?")
         builder.setPositiveButton("Sí") { dialog, _ ->
             // Aquí puedes agregar la lógica para agregar al niño al tutor
-            Toast.makeText(this, "Niño agregado al tutor", Toast.LENGTH_SHORT).show()
-            val tutorizacionRef = FirebaseDatabase.getInstance().getReference("tutorizacion").push()
-            var tutorizacionInfo = hashMapOf<String, String>()
-            var i = 0
-            var y = 0
+            //Toast.makeText(this, "Niño agregado al tutor", Toast.LENGTH_SHORT).show()
+            val tutorizacionRef = FirebaseDatabase.getInstance().getReference("tutorizacion")
+           // var tutorizacionInfo = hashMapOf<String, String>()
+            //var i = 0
+            //var y = 0
             for (alumno in alumnoLista) {
                 if (alumno.seleccionado) {
-                    alumnoSeleccion.add(alumno.id)
+                    //alumnoSeleccion.add(alumno.id)
+                    alumnoSeleccion = alumno.id
                 }
             }
             for (tutor in tutoresLista) {
                 if (tutor.seleccionado) {
-                    tutorSeleccion.add(tutor.id)
+                    //tutorSeleccion.add(tutor.id)
+                    tutorSeleccion = tutor.id
                 }
             }
-            while (i < tutorSeleccion.size) {
-                while (y < alumnoSeleccion.size) {
-                    tutorizacionInfo = hashMapOf(
-                        "matricula" to alumnoSeleccion[y],
-                        "tutor_id" to tutorSeleccion[i]
+            tutorizacionRef
+                .orderByChild("tutor_id")
+                .startAt(tutorSeleccion)
+                .endAt(tutorSeleccion + "\uf8ff")
+                .addListenerForSingleValueEvent(object: ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (registros in snapshot.children){
+                        if (registros.child("matricula").getValue(String::class.java) == alumnoSeleccion){
+                            Toast.makeText(this@Tutorizacion, "El niño ya se encuentra asignado", Toast.LENGTH_SHORT).show()
+                            return
+                        }
+                    }
+                    Toast.makeText(this@Tutorizacion, "Asignación exitosa", Toast.LENGTH_SHORT).show()
+                    val tutorizacionInfo = hashMapOf(
+                        "matricula" to alumnoSeleccion,
+                        "tutor_id" to tutorSeleccion
                     )
-                    y++
+                    tutorizacionRef.push().setValue(tutorizacionInfo).addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            //Toast.makeText(this@Tutorizacion, "Operación exitosa", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(
+                                this@Tutorizacion,
+                                "No se pudo realizar la operación",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                    alumnoLista.clear()
+                    tutoresLista.clear()
+                    lsTutoresAdapter.notifyDataSetChanged()
+                    lsAlumnoAdapter.notifyDataSetChanged()
+                    btnAsignar.isEnabled = false
+                    buscarAlumnos.setQuery("", false)
+                    buscarTutores.setQuery("", false)
+                    dialog.dismiss()
                 }
-                i++
-            }
-            tutorizacionRef.setValue(tutorizacionInfo).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(this@Tutorizacion, "Operación exitosa", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    Toast.makeText(
-                        this@Tutorizacion,
-                        "No se pudo realizar la operación",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                override fun onCancelled(error: DatabaseError) {
                 }
-            }
-            alumnoLista.clear()
-            tutoresLista.clear()
-            lsTutoresAdapter.notifyDataSetChanged()
-            lsAlumnoAdapter.notifyDataSetChanged()
-            btnAsignar.isEnabled = false
-            buscarAlumnos.setQuery("", false)
-            buscarTutores.setQuery("", false)
-            dialog.dismiss()
+            })
         }
 
         builder.setNegativeButton("No") { dialog, _ ->
@@ -242,3 +258,14 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
         }
     }
 }
+
+/*while (i < tutorSeleccion.size) {
+    while (y < alumnoSeleccion.size) {
+        tutorizacionInfo = hashMapOf(
+            "matricula" to alumnoSeleccion[y],
+            "tutor_id" to tutorSeleccion[i]
+        )
+        y++
+    }
+    i++
+}*/

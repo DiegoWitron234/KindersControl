@@ -13,24 +13,72 @@ import com.google.firebase.database.ValueEventListener
 
 class AsignacionesTutor : AppCompatActivity(), ModoOscuro {
     val alumnosAccesoLista = mutableListOf<AccesoAlumno>()
+    val alumnosAsigLista = mutableListOf<Alumno>()
     private lateinit var lsAccesoAlumnoAdapter: ArrayAdapter<AccesoAlumno>
+    private lateinit var lsAsignacionesAlAdapater: ArrayAdapter<Alumno>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_asignaciones_tutor)
+        val lsRegistrosTutor = findViewById<ListView>(R.id.lsRegistrosTutor)
         val lsAsignacionesTutor = findViewById<ListView>(R.id.lsAsignacionesTutor)
 
         lsAccesoAlumnoAdapter = ListViewAccesoAdapter(this, alumnosAccesoLista)
-        lsAsignacionesTutor.adapter = lsAccesoAlumnoAdapter
+        lsAsignacionesAlAdapater = ListViewAlumnoAdapter(this, alumnosAsigLista )
+        lsRegistrosTutor.adapter = lsAccesoAlumnoAdapter
+        lsAsignacionesTutor.adapter = lsAsignacionesAlAdapater
 
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser != null){
             cargarDatos(currentUser.uid)
+            cargarDatos2(currentUser.uid)
         }
 
         intent.getStringExtra("currentId")?.let { cargarDatos(it) }
+        intent.getStringExtra("currentId")?.let { cargarDatos2(it) }
 
         cancelarModoOscuro(this)
+    }
+
+    private fun cargarDatos2(cUserId: String){
+        val database = FirebaseDatabase.getInstance().reference
+
+        val query = database.child("tutorizacion").orderByChild("tutor_id").equalTo(cUserId)
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var cantidadAlumnos = 0
+                for (registro in snapshot.children) {
+                    val id = registro.child("matricula").getValue(String::class.java)
+                    if (id != null) {
+                        val queryAlumno =
+                            database.child("alumnos").orderByChild("matricula").equalTo(id)
+                        queryAlumno.addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                for (alumno in snapshot.children) {
+                                    val nombreAlumno =
+                                        alumno.child("nombre_alumno").getValue(String::class.java)
+                                    if (nombreAlumno != null) {
+                                        val alumno = Alumno(
+                                            nombreAlumno,
+                                            id,
+                                        )
+                                        alumnosAsigLista.add(alumno)
+                                    }
+                                }
+                                cantidadAlumnos++
+                                if (cantidadAlumnos.toLong() == snapshot.childrenCount) {
+                                    // Notificar al adaptador sobre los cambios
+                                    lsAsignacionesAlAdapater.notifyDataSetChanged()
+                                }
+                            }
+                            override fun onCancelled(error: DatabaseError) {}
+                        })
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
     private fun cargarDatos(cUserId: String) {
@@ -71,6 +119,7 @@ class AsignacionesTutor : AppCompatActivity(), ModoOscuro {
                                                     alumnosAccesoLista.add(accesoAlumno)
                                                     lsAccesoAlumnoAdapter.notifyDataSetChanged()
                                                 }
+
                                             }
                                         }
 

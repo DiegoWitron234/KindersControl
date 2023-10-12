@@ -13,3 +13,8 @@ data class AccesoAlumno(
     val estatus: String,
     var matricula: String,
 )
+
+data class Alumno(
+    val nombre: String,
+    var matricula: String
+)

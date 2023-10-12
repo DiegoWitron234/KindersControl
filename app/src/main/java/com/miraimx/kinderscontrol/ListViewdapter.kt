@@ -56,3 +56,28 @@ class ListViewAccesoAdapter(
 
 
 }
+
+class ListViewAlumnoAdapter(
+    context: Context,
+    private val listaUsuario: List<Alumno>
+) :
+    ArrayAdapter<Alumno>(context, android.R.layout.simple_selectable_list_item, listaUsuario) {
+    @SuppressLint("ViewHolder", "InflateParams")
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view = inflater.inflate(R.layout.list_item_alumnos_layout, null)
+
+        val nombre = listaUsuario[position].nombre
+        val matricula = listaUsuario[position].matricula
+
+        val tvNombre = view.findViewById<TextView>(R.id.tvAlumDatosNombre)
+        val tvMatricula = view.findViewById<TextView>(R.id.tvAlumDatosMatricula)
+
+        tvNombre.text = nombre
+        tvMatricula.text = matricula
+
+        return view
+    }
+
+
+}

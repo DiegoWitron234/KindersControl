@@ -32,11 +32,11 @@ class PanelAdmin : AppCompatActivity(), ModoOscuro {
         botonDimensiones(btnAgregarAlumno, btnRegistrarEntrada, btnRegistrarSalida)
 
         btnRegistrarEntrada.setOnClickListener {
-            registro("In")
+            registro("in")
         }
 
         btnRegistrarSalida.setOnClickListener {
-            registro("Out")
+            registro("out")
         }
         btnAsignarTutor.setOnClickListener { startActivity(Intent(this, Tutorizacion::class.java)) }
 

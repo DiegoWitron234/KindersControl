@@ -38,9 +38,9 @@ public class LeerQR_Activity extends AppCompatActivity {
     private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
             result -> {
                 if (result.getContents() == null) {
-                    Toast.makeText(LeerQR_Activity.this, "Cancelled", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(LeerQR_Activity.this, "Cancelled", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(LeerQR_Activity.this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(LeerQR_Activity.this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
                     //idTutor = result.getContents();
                     cargarDatos(result.getContents());
                     cargarDatosTutor(result.getContents());
@@ -77,7 +77,7 @@ public class LeerQR_Activity extends AppCompatActivity {
         TextView txtTitulo = findViewById(R.id.tvRegistroActivity);
 
         modoOscuro();
-        if (estatusRegistro.equals("In")){
+        if (estatusRegistro.equals("in")){
             btnRegistrarEntrada.setText("Registrar entrada");
             txtTitulo.setText("Registro de entrada");
         }else{
