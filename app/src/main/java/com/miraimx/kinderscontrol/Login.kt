@@ -3,18 +3,15 @@ package com.miraimx.kinderscontrol
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Intent
-import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatDelegate
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -22,82 +19,77 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
+import com.miraimx.kinderscontrol.databinding.ActivityLoginBinding
 
 class Login : AppCompatActivity(), ModoOscuro {
 
     private lateinit var auth: FirebaseAuth
 
-    private lateinit var campoCorreo: EditText
-    private lateinit var campoContrasena: EditText
-    private lateinit var btnLogin: Button
-    private lateinit var textRegistrar: TextView
-    private lateinit var txtCorreoValido: TextView
+    private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         cancelarModoOscuro(this)
-        /*val actionBar: ActionBar? = supportActionBar
-        if (actionBar != null) {
-            //Poner el ícono al ActionBar
-            actionBar.setIcon(R.mipmap.ic_launcher_foreground)
-            actionBar.setDisplayShowHomeEnabled(true)
-        }*/
+
+        MobileAds.initialize(this) {}
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
 
         auth = Firebase.auth
-        campoCorreo = findViewById(R.id.editCorreo)
-        campoContrasena = findViewById(R.id.editContrasena)
-        btnLogin = findViewById(R.id.btnLogin)
-        textRegistrar = findViewById(R.id.textRegistrar)
-        txtCorreoValido = findViewById(R.id.txtCorreoValido)
-        btnLogin.isEnabled = false
+        binding.btnLogin.isEnabled = false
 
         // Agregar el TextWatcher al campo de correo electrónico
-        campoCorreo.addTextChangedListener(object : TextWatcher {
+        binding.editCorreo.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             @SuppressLint("SetTextI18n")
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val correoValido = s.isValidEmail()
                 if (correoValido) {
-                    txtCorreoValido.text = ""
+                    binding.txtCorreoValido.text = ""
                 } else {
-                    txtCorreoValido.text = "Ingrese un correo válido"
+                    binding.txtCorreoValido.text = "Ingrese un correo válido"
                 }
-                btnLogin.isEnabled = correoValido && campoContrasena.text.isNotEmpty()
+                binding.btnLogin.isEnabled =
+                    correoValido && binding.editContrasena.text.isNotEmpty()
             }
 
             override fun afterTextChanged(s: Editable?) {}
         })
 
         // Listener al campo de contraseña para habilitar o deshabilitar el botón de inicio de sesión
-        campoContrasena.addTextChangedListener(object : TextWatcher {
+        binding.editContrasena.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                btnLogin.isEnabled = campoCorreo.text.isValidEmail() && s?.isNotEmpty() == true
+                binding.btnLogin.isEnabled =
+                    binding.editCorreo.text.isValidEmail() && s?.isNotEmpty() == true
             }
 
             override fun afterTextChanged(s: Editable?) {}
         })
 
         // Listener al botón de inicio de sesión (btnLogin) para realizar la acción de inicio de sesión
-        btnLogin.setOnClickListener {
+        binding.btnLogin.setOnClickListener {
             // Lógica del Login
-            val correo: String = campoCorreo.text.toString()
-            val password: String = campoContrasena.text.toString()
+            val correo: String = binding.editCorreo.text.toString()
+            val password: String = binding.editContrasena.text.toString()
             println("Correo: $correo \nContraseña: $password")
             signIn(correo, password)
         }
 
         // Listener para registrar un nuevo usuario
-        textRegistrar.setOnClickListener {
+        binding.textRegistrar.setOnClickListener {
             // Intent para ir a la activity de registro de usuario
             val intent = Intent(this, RegistrarUsuario::class.java)
             intent.putExtra("rol", "Usuario")
             startActivity(intent)
         }
     }
+
     override fun onStart() {
         super.onStart()
         verificacionRol()

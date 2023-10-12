@@ -9,18 +9,30 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.database.FirebaseDatabase
+import com.miraimx.kinderscontrol.databinding.ActivitySingUpAlumnoBinding
 
 class SingUpAlumno : AppCompatActivity(), ModoOscuro {
     private lateinit var svEdad: Spinner
     private lateinit var svSangre: Spinner
     private lateinit var svGrado: Spinner
     private lateinit var svGrupo: Spinner
+    private lateinit var binding: ActivitySingUpAlumnoBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sing_up_alumno)
+
+        binding = ActivitySingUpAlumnoBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         cancelarModoOscuro(this)
+
+        MobileAds.initialize(this) {}
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+
         scrollDatos()
         val btnRegEmpleado = findViewById<Button>(R.id.btnRegAlumno)
 

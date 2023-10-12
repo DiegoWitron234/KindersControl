@@ -65,4 +65,7 @@ dependencies {
 
     //Lector de QR
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
+
+    //Anuncios
+    implementation ("com.google.android.gms:play-services-ads:22.4.0")
 }

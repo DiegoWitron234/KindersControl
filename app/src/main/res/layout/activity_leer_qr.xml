@@ -5,86 +5,124 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/fondokinder"
-
+    android:orientation="vertical"
     tools:context=".LeerQR_Activity">
-    <LinearLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="20dp"
-        >
+        android:layout_marginHorizontal="20dp">
+
+        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            ads:adSize="BANNER"
+            ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.cardview.widget.CardView
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:cardCornerRadius="20dp">
+            android:layout_marginTop="25dp"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/adView">
 
             <ImageView
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:src="@drawable/logokinder"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                android:layout_gravity="center"
+                android:src="@drawable/logokinder" />
         </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/tvRegistroActivity"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
             style="@style/tvTitulos1"
-            android:gravity="center"
             android:layout_gravity="center"
             android:text="Registro"
-            />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
         <Button
             android:id="@+id/btnScan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:text="Escanear QR"
+            android:layout_marginTop="20dp"
             android:backgroundTint="@color/botones"
-            android:layout_gravity="center"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="Escanear QR"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvRegistroActivity" />
 
         <TextView
             android:id="@+id/txtNombraTutorQR"
+            style="@style/tvCuerpo1"
             android:hint="Nombre del tutor"
-            style="@style/tvCuerpo1"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnScan" />
 
         <TextView
             android:id="@+id/txtTelefonoTutorQR"
+            style="@style/tvCuerpo1"
             android:hint="Teléfono"
-            style="@style/tvCuerpo1"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtNombraTutorQR" />
 
         <TextView
             android:id="@+id/txEmailTutorQR"
+            style="@style/tvCuerpo1"
             android:hint="Correo electrónico"
-            style="@style/tvCuerpo1"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtTelefonoTutorQR" />
 
         <TextView
             android:id="@+id/txDireccionTutorQR"
+            style="@style/tvCuerpo1"
             android:hint="Dirección"
-            style="@style/tvCuerpo1"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txEmailTutorQR" />
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/tvTitulos1"
+            android:gravity="center"
+            android:text="Asignados"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txDireccionTutorQR" />
 
         <ListView
             android:id="@+id/lsCheckAlumno"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="200dp"
-            android:listSelector="#0f0"
-            />
+            android:listSelector="@color/hipervinculos"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <Button
             android:id="@+id/registrarIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            style="@style/boton"
-            android:layout_gravity="center"
-            android:text="registrar"
-            android:backgroundTint="@color/botones"
             android:layout_marginBottom="70dp"
-            />
-    </LinearLayout>
+            android:backgroundTint="@color/botones"
+            android:text="registrar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lsCheckAlumno" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

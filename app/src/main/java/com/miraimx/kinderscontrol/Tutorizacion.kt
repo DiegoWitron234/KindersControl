@@ -9,10 +9,13 @@ import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.text.isDigitsOnly
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.miraimx.kinderscontrol.databinding.ActivityTutorizacionBinding
 
 class Tutorizacion : AppCompatActivity(), ModoOscuro {
 
@@ -25,6 +28,7 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
     private lateinit var btnAsignar: Button
     private var posAnteriorAlumno = -1
     private var posAnteriorTutor = -1
+    private lateinit var binding: ActivityTutorizacionBinding
 
     /*data class Usuario(
         val id: String,
@@ -35,9 +39,14 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_tutorizacion)
+        binding = ActivityTutorizacionBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         cancelarModoOscuro(this)
+
+        MobileAds.initialize(this) {}
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
 
         buscarAlumnos = findViewById(R.id.buscarAlumno)
         buscarTutores = findViewById(R.id.buscarTutor)
@@ -133,7 +142,7 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
         atributoId: String,
         atributoNombre: String,
         lista: MutableList<Usuario>,
-        orden : Boolean
+        orden: Boolean
     ) {
         if (nombre.isNotBlank()) {
             val database = FirebaseDatabase.getInstance().reference.child(tabla)
@@ -171,7 +180,7 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
         val builder = AlertDialog.Builder(this)
         //val alumnoSeleccion = mutableListOf<String>()
         //val tutorSeleccion = mutableListOf<String>()
-        lateinit var tutorSeleccion:String
+        lateinit var tutorSeleccion: String
         lateinit var alumnoSeleccion: String
         builder.setTitle("Confirmación")
         builder.setMessage("¿Desea realizar la asignacion de los alumnos?")
@@ -179,7 +188,7 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
             // Aquí puedes agregar la lógica para agregar al niño al tutor
             //Toast.makeText(this, "Niño agregado al tutor", Toast.LENGTH_SHORT).show()
             val tutorizacionRef = FirebaseDatabase.getInstance().getReference("tutorizacion")
-           // var tutorizacionInfo = hashMapOf<String, String>()
+            // var tutorizacionInfo = hashMapOf<String, String>()
             //var i = 0
             //var y = 0
             for (alumno in alumnoLista) {
@@ -198,42 +207,51 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
                 .orderByChild("tutor_id")
                 .startAt(tutorSeleccion)
                 .endAt(tutorSeleccion + "\uf8ff")
-                .addListenerForSingleValueEvent(object: ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (registros in snapshot.children){
-                        if (registros.child("matricula").getValue(String::class.java) == alumnoSeleccion){
-                            Toast.makeText(this@Tutorizacion, "El niño ya se encuentra asignado", Toast.LENGTH_SHORT).show()
-                            return
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        for (registros in snapshot.children) {
+                            if (registros.child("matricula")
+                                    .getValue(String::class.java) == alumnoSeleccion
+                            ) {
+                                Toast.makeText(
+                                    this@Tutorizacion,
+                                    "El niño ya se encuentra asignado",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                return
+                            }
                         }
+                        Toast.makeText(this@Tutorizacion, "Asignación exitosa", Toast.LENGTH_SHORT)
+                            .show()
+                        val tutorizacionInfo = hashMapOf(
+                            "matricula" to alumnoSeleccion,
+                            "tutor_id" to tutorSeleccion
+                        )
+                        tutorizacionRef.push().setValue(tutorizacionInfo)
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    //Toast.makeText(this@Tutorizacion, "Operación exitosa", Toast.LENGTH_SHORT).show()
+                                } else {
+                                    Toast.makeText(
+                                        this@Tutorizacion,
+                                        "No se pudo realizar la operación",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        alumnoLista.clear()
+                        tutoresLista.clear()
+                        lsTutoresAdapter.notifyDataSetChanged()
+                        lsAlumnoAdapter.notifyDataSetChanged()
+                        btnAsignar.isEnabled = false
+                        buscarAlumnos.setQuery("", false)
+                        buscarTutores.setQuery("", false)
+                        dialog.dismiss()
                     }
-                    Toast.makeText(this@Tutorizacion, "Asignación exitosa", Toast.LENGTH_SHORT).show()
-                    val tutorizacionInfo = hashMapOf(
-                        "matricula" to alumnoSeleccion,
-                        "tutor_id" to tutorSeleccion
-                    )
-                    tutorizacionRef.push().setValue(tutorizacionInfo).addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            //Toast.makeText(this@Tutorizacion, "Operación exitosa", Toast.LENGTH_SHORT).show()
-                        } else {
-                            Toast.makeText(
-                                this@Tutorizacion,
-                                "No se pudo realizar la operación",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+
+                    override fun onCancelled(error: DatabaseError) {
                     }
-                    alumnoLista.clear()
-                    tutoresLista.clear()
-                    lsTutoresAdapter.notifyDataSetChanged()
-                    lsAlumnoAdapter.notifyDataSetChanged()
-                    btnAsignar.isEnabled = false
-                    buscarAlumnos.setQuery("", false)
-                    buscarTutores.setQuery("", false)
-                    dialog.dismiss()
-                }
-                override fun onCancelled(error: DatabaseError) {
-                }
-            })
+                })
         }
 
         builder.setNegativeButton("No") { dialog, _ ->

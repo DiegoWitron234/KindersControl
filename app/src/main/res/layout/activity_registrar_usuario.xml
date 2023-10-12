@@ -7,150 +7,193 @@
     android:background="@drawable/fondokinder"
     tools:context=".RegistrarUsuario">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="30dp"
-        >
-        <LinearLayout
-            android:layout_width="match_parent"
+        android:layout_marginHorizontal="30dp">
+
+        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:gravity="center"
-            >
-            <androidx.cardview.widget.CardView
-                android:id="@+id/imageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                app:cardCornerRadius="20dp">
+            android:layout_gravity="center"
+            ads:adSize="BANNER"
+            ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:src="@drawable/logokinder"
-                    app:layout_constraintBottom_toBottomOf="parent" />
-            </androidx.cardview.widget.CardView>
-            <TextView
-                style="@style/tvTitulos1"
-                android:layout_width="match_parent"
-                android:layout_marginTop="30dp"
-                android:text="@string/lblRegistrarNuevoUsuario"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="25dp"
-            android:orientation="vertical"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lblCorreo"
-                android:textColor="@color/textColor"
-                android:textSize="25sp"
-                android:layout_marginBottom="15dp"
-                />
+            android:layout_marginTop="25dp"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/adView">
 
-            <EditText
-                android:id="@+id/campoNuevoCorreo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:textSize="20sp"
-                android:textColor="@color/textColor"
-                android:layout_marginBottom="30dp"
-                android:hint="Correo Electrónico"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lblNuevaContra"
-                android:textColor="@color/textColor"
-                android:textSize="25sp"
-                android:layout_marginBottom="15dp"
-                />
-
-            <EditText
-                android:id="@+id/campoNuevaContraseña"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textColor="@color/textColor"
-                android:inputType="textPassword"
-                android:layout_marginBottom="30dp"
-                android:hint="Contraseña"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lblConfirmaContra"
-                android:textSize="25sp"
-                android:textColor="@color/textColor"
-                android:layout_marginBottom="15dp"
-                />
-
-            <EditText
-                android:id="@+id/campoConfirmarContraseña"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:textColor="@color/textColor"
-                android:inputType="textPassword"
-                android:textSize="20sp"
-                android:hint="Contraseña"
-                />
-
-            <TextView
-                android:id="@+id/txtCorreoValido"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/rojo"
-                android:textSize="15sp"
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_gravity="center"
-                android:layout_marginBottom="15dp"
-                />
+                android:contentDescription="@string/imagenkinderscontrol"
+                android:src="@drawable/logokinder" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvRegistrarNuevoUsuario"
+            style="@style/tvTitulos1"
+            android:layout_marginTop="30dp"
+            android:text="@string/lblRegistrarNuevoUsuario"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+        <TextView
+            android:id="@+id/lblCorreo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@string/lblCorreo"
+            android:textColor="@color/textColor"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvRegistrarNuevoUsuario" />
+
+        <EditText
+            android:id="@+id/campoNuevoCorreo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:hint="Correo Electrónico"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/textColor"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblCorreo" />
+
+        <TextView
+            android:id="@+id/lblNuevaContra"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@string/lblNuevaContra"
+            android:textColor="@color/textColor"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/campoNuevoCorreo" />
+
+        <EditText
+            android:id="@+id/campoNuevaContraseña"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            android:textColor="@color/textColor"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblNuevaContra" />
+
+        <TextView
+            android:id="@+id/lblConfirmaContra"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@string/lblConfirmaContra"
+            android:textColor="@color/textColor"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/campoNuevaContraseña" />
+
+        <EditText
+            android:id="@+id/campoConfirmarContraseña"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            android:textColor="@color/textColor"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblConfirmaContra" />
+
+        <TextView
+            android:id="@+id/txtCorreoValido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="15dp"
+            android:textColor="@color/rojo"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/campoConfirmarContraseña" />
+
+        <TextView
+            android:id="@+id/txtContraseñaValida"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="15dp"
+            android:textColor="@color/rojo"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtCorreoValido" />
+
+        <LinearLayout
+            android:id="@+id/layoutTerminosCondiciones"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtContraseñaValida">
+
+            <CheckBox
+                android:id="@+id/checkboxAceptar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/txtContraseñaValida"
+                android:id="@+id/termsAndPrivacyTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/rojo"
-                android:textSize="15sp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="15dp"
-                />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                >
-                <CheckBox
-                    android:id="@+id/checkboxAceptar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
-                <TextView
-                    android:id="@+id/termsAndPrivacyTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:autoLink="web"
-                    android:textColor="@color/textColor"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-            </LinearLayout>
-            <Button
-                android:id="@+id/btnRegistrarse"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lblRegistrarse"
-                android:textSize="20sp"
-                android:layout_marginBottom="70dp"
-                android:background="@drawable/redondeado_completo"
-                android:layout_gravity="center"/>
+                android:autoLink="web"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/textColor" />
         </LinearLayout>
-    </LinearLayout>
+
+        <Button
+            android:id="@+id/btnRegistrarse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="70dp"
+            android:background="@drawable/redondeado_completo"
+            android:text="@string/lblRegistrarse"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutTerminosCondiciones" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -1,71 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondokinder"
     tools:context=".Tutorizacion">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:orientation="vertical">
+        android:layout_marginHorizontal="20dp">
 
-        <TextView
-            style="@style/tvTitulos1"
-            android:text="Asignar tutor" />
-
-        <TextView
-            style="@style/tvTitulos2"
-            android:text="Buscar tutor" />
-
-        <SearchView
-            android:id="@+id/buscarTutor"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:queryHint="Nombre" />
-
-        <RelativeLayout
+        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
             android:layout_width="wrap_content"
-            android:layout_height="125dp">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            ads:adSize="BANNER"
+            ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ListView
-                android:id="@+id/spTutores"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:listSelector="#0f0"/>
-        </RelativeLayout>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/adView">
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@drawable/logokinder"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.cardview.widget.CardView>
 
         <TextView
+            android:id="@+id/tvAsignarTutor"
+            style="@style/tvTitulos1"
+            android:text="Asignar tutor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+        <TextView
+            android:id="@+id/tvBuscarTutor"
             style="@style/tvTitulos2"
             android:layout_marginTop="20dp"
-            android:text="@string/buscar_alumno" />
+            android:text="Buscar tutor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAsignarTutor" />
 
-        <SearchView
-            android:id="@+id/buscarAlumno"
-            android:layout_width="match_parent"
+        <android.widget.SearchView
+            android:id="@+id/buscarTutor"
+            android:layout_width="0dp"
             android:layout_height="40dp"
-            android:queryHint="Matricula o nombre" />
+            android:queryHint="Nombre"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvBuscarTutor" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="125dp">
+        <ListView
+            android:id="@+id/spTutores"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:listSelector="@color/hipervinculos"
+            app:layout_constraintBottom_toTopOf="@+id/tvBuscarAlumno"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buscarTutor" />
 
-            <ListView
-                android:id="@+id/spAlumnos"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:listSelector="#0f0"
-                />
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/tvBuscarAlumno"
+            style="@style/tvTitulos2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/buscar_alumno"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spTutores" />
+
+        <android.widget.SearchView
+            android:id="@+id/buscarAlumno"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:queryHint="Matricula o nombre"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvBuscarAlumno" />
+
+        <ListView
+            android:id="@+id/spAlumnos"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:maxHeight="200dp"
+            android:listSelector="@color/hipervinculos"
+            app:layout_constraintBottom_toTopOf="@+id/btnAsignar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buscarAlumno" />
 
         <Button
             android:id="@+id/btnAsignar"
             style="@style/boton"
-            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="50dp"
-            android:text="Asignar" />
-    </LinearLayout>
+            android:layout_marginBottom="70dp"
+            android:text="Asignar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spAlumnos" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -7,138 +7,159 @@
     android:background="@drawable/fondokinder"
     tools:context=".PanelAdmin">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:orientation="vertical">
+        android:paddingHorizontal="20dp">
+
+        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            ads:adSize="BANNER"
+            ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:layout_gravity="center"
+            android:layout_marginTop="25dp"
             app:cardCornerRadius="20dp"
-            >
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/adView">
+
             <ImageView
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:src="@drawable/logokinder"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:contentDescription="@string/imagenkinderscontrol"/>
+                android:layout_gravity="center"
+                android:contentDescription="@string/imagenkinderscontrol"
+                android:src="@drawable/logokinder" />
         </androidx.cardview.widget.CardView>
 
         <TextView
+            android:id="@+id/lblAdministracion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             android:text="@string/lblAdministracion"
             android:textColor="@color/textColor"
             android:textSize="40sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-            <TableRow
-                android:gravity="center"
-                >
-                <TextView
-                    android:id="@+id/textView"
-                    style="@style/tvTitulos2"
-                    android:layout_gravity="center"
-                    android:text="@string/agregar"
-                    android:textStyle="bold"
-                    android:layout_margin="10dp"
-                    />
-            </TableRow>
-            <TableRow
-                android:gravity="center"
-                >
-                <Button
-                    android:id="@+id/btnAgregarEmpleado"
-                    android:layout_width="0dp"
-                    android:layout_height="70dp"
-                    android:text="@string/btn_agregar_empleado"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMaxTextSize="20sp"
-                    android:background="@drawable/estilos_boton"
-                    android:layout_margin="8dp"
-                    android:layout_weight="1"
-                    tools:targetApi="o" />
+        <TextView
+            android:id="@+id/lblAgregar"
+            style="@style/tvTitulos2"
+            android:layout_gravity="center"
+            android:layout_marginTop="32dp"
+            android:text="@string/agregar"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lblAdministracion" />
 
-                <Button
-                    android:id="@+id/btnAgregarNino"
-                    android:layout_width="0dp"
-                    android:layout_height="70dp"
-                    android:text="@string/agregar_ni_o"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMaxTextSize="20sp"
-                    android:background="@drawable/estilos_boton"
-                    android:layout_margin="8dp"
-                    android:layout_weight="1"
-                    tools:targetApi="o" />
-            </TableRow>
-            <TableRow
-                android:gravity="center"
-                >
-                <TextView
-                    android:id="@+id/textView3"
-                    style="@style/tvTitulos2"
-                    android:text="@string/registrarBoton"
-                    android:textStyle="bold"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    />
-            </TableRow>
-            <TableRow
-                android:gravity="center"
-                >
-                <Button
-                    android:id="@+id/btnRegistroEntrada"
-                    android:layout_width="0dp"
-                    android:layout_height="70dp"
-                    android:text="@string/registrar_entrada"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMaxTextSize="20sp"
-                    android:background="@drawable/estilos_boton"
-                    android:layout_margin="8dp"
-                    android:layout_weight="1"
-                    tools:targetApi="o" />
-                <Button
-                    android:id="@+id/btnRegistroSalida"
-                    android:layout_width="0dp"
-                    android:layout_height="70dp"
-                    android:text="@string/entrada_salida"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMaxTextSize="20sp"
-                    android:background="@drawable/estilos_boton"
-                    android:layout_margin="8dp"
-                    android:layout_weight="1"
-                    tools:targetApi="o" />
-            </TableRow>
-        </TableLayout>
+        <Button
+            android:id="@+id/btnAgregarEmpleado"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="8dp"
+            android:autoSizeMaxTextSize="20dp"
+            android:autoSizeTextType="uniform"
+            android:background="@drawable/estilos_boton"
+            android:text="@string/btn_agregar_empleado"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toStartOf="@+id/btnAgregarNino"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblAgregar" />
+
+        <Button
+            android:id="@+id/btnAgregarNino"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="10dp"
+            android:autoSizeMaxTextSize="20dp"
+            android:autoSizeTextType="uniform"
+            android:background="@drawable/estilos_boton"
+            android:text="@string/agregar_ni_o"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnAgregarEmpleado"
+            app:layout_constraintTop_toBottomOf="@+id/lblAgregar" />
+
+        <TextView
+            android:id="@+id/lblEntrada"
+            style="@style/tvTitulos2"
+            android:layout_gravity="center"
+            android:layout_marginTop="160dp"
+            android:text="@string/registrar_entrada"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lblAdministracion" />
+
+        <Button
+            android:id="@+id/btnRegistroEntrada"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="8dp"
+            android:autoSizeMaxTextSize="20dp"
+            android:autoSizeTextType="uniform"
+            android:background="@drawable/estilos_boton"
+            android:text="@string/registrar_entrada"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toStartOf="@+id/btnRegistroSalida"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblEntrada" />
+
+        <Button
+            android:id="@+id/btnRegistroSalida"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="10dp"
+            android:autoSizeMaxTextSize="20dp"
+            android:autoSizeTextType="uniform"
+            android:background="@drawable/estilos_boton"
+            android:text="@string/entrada_salida"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnRegistroEntrada"
+            app:layout_constraintTop_toBottomOf="@+id/lblEntrada" />
 
         <Button
             android:id="@+id/btnAsignarTutorias"
             style="@style/botonMenu"
             android:layout_width="200dp"
-            android:layout_gravity="center"
+            android:layout_height="70dp"
             android:layout_marginTop="10dp"
-            android:text="@string/administrar_tutorias" />
+            android:text="@string/administrar_tutorias"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnRegistroEntrada" />
 
         <Button
             android:id="@+id/btnCerrarSesion"
             style="@style/botonMenu"
+            android:layout_width="200dp"
             android:layout_height="70dp"
-            android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="70dp"
-            android:text="@string/cerrar_sesi_n" />
+            android:text="@string/cerrar_sesi_n"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnAsignarTutorias" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

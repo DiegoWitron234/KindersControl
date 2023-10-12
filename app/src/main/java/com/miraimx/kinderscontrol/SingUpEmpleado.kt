@@ -9,16 +9,27 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import com.miraimx.kinderscontrol.databinding.ActivitySingUpEmpleadoBinding
 
 class SingUpEmpleado : AppCompatActivity(), ModoOscuro {
     private var esUsuarioActual: Boolean = false
+    private lateinit var binding: ActivitySingUpEmpleadoBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sing_up_empleado)
+        binding = ActivitySingUpEmpleadoBinding.inflate(layoutInflater)
+
+        setContentView(binding.root)
         cancelarModoOscuro(this)
+
+        MobileAds.initialize(this) {}
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+
         val btnRegEmpleado = findViewById<Button>(R.id.btnRegEmpleado)
         val edCorreo = findViewById<EditText>(R.id.edEmpleadoCorreo)
 

@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +14,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,6 +28,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+import com.miraimx.kinderscontrol.databinding.ActivityLeerQrBinding;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,25 +40,18 @@ import java.util.Locale;
 public class LeerQR_Activity extends AppCompatActivity {
     private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
             result -> {
-                if (result.getContents() == null) {
-                    //Toast.makeText(LeerQR_Activity.this, "Cancelled", Toast.LENGTH_LONG).show();
-                } else {
-                    //Toast.makeText(LeerQR_Activity.this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                    //idTutor = result.getContents();
+                if (result.getContents() != null) {
                     cargarDatos(result.getContents());
                     cargarDatosTutor(result.getContents());
-
                 }
             });
-    Button btnScan;
     String idEmpleado, idTutor, estatusRegistro;
     //idTutor = "8PalsQD1XmMSEELuEh8x8maxqdv2",
-    TextView txtNombre, txtTelefono, txtEmail, txtDireccion;
     private final List<Usuario> alumnoLista = new ArrayList<>();
     //private RecyclerAdapter2 recyclerAdapterAlumnos;
     private ArrayAdapter listViewAdapter;
 
-    private Button btnRegistrarEntrada;
+    private ActivityLeerQrBinding binding;
 
     private int posAnteriorAlumno = -1;
 
@@ -63,31 +59,37 @@ public class LeerQR_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_leer_qr);
+        binding = ActivityLeerQrBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        modoOscuro();
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
+            }
+        });
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        binding.adView.loadAd(adRequest);
+
         idEmpleado = getIntent().getStringExtra("id");
         estatusRegistro = getIntent().getStringExtra("estatus");
 
-        btnScan = findViewById(R.id.btnScan);
-        txtNombre = findViewById(R.id.txtNombraTutorQR);
-        txtTelefono = findViewById(R.id.txtTelefonoTutorQR);
-        txtEmail = findViewById(R.id.txEmailTutorQR);
-        txtDireccion = findViewById(R.id.txDireccionTutorQR);
-        btnRegistrarEntrada = findViewById(R.id.registrarIn);
-        btnRegistrarEntrada.setEnabled(false);
+        binding.registrarIn.setEnabled(false);
         TextView txtTitulo = findViewById(R.id.tvRegistroActivity);
 
-        modoOscuro();
-        if (estatusRegistro.equals("in")){
-            btnRegistrarEntrada.setText("Registrar entrada");
+
+        if (estatusRegistro.equals("in")) {
+            binding.registrarIn.setText("Registrar entrada");
             txtTitulo.setText("Registro de entrada");
-        }else{
-            btnRegistrarEntrada.setText("Registrar salida");
+        } else {
+            binding.registrarIn.setText("Registrar salida");
             txtTitulo.setText("Registro de salida");
         }
 
-        btnRegistrarEntrada.setOnClickListener(view -> btnRegistrarEntrada());
+        binding.registrarIn.setOnClickListener(view -> btnRegistrarEntrada());
 
-        btnScan.setOnClickListener(view -> {
+        binding.btnScan.setOnClickListener(view -> {
             ScanOptions options = new ScanOptions();
             options.setDesiredBarcodeFormats(ScanOptions.QR_CODE);
             options.setPrompt("Leer código QR");
@@ -97,25 +99,26 @@ public class LeerQR_Activity extends AppCompatActivity {
             barcodeLauncher.launch(options);
         });
 
-        ListView listViewAlumnos = findViewById(R.id.lsCheckAlumno);
         listViewAdapter = new ListViewUsuarioAdapter(this, alumnoLista);
-        listViewAlumnos.setAdapter(listViewAdapter);
-        listViewAlumnos.setOnItemClickListener((adapterView, view, i, l) -> {
+        binding.lsCheckAlumno.setAdapter(listViewAdapter);
+        binding.lsCheckAlumno.setOnItemClickListener((adapterView, view, i, l) -> {
             Usuario elementoSeleccionado = alumnoLista.get(i);
             elementoSeleccionado.setSeleccionado(true);
             if (posAnteriorAlumno != -1 && posAnteriorAlumno != i) {
                 alumnoLista.get(posAnteriorAlumno).setSeleccionado(false);
             }
             posAnteriorAlumno = i;
-            btnRegistrarEntrada.setEnabled(true);
+            binding.registrarIn.setEnabled(true);
         });
     }
-    private void modoOscuro(){
+
+    private void modoOscuro() {
         int nightModeFlags = this.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {/* si está activo el modo oscuro lo desactiva */
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
@@ -132,22 +135,22 @@ public class LeerQR_Activity extends AppCompatActivity {
     }
 
 
-    private void cargarDatosTutor(String cUserId){
+    private void cargarDatosTutor(String cUserId) {
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         Query query = database.child("tutores").orderByChild("tutor_id").equalTo(cUserId);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot datos: snapshot.getChildren()){
+                for (DataSnapshot datos : snapshot.getChildren()) {
                     String nombreTutor = datos.child("nombre_tutor").getValue(String.class);
                     String telefono = datos.child("telefono_tutor").getValue(String.class);
                     String correo = datos.child("correo_tutor").getValue(String.class);
                     String direccion = datos.child("direccion_tutor").getValue(String.class);
-                    if (nombreTutor != null && telefono != null && correo != null && direccion != null){
-                        txtNombre.setText(nombreTutor);
-                        txtTelefono.setText(telefono);
-                        txtEmail.setText(correo);
-                        txtDireccion.setText(direccion);
+                    if (nombreTutor != null && telefono != null && correo != null && direccion != null) {
+                        binding.txtNombraTutorQR.setText(nombreTutor);
+                        binding.txtTelefonoTutorQR.setText(telefono);
+                        binding.txEmailTutorQR.setText(correo);
+                        binding.txDireccionTutorQR.setText(direccion);
                     }
                 }
             }
@@ -219,7 +222,7 @@ public class LeerQR_Activity extends AppCompatActivity {
 
         builder.setPositiveButton("Sí", (dialog, which) -> {
             // Aquí puedes agregar la lógica para agregar al niño al tutor
-            Toast.makeText(LeerQR_Activity.this, "Registro de "+estatusRegistro+" exitoso", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LeerQR_Activity.this, "Registro de " + estatusRegistro + " exitoso", Toast.LENGTH_SHORT).show();
 
             DatabaseReference chekinRef = FirebaseDatabase.getInstance().getReference("checkin").push();
             HashMap<String, Object> checkInfo = new HashMap<>();
@@ -259,7 +262,7 @@ public class LeerQR_Activity extends AppCompatActivity {
 
             listViewAdapter.notifyDataSetChanged();
 
-            btnRegistrarEntrada.setEnabled(false);
+            binding.registrarIn.setEnabled(false);
             dialog.dismiss();
         });
 

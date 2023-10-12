@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -13,32 +15,36 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
+import com.miraimx.kinderscontrol.databinding.ActivityPanelAdminBinding
 
 class PanelAdmin : AppCompatActivity(), ModoOscuro {
 
     private lateinit var btnAgregarEmpleado: Button
     private lateinit var btnCerrarSesion: Button
+    private lateinit var binding: ActivityPanelAdminBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_panel_admin)
+        binding = ActivityPanelAdminBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         cancelarModoOscuro(this)
-        btnAgregarEmpleado = findViewById(R.id.btnAgregarEmpleado)
-        val btnAgregarAlumno = findViewById<Button>(R.id.btnAgregarNino)
-        val btnRegistrarEntrada = findViewById<Button>(R.id.btnRegistroEntrada)
-        val btnRegistrarSalida = findViewById<Button>(R.id.btnRegistroSalida)
-        val btnAsignarTutor = findViewById<Button>(R.id.btnAsignarTutorias)
 
-        botonDimensiones(btnAgregarAlumno, btnRegistrarEntrada, btnRegistrarSalida)
+        MobileAds.initialize(this) {}
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
 
-        btnRegistrarEntrada.setOnClickListener {
+        btnAgregarEmpleado = binding.btnAgregarEmpleado
+
+        botonDimensiones(binding.btnAgregarNino, binding.btnRegistroEntrada,  binding.btnRegistroSalida)
+
+        binding.btnRegistroEntrada.setOnClickListener {
             registro("in")
         }
 
-        btnRegistrarSalida.setOnClickListener {
+        binding.btnRegistroSalida.setOnClickListener {
             registro("out")
         }
-        btnAsignarTutor.setOnClickListener { startActivity(Intent(this, Tutorizacion::class.java)) }
+        binding.btnAsignarTutorias.setOnClickListener { startActivity(Intent(this, Tutorizacion::class.java)) }
 
         btnAgregarEmpleado.setOnClickListener {
             val intent = Intent(this, RegistrarUsuario::class.java)
@@ -46,7 +52,7 @@ class PanelAdmin : AppCompatActivity(), ModoOscuro {
             startActivity(intent)
         }
 
-        btnAgregarAlumno.setOnClickListener {
+        binding.btnAgregarNino.setOnClickListener {
             val intent = Intent(this, SingUpAlumno::class.java)
             startActivity(intent)
         }

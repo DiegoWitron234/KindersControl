@@ -1,21 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/fondokinder"
     tools:context=".SingUpEmpleado">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="30dp"
+        android:layout_marginHorizontal="30dp"
         android:orientation="vertical">
+
+        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            ads:adSize="BANNER"
+            ads:adUnitId="ca-app-pub-3940256099942544/6300978111" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
+            android:layout_marginTop="30dp">
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/imageView"
                 android:layout_width="wrap_content"
@@ -29,26 +39,28 @@
                     android:src="@drawable/logokinder"
                     app:layout_constraintBottom_toBottomOf="parent" />
             </androidx.cardview.widget.CardView>
+
             <TextView
                 style="@style/tvTitulos1"
                 android:layout_width="match_parent"
                 android:text="@string/registrar_empleado" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginHorizontal="25dp"
-            >
+            android:orientation="vertical">
+
             <TextView
                 style="@style/tvTitulos2"
                 android:text="@string/nombre" />
 
             <EditText
                 android:id="@+id/edEmpleadoNombre"
-                android:inputType="textPersonName"
                 style="@style/etTitulos"
-                android:hint="@string/nombre" />
+                android:hint="@string/nombre"
+                android:inputType="textPersonName" />
 
             <TextView
                 style="@style/tvTitulos2"
@@ -56,9 +68,9 @@
 
             <EditText
                 android:id="@+id/edEmpleadoPuesto"
-                android:inputType="textPersonName"
                 style="@style/etTitulos"
-                android:hint="@string/puesto" />
+                android:hint="@string/puesto"
+                android:inputType="textPersonName" />
 
             <TextView
                 style="@style/tvTitulos2"
@@ -66,17 +78,16 @@
 
             <EditText
                 android:id="@+id/edEmpleadoCorreo"
-                android:inputType="textEmailAddress"
                 style="@style/etTitulos"
-                android:hint="@string/hintCorreo" />
+                android:hint="@string/hintCorreo"
+                android:inputType="textEmailAddress" />
 
             <Button
                 android:id="@+id/btnRegEmpleado"
-                android:layout_gravity="center"
-                android:text="@string/registrar"
-                android:layout_marginBottom="70dp"
                 style="@style/boton"
-                />
+                android:layout_gravity="center"
+                android:layout_marginBottom="70dp"
+                android:text="@string/registrar" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

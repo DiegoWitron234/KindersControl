@@ -1,96 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:background="@drawable/fondokinder"
     tools:context=".Login">
 
+    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        app:cardCornerRadius="20dp">
+        android:layout_marginTop="25dp"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/adView">
 
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/logokinder"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+            android:layout_gravity="center"
+            android:src="@drawable/logokinder" />
     </androidx.cardview.widget.CardView>
 
     <TextView
+        android:id="@+id/lblIniciarSesion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/lblIniciarSesion"
         android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="@string/lblIniciarSesion"
         android:textColor="@color/textColor"
-        android:layout_marginBottom="30dp"
         android:textSize="40sp"
         android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <EditText
         android:id="@+id/editCorreo"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="48dp"
-        android:layout_marginTop="96dp"
-        android:textColor="@color/textColor"
+        android:layout_margin="20dp"
+        android:layout_marginTop="32dp"
         android:hint="@string/hintCorreo"
-        android:textColorHint="@color/gris"
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true"
-        android:layout_margin="20dp"
-        />
+        android:textColor="@color/textColor"
+        android:textColorHint="@color/gris"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lblIniciarSesion" />
 
     <EditText
         android:id="@+id/editContrasena"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="48dp"
+        android:layout_margin="20dp"
         android:layout_marginTop="8dp"
-        android:textColor="@color/textColor"
         android:hint="@string/hintContrasena"
-        android:textColorHint="@color/gris"
         android:inputType="textPassword"
         android:selectAllOnFocus="true"
-        android:layout_margin="20dp"
-        />
+        android:textColor="@color/textColor"
+        android:textColorHint="@color/gris"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editCorreo" />
 
     <TextView
         android:id="@+id/txtCorreoValido"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
         android:textColor="@color/rojo"
         android:textSize="15sp"
-        android:layout_gravity="center"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editContrasena" />
 
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_margin="20dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="64dp"
-        android:layout_margin="20dp"
+        android:background="@drawable/estilos_boton"
         android:text="@string/lblIniciarSesion"
         android:textColor="@color/white"
-        android:background="@drawable/estilos_boton"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtCorreoValido" />
 
     <TextView
         android:id="@+id/textRegistrar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/hipervinculos"
+        android:layout_marginTop="16dp"
         android:text="@string/lblRegistrate"
-        android:layout_gravity="center"
-        android:textSize="20sp"/>
-</LinearLayout>
+        android:textColor="@color/hipervinculos"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
+</androidx.constraintlayout.widget.ConstraintLayout>

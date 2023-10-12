@@ -1,17 +1,25 @@
 package com.miraimx.kinderscontrol
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.View
+import android.view.View.OnTouchListener
 import android.widget.ArrayAdapter
-import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.miraimx.kinderscontrol.databinding.ActivityAsignacionesTutorBinding
 
 
 class AsignacionesTutor : AppCompatActivity(), ModoOscuro {
+
+    private lateinit var binding: ActivityAsignacionesTutorBinding
     val alumnosAccesoLista = mutableListOf<AccesoAlumno>()
     val alumnosAsigLista = mutableListOf<Alumno>()
     private lateinit var lsAccesoAlumnoAdapter: ArrayAdapter<AccesoAlumno>
@@ -19,17 +27,19 @@ class AsignacionesTutor : AppCompatActivity(), ModoOscuro {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_asignaciones_tutor)
-        val lsRegistrosTutor = findViewById<ListView>(R.id.lsRegistrosTutor)
-        val lsAsignacionesTutor = findViewById<ListView>(R.id.lsAsignacionesTutor)
+        binding = ActivityAsignacionesTutorBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        lsAccesoAlumnoAdapter = ListViewAccesoAdapter(this, alumnosAccesoLista)
-        lsAsignacionesAlAdapater = ListViewAlumnoAdapter(this, alumnosAsigLista )
-        lsRegistrosTutor.adapter = lsAccesoAlumnoAdapter
-        lsAsignacionesTutor.adapter = lsAsignacionesAlAdapater
+        cancelarModoOscuro(this)
+
+        MobileAds.initialize(this) {}
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+
+        configListas()
 
         val currentUser = FirebaseAuth.getInstance().currentUser
-        if (currentUser != null){
+        if (currentUser != null) {
             cargarDatos(currentUser.uid)
             cargarDatos2(currentUser.uid)
         }
@@ -40,7 +50,15 @@ class AsignacionesTutor : AppCompatActivity(), ModoOscuro {
         cancelarModoOscuro(this)
     }
 
-    private fun cargarDatos2(cUserId: String){
+    @SuppressLint("ClickableViewAccessibility")
+    private fun configListas() {
+        lsAccesoAlumnoAdapter = ListViewAccesoAdapter(this, alumnosAccesoLista)
+        lsAsignacionesAlAdapater = ListViewAlumnoAdapter(this, alumnosAsigLista)
+        binding.lsRegistrosTutor.adapter = lsAccesoAlumnoAdapter
+        binding.lsAsignacionesTutor.adapter = lsAsignacionesAlAdapater
+    }
+
+    private fun cargarDatos2(cUserId: String) {
         val database = FirebaseDatabase.getInstance().reference
 
         val query = database.child("tutorizacion").orderByChild("tutor_id").equalTo(cUserId)
@@ -71,6 +89,7 @@ class AsignacionesTutor : AppCompatActivity(), ModoOscuro {
                                     lsAsignacionesAlAdapater.notifyDataSetChanged()
                                 }
                             }
+
                             override fun onCancelled(error: DatabaseError) {}
                         })
                     }

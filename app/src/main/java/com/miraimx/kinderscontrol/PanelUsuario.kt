@@ -7,9 +7,10 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -18,6 +19,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
+import com.miraimx.kinderscontrol.databinding.ActivityPanelUsuarioBinding
 
 
 class PanelUsuario : AppCompatActivity(), ModoOscuro {
@@ -27,6 +29,7 @@ class PanelUsuario : AppCompatActivity(), ModoOscuro {
     private lateinit var btnMostrarQR: Button
     private lateinit var currentUser: FirebaseUser
     private lateinit var serviceIntent: Intent
+    private lateinit var binding: ActivityPanelUsuarioBinding
 
     companion object {
         val PERMISOS = arrayListOf(
@@ -36,14 +39,22 @@ class PanelUsuario : AppCompatActivity(), ModoOscuro {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_panel_usuario)
+
+        binding = ActivityPanelUsuarioBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         cancelarModoOscuro(this)
-        verificarPermisos()
-        shouldShowRequestPermissionRationale("android.permission.POST_NOTIFICATIONS")
-        btnCerrarSesion = findViewById(R.id.btnCerrarSesion)
 
-        btnMostrarQR = findViewById(R.id.btnMostrarQR)
+        MobileAds.initialize(this) {}
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+
+        verificarPermisos()
+
+        shouldShowRequestPermissionRationale("android.permission.POST_NOTIFICATIONS")
+
+        btnCerrarSesion = binding.btnCerrarSesion
+        btnMostrarQR = binding.btnMostrarQR
 
         btnCerrarSesion.setOnClickListener { cerrarSesion() }
 
@@ -181,19 +192,5 @@ class PanelUsuario : AppCompatActivity(), ModoOscuro {
             intent.putExtra("android.provider.extra.APP_PACKAGE", packageName)
             startActivity(intent)
         }
-
     }
-
-    private fun permisos() {
-        val requestPermissionLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted ->
-            if (isGranted) {
-
-            }
-        }
-        requestPermissionLauncher.launch("android.permission.POST_NOTIFICATIONS")
-    }
-
-
 }

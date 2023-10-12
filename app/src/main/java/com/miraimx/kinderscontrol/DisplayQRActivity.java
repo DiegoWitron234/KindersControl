@@ -3,33 +3,40 @@ package com.miraimx.kinderscontrol;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.widget.ImageView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.miraimx.kinderscontrol.databinding.ActivityDisplayQrBinding;
 
 public class DisplayQRActivity extends AppCompatActivity {
 
-    private ImageView qrImageView;
+    private ActivityDisplayQrBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display_qr);
+        binding = ActivityDisplayQrBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         modoOscuro();
-        qrImageView = findViewById(R.id.qr_image);
 
+        MobileAds.initialize(this, initializationStatus -> {
+        });
+        AdRequest adRequest = new AdRequest.Builder().build();
+        binding.adView.loadAd(adRequest);
         // Obtiene el UID del intent
         String uid = getIntent().getStringExtra("uid");
 
         // Convierte el UID en un código QR y lo muestra
         if (uid != null) {
             Bitmap qrBitmap = generateQRCode(uid);
-            qrImageView.setImageBitmap(qrBitmap);
+            binding.qrImage.setImageBitmap(qrBitmap);
         }
     }
 
@@ -39,6 +46,7 @@ public class DisplayQRActivity extends AppCompatActivity {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
+
     private Bitmap generateQRCode(String data) {
         try {
             BitMatrix bitMatrix = new MultiFormatWriter().encode(data, BarcodeFormat.QR_CODE, 200, 200);

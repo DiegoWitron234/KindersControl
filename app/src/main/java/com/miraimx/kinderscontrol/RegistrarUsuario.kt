@@ -19,10 +19,13 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import com.miraimx.kinderscontrol.databinding.ActivityRegistrarUsuarioBinding
 
 class RegistrarUsuario : AppCompatActivity(), ModoOscuro {
 
@@ -34,11 +37,19 @@ class RegistrarUsuario : AppCompatActivity(), ModoOscuro {
     private lateinit var txtCorreoValido: TextView
     private lateinit var txtPassValida: TextView
     private lateinit var checkboxAceptar: CheckBox
+    private lateinit var binding: ActivityRegistrarUsuarioBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_registrar_usuario)
+        binding = ActivityRegistrarUsuarioBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        MobileAds.initialize(this) {}
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+
         cancelarModoOscuro(this)
+
         val rol = intent.getStringExtra("rol")
         if (rol == null) {
             Toast.makeText(this, "El rol es desconocido", Toast.LENGTH_LONG).show()
@@ -47,21 +58,21 @@ class RegistrarUsuario : AppCompatActivity(), ModoOscuro {
 
         auth = Firebase.auth
 
-        campoNuevoCorreo = findViewById(R.id.campoNuevoCorreo)
-        campoNuevaPassword = findViewById(R.id.campoNuevaContraseña)
-        campoConfirmarPassword = findViewById(R.id.campoConfirmarContraseña)
-        btnRegistrarse = findViewById(R.id.btnRegistrarse)
-        txtCorreoValido = findViewById(R.id.txtCorreoValido)
-        txtPassValida = findViewById(R.id.txtContraseñaValida)
+        campoNuevoCorreo = binding.campoNuevoCorreo
+        campoNuevaPassword = binding.campoNuevaContraseA
+        campoConfirmarPassword = binding.campoConfirmarContraseA
+        btnRegistrarse = binding.btnRegistrarse
+        txtCorreoValido = binding.txtCorreoValido
+        txtPassValida = binding.txtContraseAValida
         btnRegistrarse.isEnabled = false
 
         campoNuevoCorreo.addTextChangedListener(watcher)
         campoNuevaPassword.addTextChangedListener(watcher)
         campoConfirmarPassword.addTextChangedListener(watcher)
 
-        checkboxAceptar = findViewById(R.id.checkboxAceptar)
+        checkboxAceptar = binding.checkboxAceptar
 
-        val termsAndPrivacyTextView = findViewById<TextView>(R.id.termsAndPrivacyTextView)
+        val termsAndPrivacyTextView = binding.termsAndPrivacyTextView
 
         val message =
             "Confirma que has leído y aceptas los términos y condiciones y el aviso de privacidad."
