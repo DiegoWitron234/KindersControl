@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.miraimx.kinderscontrol.databinding.ActivityTutorizacionBinding
+import java.util.Locale
 
 class Tutorizacion : AppCompatActivity(), ModoOscuro {
 
@@ -29,13 +30,6 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
     private var posAnteriorAlumno = -1
     private var posAnteriorTutor = -1
     private lateinit var binding: ActivityTutorizacionBinding
-
-    /*data class Usuario(
-        val id: String,
-        val nombre: String,
-        var seleccionado: Boolean,
-        var usuario: String
-    )*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +59,7 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
         lsTutoresAdapter = ListViewUsuarioAdapter(this, tutoresLista)
         listAlumno.adapter = lsAlumnoAdapter
         listTutores.adapter = lsTutoresAdapter
-        listAlumno.setOnItemClickListener { _, view, i, _ ->
+        listAlumno.setOnItemClickListener { _, _, i, _ ->
             val elementoSeleccionado = alumnoLista[i]
             elementoSeleccionado.seleccionado = true
 
@@ -76,7 +70,7 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
             selectLister()
         }
 
-        listTutores.setOnItemClickListener { _, view, i, l ->
+        listTutores.setOnItemClickListener { _, _, i, _ ->
             val elementoSeleccionado = tutoresLista[i]
             elementoSeleccionado.seleccionado = true
             if (posAnteriorTutor != -1 && posAnteriorTutor != i) {
@@ -87,19 +81,18 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
         }
     }
 
-
     private fun busquedas(srvAlumno: SearchView, srvTutores: SearchView) {
         srvAlumno.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(p0: String?): Boolean {
-                return false
+                return true
             }
 
             override fun onQueryTextChange(p0: String?): Boolean {
                 if (p0 != null) {
                     if (!p0.isDigitsOnly()) {
-                        consulta("alumnos", p0, "matricula", "nombre_alumno", alumnoLista, false)
+                        consulta("alumnos", normalizerText(p0), "matricula", "nombre_alumno", alumnoLista, false)
                     } else {
-                        consulta("alumnos", p0, "nombre_alumno", "matricula", alumnoLista, true)
+                        consulta("alumnos",normalizerText(p0), "nombre_alumno", "matricula", alumnoLista, true)
                     }
                 }
                 return true
@@ -109,30 +102,21 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
 
         srvTutores.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(p0: String?): Boolean {
-                return false
+                return true
             }
-
             override fun onQueryTextChange(p0: String?): Boolean {
                 if (p0 != null) {
-                    consulta("tutores", p0, "tutor_id", "nombre_tutor", tutoresLista, false)
+                    consulta("tutores", normalizerText(p0), "tutor_id", "nombre_tutor", tutoresLista, false)
                 }
                 return true
             }
-
         })
+    }
 
-        srvAlumno.setOnCloseListener {
-            // Borrar la lista de alumnos y notificar al adaptador
-            alumnoLista.clear()
-            lsAlumnoAdapter.notifyDataSetChanged()
-            true
-        }
-
-        srvTutores.setOnCloseListener {
-            // Borrar la lista de tutores y notificar al adaptador
-            tutoresLista.clear()
-            lsTutoresAdapter.notifyDataSetChanged()
-            true
+    private fun normalizerText(texto: String): String {
+        return texto.split(" ").joinToString(" ") { it ->
+            it.lowercase()
+                .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
         }
     }
 
@@ -140,21 +124,21 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
         tabla: String,
         nombre: String,
         atributoId: String,
-        atributoNombre: String,
+        atributoBuscar: String,
         lista: MutableList<Usuario>,
         orden: Boolean
     ) {
         if (nombre.isNotBlank()) {
             val database = FirebaseDatabase.getInstance().reference.child(tabla)
             val alumnosQuery =
-                database.orderByChild(atributoNombre).startAt(nombre).endAt(nombre + "\uf8ff")
+                database.orderByChild(atributoBuscar).startAt(nombre).endAt(nombre + "\uf8ff")
             alumnosQuery.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     lista.clear() // Borra la lista antes de agregar nuevos resultados
                     for (usuario in snapshot.children) {
                         val id = usuario.child(atributoId).getValue(String::class.java)
                         val nombreUsuario =
-                            usuario.child(atributoNombre).getValue(String::class.java)
+                            usuario.child(atributoBuscar).getValue(String::class.java)
 
                         if (nombreUsuario != null && id != null) {
                             val usuarioDatos = Usuario(
@@ -259,7 +243,6 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
             Toast.makeText(this, "No se agregó al niño al tutor", Toast.LENGTH_SHORT).show()
             dialog.dismiss()
         }
-
         val dialog = builder.create()
         dialog.show()
     }
@@ -276,14 +259,3 @@ class Tutorizacion : AppCompatActivity(), ModoOscuro {
         }
     }
 }
-
-/*while (i < tutorSeleccion.size) {
-    while (y < alumnoSeleccion.size) {
-        tutorizacionInfo = hashMapOf(
-            "matricula" to alumnoSeleccion[y],
-            "tutor_id" to tutorSeleccion[i]
-        )
-        y++
-    }
-    i++
-}*/

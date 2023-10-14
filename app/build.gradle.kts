@@ -60,6 +60,9 @@ dependencies {
     implementation("com.google.firebase:firebase-database-ktx")
     implementation("com.google.firebase:firebase-messaging")
 
+    //Firebase Cloud Storage
+    implementation("com.google.firebase:firebase-storage-ktx:20.2.1")
+
     //Generador de QR
     implementation ("com.google.zxing:core:3.4.1")
 
@@ -68,4 +71,7 @@ dependencies {
 
     //Anuncios
     implementation ("com.google.android.gms:play-services-ads:22.4.0")
+
+    // Camara
+
 }

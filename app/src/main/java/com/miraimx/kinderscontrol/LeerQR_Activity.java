@@ -63,10 +63,7 @@ public class LeerQR_Activity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         modoOscuro();
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
-            }
+        MobileAds.initialize(this, initializationStatus -> {
         });
 
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -222,7 +219,7 @@ public class LeerQR_Activity extends AppCompatActivity {
 
         builder.setPositiveButton("Sí", (dialog, which) -> {
             // Aquí puedes agregar la lógica para agregar al niño al tutor
-            Toast.makeText(LeerQR_Activity.this, "Registro de " + estatusRegistro + " exitoso", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(LeerQR_Activity.this, "Registro de " + estatusRegistro + " exitoso", Toast.LENGTH_SHORT).show();
 
             DatabaseReference chekinRef = FirebaseDatabase.getInstance().getReference("checkin").push();
             HashMap<String, Object> checkInfo = new HashMap<>();
@@ -260,10 +257,17 @@ public class LeerQR_Activity extends AppCompatActivity {
                 alumnoLista.get(y).setSeleccionado(false);
             }
 
-            listViewAdapter.notifyDataSetChanged();
 
+            Intent intent = new Intent(this, PanelAdmin.class);
+            startActivity(intent);
+            finish();
+
+            /*alumnoLista.get(posAnteriorAlumno).setSeleccionado(false);
+            posAnteriorAlumno = -1;
+            binding.lsCheckAlumno.clearChoices();
+            listViewAdapter.notifyDataSetChanged();
             binding.registrarIn.setEnabled(false);
-            dialog.dismiss();
+            dialog.dismiss();*/
         });
 
         builder.setNegativeButton("No", (dialog, which) -> {
@@ -275,4 +279,6 @@ public class LeerQR_Activity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+
 }

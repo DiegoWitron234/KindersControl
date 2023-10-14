@@ -2,9 +2,6 @@ package com.miraimx.kinderscontrol
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.MotionEvent
-import android.view.View
-import android.view.View.OnTouchListener
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdRequest
@@ -15,6 +12,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.miraimx.kinderscontrol.databinding.ActivityAsignacionesTutorBinding
+import java.text.SimpleDateFormat
+import java.util.Date
 
 
 class AsignacionesTutor : AppCompatActivity(), ModoOscuro {
@@ -76,11 +75,12 @@ class AsignacionesTutor : AppCompatActivity(), ModoOscuro {
                                     val nombreAlumno =
                                         alumno.child("nombre_alumno").getValue(String::class.java)
                                     if (nombreAlumno != null) {
-                                        val alumno = Alumno(
-                                            nombreAlumno,
-                                            id,
+                                        alumnosAsigLista.add(
+                                            Alumno(
+                                                nombreAlumno,
+                                                id,
+                                            )
                                         )
-                                        alumnosAsigLista.add(alumno)
                                     }
                                 }
                                 cantidadAlumnos++
@@ -102,12 +102,10 @@ class AsignacionesTutor : AppCompatActivity(), ModoOscuro {
 
     private fun cargarDatos(cUserId: String) {
         val database = FirebaseDatabase.getInstance().reference
-
         val query = database.child("tutorizacion").orderByChild("tutor_id").equalTo(cUserId)
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 var cantidadAlumnos = 0
-
                 for (registro in snapshot.children) {
                     val matricula = registro.child("matricula").getValue(String::class.java)
                     if (matricula != null) {
@@ -131,7 +129,7 @@ class AsignacionesTutor : AppCompatActivity(), ModoOscuro {
                                                 if (estatus != null && tiempo != null) {
                                                     val accesoAlumno = AccesoAlumno(
                                                         nombreAlumno,
-                                                        tiempo,
+                                                        convertirFecha(tiempo),
                                                         estatus,
                                                         matricula
                                                     )
@@ -162,10 +160,29 @@ class AsignacionesTutor : AppCompatActivity(), ModoOscuro {
         })
     }
 
+    @SuppressLint("SimpleDateFormat")
+    fun convertirFecha(fechaOriginal : String): String{
+
+        // Formato de entrada
+        val formatoEntrada = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+
+        // Formato de salida (day-month-year)
+        val formatoSalida = SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
+
+        try {
+            // Parsear la fecha original al formato de entrada
+            val fechaParseada: Date = formatoEntrada.parse(fechaOriginal)
+
+            // Formatear la fecha al formato de salida
+            val fechaFormateada: String = formatoSalida.format(fechaParseada)
+
+            // Imprimir la fecha formateada
+            println("Fecha formateada: $fechaFormateada")
+            return fechaFormateada
+        } catch (e: Exception) {
+            println("Error al formatear la fecha: ${e.message}")
+            return " "
+        }
+    }
 }
-
-
-
-
-
 

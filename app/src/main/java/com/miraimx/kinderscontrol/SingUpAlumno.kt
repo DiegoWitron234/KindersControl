@@ -70,7 +70,7 @@ class SingUpAlumno : AppCompatActivity(), ModoOscuro {
             usuarioRef.setValue(usuarioInfo)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Toast.makeText(this, "Tutor registrado", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Alumno registrado", Toast.LENGTH_SHORT).show()
                         finish()
                     } else {
                         Toast.makeText(this, "Ha ocurrido un error", Toast.LENGTH_SHORT).show()
