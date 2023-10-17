@@ -49,12 +49,17 @@ class PanelUsuario : AppCompatActivity(), ModoOscuro {
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
 
+        binding.btnVerGrupo.setOnClickListener {
+            startActivity(Intent(this, AsistenciaAlumnos::class.java))
+        }
+
         verificarPermisos()
 
         shouldShowRequestPermissionRationale("android.permission.POST_NOTIFICATIONS")
 
         btnCerrarSesion = binding.btnCerrarSesion
         btnMostrarQR = binding.btnMostrarQR
+
 
         btnCerrarSesion.setOnClickListener { cerrarSesion() }
 

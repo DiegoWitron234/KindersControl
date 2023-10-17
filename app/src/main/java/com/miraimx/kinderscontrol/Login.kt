@@ -77,7 +77,7 @@ class Login : AppCompatActivity(), ModoOscuro {
             // Lógica del Login
             val correo: String = binding.editCorreo.text.toString()
             val password: String = binding.editContrasena.text.toString()
-            println("Correo: $correo \nContraseña: $password")
+            //println("Correo: $correo \nContraseña: $password")
             signIn(correo, password)
         }
 
