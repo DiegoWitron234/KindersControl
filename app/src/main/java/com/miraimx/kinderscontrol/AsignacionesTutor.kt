@@ -122,11 +122,16 @@ class AsignacionesTutor : AppCompatActivity(), ModoOscuro {
                                         ValueEventListener {
                                         override fun onDataChange(checkinSnapshot: DataSnapshot) {
                                             for (checkin in checkinSnapshot.children) {
-                                                val estatus = checkin.child("in_out")
+                                                var estatus = checkin.child("in_out")
                                                     .getValue(String::class.java)
                                                 val tiempo = checkin.child("horafecha_check")
                                                     .getValue(String::class.java)
                                                 if (estatus != null && tiempo != null) {
+                                                    estatus = if (estatus == "In") {
+                                                        "Ingresó"
+                                                    }else{
+                                                        "Salió"
+                                                    }
                                                     val accesoAlumno = AccesoAlumno(
                                                         nombreAlumno,
                                                         convertirFecha(tiempo),

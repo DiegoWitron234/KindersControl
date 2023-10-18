@@ -46,15 +46,10 @@ class ListViewAccesoAdapter(
 
         tvNombre.text = nombre
         tvTiempo.text = tiempo
-        if(estatus == "in"){
-            tvEstatus.text = "Ingresó"
-        }else{
-            tvEstatus.text = "Salió"
-        }
+        tvEstatus.text = estatus
+
         return view
     }
-
-
 }
 
 class ListViewAlumnoAdapter(
@@ -78,6 +73,5 @@ class ListViewAlumnoAdapter(
 
         return view
     }
-
-
 }
+
