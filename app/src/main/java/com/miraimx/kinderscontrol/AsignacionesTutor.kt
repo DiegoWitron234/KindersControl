@@ -14,6 +14,7 @@ import com.google.firebase.database.ValueEventListener
 import com.miraimx.kinderscontrol.databinding.ActivityAsignacionesTutorBinding
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 
 class AsignacionesTutor : AppCompatActivity(), ModoOscuro {
@@ -127,9 +128,9 @@ class AsignacionesTutor : AppCompatActivity(), ModoOscuro {
                                                 val tiempo = checkin.child("horafecha_check")
                                                     .getValue(String::class.java)
                                                 if (estatus != null && tiempo != null) {
-                                                    estatus = if (estatus == "In") {
+                                                    estatus = if (estatus == "in") {
                                                         "Ingresó"
-                                                    }else{
+                                                    } else {
                                                         "Salió"
                                                     }
                                                     val accesoAlumno = AccesoAlumno(
@@ -165,28 +166,27 @@ class AsignacionesTutor : AppCompatActivity(), ModoOscuro {
         })
     }
 
-    @SuppressLint("SimpleDateFormat")
-    fun convertirFecha(fechaOriginal : String): String{
+    fun convertirFecha(fechaOriginal: String): String {
 
         // Formato de entrada
-        val formatoEntrada = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val formatoEntrada = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT)
 
         // Formato de salida (day-month-year)
-        val formatoSalida = SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
+        val formatoSalida = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ROOT)
 
-        try {
+        return try {
             // Parsear la fecha original al formato de entrada
-            val fechaParseada: Date = formatoEntrada.parse(fechaOriginal)
+            val fechaParseada: Date = formatoEntrada.parse(fechaOriginal) as Date
 
             // Formatear la fecha al formato de salida
             val fechaFormateada: String = formatoSalida.format(fechaParseada)
 
             // Imprimir la fecha formateada
-            println("Fecha formateada: $fechaFormateada")
-            return fechaFormateada
+            //println("Fecha formateada: $fechaFormateada")
+            fechaFormateada
         } catch (e: Exception) {
             println("Error al formatear la fecha: ${e.message}")
-            return " "
+            " "
         }
     }
 }

@@ -17,12 +17,10 @@ import com.miraimx.kinderscontrol.databinding.ActivityDisplayQrBinding;
 
 public class DisplayQRActivity extends AppCompatActivity {
 
-    private ActivityDisplayQrBinding binding;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityDisplayQrBinding.inflate(getLayoutInflater());
+        com.miraimx.kinderscontrol.databinding.ActivityDisplayQrBinding binding = ActivityDisplayQrBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         modoOscuro();
 

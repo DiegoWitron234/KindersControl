@@ -2,9 +2,12 @@ package com.miraimx.kinderscontrol
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.initialization.InitializationStatus
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -27,6 +30,11 @@ class AsistenciaAlumnos : AppCompatActivity(), ModoOscuro {
         setContentView(binding.root)
 
         cancelarModoOscuro(this)
+        MobileAds.initialize(
+            this
+        ) {}
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
 
         initListaAlumnos()
     }
@@ -45,15 +53,17 @@ class AsistenciaAlumnos : AppCompatActivity(), ModoOscuro {
             Calendar.getInstance().time.toString()
         }
         val firebase = FirebaseDatabase.getInstance().reference
-        val refCheck = firebase.child("checkin").orderByChild("in_out").equalTo("In")
+        val refCheck = firebase.child("checkin").orderByChild("in_out").equalTo("in")
         refCheck.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                var cantidadAlumnos = 0
                 for (ch in snapshot.children) {
                     val fecha = ch.child("horafecha_check").getValue(String::class.java)
+                    Toast.makeText(this@AsistenciaAlumnos, "REGISTRO DE HORA OBTENIDO", Toast.LENGTH_SHORT).show()
                     if (!fecha.isNullOrEmpty()) {
+                        //Toast.makeText(this@AsistenciaAlumnos, "NO ES NULO", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(this@AsistenciaAlumnos, "Hoy: "+fechaActual+ "registro: "+convertirFecha(fecha), Toast.LENGTH_SHORT).show()
                         if (fechaActual.toString() == convertirFecha(fecha)) {
-                            Log.i("Log", "REGISTROS ENCONTRADOS")
+                            //Toast.makeText(this@AsistenciaAlumnos, "REGISTROS ENCONTRADOS", Toast.LENGTH_SHORT).show()
                             val matricula = ch.child("matricula").getValue(String::class.java)
                             val refAlumnos =
                                 firebase.child("alumnos").orderByChild("matricula")
@@ -63,9 +73,9 @@ class AsistenciaAlumnos : AppCompatActivity(), ModoOscuro {
                                     for (a in snapshot.children) {
                                         val nombre =
                                             a.child("nombre_alumno").getValue(String::class.java)
-                                        Log.i("Log", matricula + ": " + nombre)
+                                        //Toast.makeText(this@AsistenciaAlumnos, matricula + ": " + nombre, Toast.LENGTH_SHORT).show()
                                         if (!nombre.isNullOrEmpty() && !matricula.isNullOrEmpty()) {
-                                            Log.i("Log", "REGISTROS REGISTRADOS")
+                                            //Toast.makeText(this@AsistenciaAlumnos, "REGISTROS REGISTRADOS", Toast.LENGTH_SHORT).show()
                                             val alumno = AccesoAlumno(
                                                 nombre,
                                                 fecha,
