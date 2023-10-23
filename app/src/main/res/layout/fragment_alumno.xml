@@ -25,39 +25,58 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/imgAlumno"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+
+    <ImageButton
+        android:id="@+id/imbEditar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@mipmap/edit"
+        android:contentDescription="Editar datos"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtAlumnoNombre">
+        app:layout_constraintTop_toBottomOf="@+id/txtAlumnoNombre" />
 
-        <ImageView
-            android:layout_width="200dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/logokinder" />
-    </androidx.cardview.widget.CardView>
+    <ImageButton
+        android:id="@+id/imbQR"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="5dp"
+        android:background="@mipmap/qr"
+        android:contentDescription="QR de alumno"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/imbEditar"
+        app:layout_constraintTop_toBottomOf="@+id/txtAlumnoNombre" />
+
+    <ImageView
+        android:id="@+id/imgAlumno"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/logokinder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imbQR" />
 
     <TextView
         android:id="@+id/txtALumnoMatricula"
         style="@style/tvDatos"
         android:layout_width="0dp"
-        android:textStyle="bold"
         android:layout_height="50dp"
         android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/imgAlumno"
-        app:layout_constraintTop_toBottomOf="@id/txtAlumnoNombre" />
+        app:layout_constraintTop_toBottomOf="@id/imbQR" />
 
     <TextView
         android:id="@+id/txtALumnoEdad"
         style="@style/tvDatos"
         android:layout_width="0dp"
-        android:textStyle="bold"
         android:layout_height="50dp"
         android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/imgAlumno"
         app:layout_constraintTop_toBottomOf="@id/txtALumnoMatricula" />
@@ -67,8 +86,8 @@
         style="@style/tvDatos"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:textStyle="bold"
         android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/imgAlumno"
         app:layout_constraintTop_toBottomOf="@id/txtALumnoEdad" />
@@ -78,8 +97,8 @@
         style="@style/tvDatos"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:textStyle="bold"
         android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/imgAlumno"
         app:layout_constraintTop_toBottomOf="@id/txtAlumnoSangre" />
@@ -87,9 +106,9 @@
     <TextView
         android:id="@+id/txtRegistrosAcceso"
         style="@style/tvTitulos2"
-        android:textStyle="bold"
         android:layout_marginTop="20dp"
         android:text="Registro de acceso"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imgAlumno" />
@@ -104,4 +123,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtRegistrosAcceso"
         app:layout_constraintVertical_bias="0.0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

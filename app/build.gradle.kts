@@ -63,7 +63,7 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging")
 
     //Firebase Cloud Storage
-    implementation("com.google.firebase:firebase-storage-ktx:20.2.1")
+    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
 
     //Generador de QR
     implementation ("com.google.zxing:core:3.4.1")
@@ -75,7 +75,14 @@ dependencies {
     implementation ("com.google.android.gms:play-services-ads:22.4.0")
 
     // Camara
+    val camerax_version = "1.4.0-alpha02"
+    implementation ("androidx.camera:camera-core:${camerax_version}")
+    implementation ("androidx.camera:camera-camera2:${camerax_version}")
+    implementation ("androidx.camera:camera-lifecycle:${camerax_version}")
+    implementation ("androidx.camera:camera-video:${camerax_version}")
 
+    implementation ("androidx.camera:camera-view:${camerax_version}")
+    implementation ("androidx.camera:camera-extensions:${camerax_version}")
     //Fragment
     implementation("androidx.fragment:fragment-ktx:1.6.1")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.4")

@@ -1,19 +1,26 @@
 package com.miraimx.kinderscontrol
 
+import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.MultiFormatWriter
+import com.google.zxing.WriterException
 import com.miraimx.kinderscontrol.databinding.FragmentAlumnoBinding
 import java.text.SimpleDateFormat
 import java.time.ZoneId
@@ -21,9 +28,11 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
+
 class AlumnoFragment : Fragment() {
     private lateinit var binding: FragmentAlumnoBinding
     val args: AlumnoFragmentArgs by navArgs()
+    private lateinit var matricula: String
     private lateinit var lsAccesoAlumnoAdapter: ArrayAdapter<AccesoAlumno>
     val alumnosAccesoLista = mutableListOf<AccesoAlumno>()
 
@@ -35,11 +44,33 @@ class AlumnoFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val datosAlumnos = args.datosAlumno
         lsAccesoAlumnoAdapter = ListViewAccesoAdapter(requireContext(), alumnosAccesoLista)
-        val matricula = datosAlumnos[1]
+        matricula = datosAlumnos[1]
+        binding.imbQR.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.animate().scaleX(0.9f).scaleY(0.9f).setDuration(200).start()
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    v.animate().scaleX(1f).scaleY(1f).setDuration(200).start()
+                    val builder = AlertDialog.Builder(requireContext())
+                    val view = layoutInflater.inflate(R.layout.qralumno, null)
+                    view.findViewById<ImageView>(R.id.qrAlumno).setImageBitmap(generateQRCode(matricula))
+                    builder.setView(view)
+                    builder.create()
+                    builder.show()
+                }
+            }
+            // No consumimos el evento y permitimos que se procese más
+            false
+        }
+
+
         binding.lvRegistrosAcceso.adapter = lsAccesoAlumnoAdapter
         binding.txtAlumnoNombre.text = datosAlumnos[0]
         binding.txtALumnoMatricula.text = "No." + matricula
@@ -104,16 +135,42 @@ class AlumnoFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun convertirFecha(fechaOriginal: String): String {
         val formatoEntrada = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT)
-        val formatoFechaHora = DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy|hh:mm a", Locale("es"))
+        val formatoFechaHora =
+            DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy|hh:mm a", Locale("es"))
 
         return try {
             val fechaParseada: Date = formatoEntrada.parse(fechaOriginal) as Date
-            val fechaLocal = fechaParseada.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+            val fechaLocal =
+                fechaParseada.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
             val fechaFormateada: String = formatoFechaHora.format(fechaLocal)
             fechaFormateada
         } catch (e: Exception) {
             println("Error al formatear la fecha: ${e.message}")
             " "
+        }
+    }
+
+    private fun generateQRCode(data: String): Bitmap? {
+        return try {
+            val bitMatrix = MultiFormatWriter().encode(data, BarcodeFormat.QR_CODE, 200, 200)
+            val width = bitMatrix.width
+            val height = bitMatrix.height
+            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
+            for (x in 0 until width) {
+                for (y in 0 until height) {
+                    bitmap.setPixel(
+                        x,
+                        y,
+                        if (bitMatrix[x, y]) resources.getColor(R.color.black) else resources.getColor(
+                            R.color.white
+                        )
+                    )
+                }
+            }
+            bitmap
+        } catch (e: WriterException) {
+            e.printStackTrace()
+            null
         }
     }
 }

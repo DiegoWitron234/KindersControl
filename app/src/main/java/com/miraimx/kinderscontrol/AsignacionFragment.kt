@@ -16,10 +16,8 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.miraimx.kinderscontrol.databinding.FragmentAsignacionBinding
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -48,7 +46,6 @@ class AsignacionFragment : Fragment(), ModoOscuro {
         }
     }
 
-
     private fun configListas() {
         lsAsignacionesAlAdapater = ListViewAlumnoAdapter(requireContext(), alumnosAsigLista)
         binding.lsAsignacionesTutor.adapter = lsAsignacionesAlAdapater
@@ -69,7 +66,6 @@ class AsignacionFragment : Fragment(), ModoOscuro {
 
     private fun cargarDatos(cUserId: String) {
         val database = FirebaseDatabase.getInstance().reference
-
         val query = database.child("tutorizacion").orderByChild("tutor_id").equalTo(cUserId)
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
