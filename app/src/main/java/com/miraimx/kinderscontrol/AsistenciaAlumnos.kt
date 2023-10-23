@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
@@ -44,6 +45,23 @@ class AsistenciaAlumnos : AppCompatActivity(), ModoOscuro {
         lsAlumnosGrupoAdapter = ListViewAccesoAdapter(this, alumnosGrupo)
         binding.listAlumnosGrupo.adapter = lsAlumnosGrupoAdapter
         consultarAsistencia()
+        if (lsAlumnosGrupoAdapter.count == 0){
+            val mensaje = "Sin registros el día de hoy 😴"
+
+            AlertDialog.Builder(this).apply {
+                setTitle("Mensaje")
+                setMessage(mensaje)
+                setPositiveButton("OK") { dialog, _ ->
+                    finish()
+                    dialog.dismiss()
+                }
+                setOnCancelListener {
+                    finish()
+                }
+                show()
+            }
+
+        }
     }
 
     private fun consultarAsistencia() {
@@ -58,7 +76,7 @@ class AsistenciaAlumnos : AppCompatActivity(), ModoOscuro {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (ch in snapshot.children) {
                     val fecha = ch.child("horafecha_check").getValue(String::class.java)
-                    Toast.makeText(this@AsistenciaAlumnos, "REGISTRO DE HORA OBTENIDO", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this@AsistenciaAlumnos, "REGISTRO DE HORA OBTENIDO", Toast.LENGTH_SHORT).show()
                     if (!fecha.isNullOrEmpty()) {
                         //Toast.makeText(this@AsistenciaAlumnos, "NO ES NULO", Toast.LENGTH_SHORT).show()
                         //Toast.makeText(this@AsistenciaAlumnos, "Hoy: "+fechaActual+ "registro: "+convertirFecha(fecha), Toast.LENGTH_SHORT).show()
