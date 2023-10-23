@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--         android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeMaxTextSize="20sp"
+        android:autoSizeStepGranularity="2sp"-->
     <style name="tvTitulos1">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
@@ -10,6 +13,14 @@
         <item name="android:textStyle">bold</item>
         <item name="android:layout_marginBottom">30dp</item>
         <item name="android:layout_marginTop">10dp</item>
+    </style>
+
+    <style name="tvDatos">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:autoSizeTextType" tools:targetApi="o">uniform</item>
+        <item name="android:autoSizeMinTextSize" tools:targetApi="o">12sp</item>
+        <item name="android:autoSizeMaxTextSize" tools:targetApi="o">20sp</item>
+        <item name="android:autoSizeStepGranularity" tools:targetApi="o">2sp</item>
     </style>
 
     <style name="tvTitulos2">

@@ -126,7 +126,7 @@ class PanelUsuario : AppCompatActivity(), ModoOscuro {
             startActivity(
                 Intent(
                     this@PanelUsuario,
-                    AsignacionesTutor::class.java
+                    MainAsignacionActivity::class.java
                 )
             )
         }

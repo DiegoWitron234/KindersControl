@@ -3,29 +3,26 @@
     android:id="@+id/cuerpoAccesoDatosTabla"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <TextView
-        android:id="@+id/tvAccesoDatosNombre"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="@color/black"
-        />
-
-    <TextView
-        android:id="@+id/tvAccesoDatosTiempo"
-        android:layout_width="133dp"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textColor="@color/black"
-        />
 
     <TextView
         android:id="@+id/tvAccesoDatosEstatus"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center"
-        android:textSize="20sp"
+        android:textStyle="bold"
         android:textColor="@color/black"
-        />
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvAccesoFecha"
+        android:layout_width="300dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="0dp"
+        android:layout_height="match_parent"
+        android:autoSizeMaxTextSize="50sp"
+        android:autoSizeMinTextSize="10sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center|start"
+        android:textColor="@color/black" />
 </LinearLayout>

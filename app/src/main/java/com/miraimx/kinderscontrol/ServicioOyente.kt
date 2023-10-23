@@ -126,7 +126,7 @@ class ServicioOyente : Service() {
 
     private fun showNotification(horafecha: String?, inOut: String?, nombre: String?) {
         // Crea un intent para abrir la actividad "AsignacionesTutor"
-        val intent = Intent(this, AsignacionesTutor::class.java)
+        val intent = Intent(this, MainAsignacionActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
 
         val pendingIntent = PendingIntent.getActivity(

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondokinder"
+    android:padding="20dp"
+    tools:context=".AlumnoFragment">
+
+
+    <TextView
+        android:id="@+id/txtAlumnoNombre"
+        style="@style/tvTitulos1"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:autoSizeMaxTextSize="30sp"
+        android:autoSizeMinTextSize="25sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/imgAlumno"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtAlumnoNombre">
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/logokinder" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/txtALumnoMatricula"
+        style="@style/tvDatos"
+        android:layout_width="0dp"
+        android:textStyle="bold"
+        android:layout_height="50dp"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imgAlumno"
+        app:layout_constraintTop_toBottomOf="@id/txtAlumnoNombre" />
+
+    <TextView
+        android:id="@+id/txtALumnoEdad"
+        style="@style/tvDatos"
+        android:layout_width="0dp"
+        android:textStyle="bold"
+        android:layout_height="50dp"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imgAlumno"
+        app:layout_constraintTop_toBottomOf="@id/txtALumnoMatricula" />
+
+    <TextView
+        android:id="@+id/txtAlumnoSangre"
+        style="@style/tvDatos"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imgAlumno"
+        app:layout_constraintTop_toBottomOf="@id/txtALumnoEdad" />
+
+    <TextView
+        android:id="@+id/txtALumnoAula"
+        style="@style/tvDatos"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imgAlumno"
+        app:layout_constraintTop_toBottomOf="@id/txtAlumnoSangre" />
+
+    <TextView
+        android:id="@+id/txtRegistrosAcceso"
+        style="@style/tvTitulos2"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:text="Registro de acceso"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imgAlumno" />
+
+    <ListView
+        android:id="@+id/lvRegistrosAcceso"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginVertical="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtRegistrosAcceso"
+        app:layout_constraintVertical_bias="0.0" />
+</androidx.constraintlayout.widget.ConstraintLayout>

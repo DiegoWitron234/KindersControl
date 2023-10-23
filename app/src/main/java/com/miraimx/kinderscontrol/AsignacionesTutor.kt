@@ -47,7 +47,6 @@ class AsignacionesTutor : AppCompatActivity(), ModoOscuro {
         intent.getStringExtra("currentId")?.let { cargarDatos(it) }
         intent.getStringExtra("currentId")?.let { cargarDatos2(it) }
 
-        cancelarModoOscuro(this)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -80,6 +79,11 @@ class AsignacionesTutor : AppCompatActivity(), ModoOscuro {
                                             Alumno(
                                                 nombreAlumno,
                                                 id,
+                                                "",
+                                                "",
+                                                "",
+                                                "",
+                                                ""
                                             )
                                         )
                                     }

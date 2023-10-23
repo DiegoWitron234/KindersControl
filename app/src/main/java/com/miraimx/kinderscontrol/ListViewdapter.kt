@@ -36,16 +36,17 @@ class ListViewAccesoAdapter(
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view = inflater.inflate(R.layout.list_item_accesodatos_layout, null)
 
-        val nombre = listaUsuario[position].nombre
+        //val nombre = listaUsuario[position].nombre
         val estatus = listaUsuario[position].estatus
-        val tiempo = listaUsuario[position].tiempo
+        val tiempo = listaUsuario[position].tiempo.split("|")
 
-        val tvNombre = view.findViewById<TextView>(R.id.tvAccesoDatosNombre)
+        //val tvNombre = view.findViewById<TextView>(R.id.tvAccesoDatosNombre)
         val tvEstatus = view.findViewById<TextView>(R.id.tvAccesoDatosEstatus)
-        val tvTiempo = view.findViewById<TextView>(R.id.tvAccesoDatosTiempo)
+        //val tvHora = view.findViewById<TextView>(R.id.tvAccesoHora)
+        val tvFecha = view.findViewById<TextView>(R.id.tvAccesoFecha)
 
-        tvNombre.text = nombre
-        tvTiempo.text = tiempo
+        //tvNombre.text = nombre
+        tvFecha.text = "Fecha: "+tiempo[0]+"\nHora: "+tiempo[1]
         tvEstatus.text = estatus
 
         return view
@@ -64,12 +65,18 @@ class ListViewAlumnoAdapter(
 
         val nombre = listaUsuario[position].nombre
         val matricula = listaUsuario[position].matricula
+        val estatus = listaUsuario[position].estatus
+        val tiempo = listaUsuario[position].tiempo
 
         val tvNombre = view.findViewById<TextView>(R.id.tvAlumDatosNombre)
         val tvMatricula = view.findViewById<TextView>(R.id.tvAlumDatosMatricula)
+        val tvEstatus = view.findViewById<TextView>(R.id.tvAlumDatosEstatus)
+        val tvTiempo = view.findViewById<TextView>(R.id.tvAlumDatosTiempo)
 
         tvNombre.text = nombre
-        tvMatricula.text = matricula
+        tvMatricula.text = "Matricula: "+matricula
+        tvEstatus.text ="Estatus: "+estatus
+        tvTiempo.text = tiempo
 
         return view
     }
