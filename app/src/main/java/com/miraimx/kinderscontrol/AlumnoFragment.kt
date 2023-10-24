@@ -2,6 +2,7 @@ package com.miraimx.kinderscontrol
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
@@ -50,6 +51,11 @@ class AlumnoFragment : Fragment() {
         val datosAlumnos = args.datosAlumno
         lsAccesoAlumnoAdapter = ListViewAccesoAdapter(requireContext(), alumnosAccesoLista)
         matricula = datosAlumnos[1]
+
+        binding.imbEditar.setOnClickListener(){
+            startActivity(Intent(requireContext(), Camara::class.java))
+        }
+
         binding.imbQR.setOnTouchListener { v, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -59,9 +65,9 @@ class AlumnoFragment : Fragment() {
                 MotionEvent.ACTION_UP -> {
                     v.animate().scaleX(1f).scaleY(1f).setDuration(200).start()
                     val builder = AlertDialog.Builder(requireContext())
-                    val view = layoutInflater.inflate(R.layout.qralumno, null)
-                    view.findViewById<ImageView>(R.id.qrAlumno).setImageBitmap(generateQRCode(matricula))
-                    builder.setView(view)
+                    val vista = layoutInflater.inflate(R.layout.qralumno, null)
+                    vista.findViewById<ImageView>(R.id.qrAlumno).setImageBitmap(generateQRCode(matricula))
+                    builder.setView(vista)
                     builder.create()
                     builder.show()
                 }

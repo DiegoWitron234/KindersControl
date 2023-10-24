@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-feature
-        android:name="android.hardware.camera"
+        android:name="android.hardware.camera.any"
         android:required="false" />
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
@@ -44,10 +44,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".DisplayQRActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".AsignacionesTutor"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
