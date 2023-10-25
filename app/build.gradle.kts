@@ -63,7 +63,12 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging")
 
     //Firebase Cloud Storage
-    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
+    // Import the BoM for the Firebase platform
+    implementation(platform("com.google.firebase:firebase-bom:32.4.0"))
+
+    // Add the dependency for the Cloud Storage library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation("com.google.firebase:firebase-storage")
 
     //Generador de QR
     implementation ("com.google.zxing:core:3.4.1")

@@ -7,12 +7,9 @@ import androidx.core.app.ActivityCompat
 import com.miraimx.kinderscontrol.databinding.ActivityCamaraBinding
 import java.util.concurrent.ExecutorService
 import android.Manifest
-import android.content.ContentValues
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.Build
-import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.camera.core.CameraSelector
@@ -21,17 +18,20 @@ import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.navigation.navArgs
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import com.google.firebase.storage.storageMetadata
 import java.io.ByteArrayOutputStream
 import java.io.OutputStream
 import java.nio.ByteBuffer
-import java.text.SimpleDateFormat
-import java.util.Locale
 import java.util.concurrent.Executors
 
 class Camara : AppCompatActivity() {
     private lateinit var binding: ActivityCamaraBinding
     private lateinit var cameraExecutor: ExecutorService
     private var imageCapture: ImageCapture? = null
+    private val args: CamaraArgs by navArgs()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCamaraBinding.inflate(layoutInflater)
@@ -56,7 +56,7 @@ class Camara : AppCompatActivity() {
         val imageCapture = imageCapture ?: return
         val outputStream: OutputStream = ByteArrayOutputStream()
         // Create output options object which contains file + metadata
-        val outputOptions = ImageCapture.OutputFileOptions
+        ImageCapture.OutputFileOptions
             .Builder(outputStream)
             .build()
 
@@ -66,9 +66,27 @@ class Camara : AppCompatActivity() {
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageCapturedCallback() {
                 override fun onCaptureSuccess(image: ImageProxy) {
-                    val bimpap = imageProxyToBitmap(image)
-                    Toast.makeText(baseContext, "Imagen Tomada", Toast.LENGTH_SHORT).show()
-                    finish()
+                    val bitmap = imageProxyToBitmap(image)
+                    val baos = ByteArrayOutputStream()
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+                    val data = baos.toByteArray()
+
+                    val storage = Firebase.storage
+                    val reference = storage.reference
+                    val imageRef = reference.child("alumno/"+ args.matricula+".png")
+                    val metadata = storageMetadata{
+                        contentType = "alumno/png"
+                    }
+                    imageRef.putBytes(data, metadata).addOnSuccessListener {
+                        imageRef.downloadUrl.addOnSuccessListener{
+                            Toast.makeText(this@Camara, it.toString(), Toast.LENGTH_SHORT).show()
+                        }
+                        Toast.makeText(baseContext, "Imagen Tomada", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }.addOnFailureListener {
+                        Log.e("Log","Imagen no subida")
+                    }
+                    image.close()
                 }
 
                 override fun onError(exception: ImageCaptureException) {
@@ -151,7 +169,7 @@ class Camara : AppCompatActivity() {
 
     companion object {
         private const val TAG = "CameraXApp"
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+        //private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS =
             mutableListOf(

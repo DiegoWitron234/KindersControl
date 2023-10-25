@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -51,9 +52,13 @@ class AlumnoFragment : Fragment() {
         val datosAlumnos = args.datosAlumno
         lsAccesoAlumnoAdapter = ListViewAccesoAdapter(requireContext(), alumnosAccesoLista)
         matricula = datosAlumnos[1]
-
         binding.imbEditar.setOnClickListener(){
-            startActivity(Intent(requireContext(), Camara::class.java))
+            findNavController().navigate(
+                AlumnoFragmentDirections.actionAlumnoFragmentToCamara(
+                    matricula = matricula
+                )
+            )
+            //startActivity(Intent(requireContext(), Camara::class.java))
         }
 
         binding.imbQR.setOnTouchListener { v, event ->

@@ -25,5 +25,18 @@
         <argument
             android:name="datosAlumno"
             app:argType="string[]" />
+        <action
+            android:id="@+id/action_alumnoFragment_to_camara"
+            app:destination="@id/camara" />
     </fragment>
+    <activity
+        android:id="@+id/camara"
+        android:name="com.miraimx.kinderscontrol.Camara"
+        android:label="activity_camara"
+        tools:layout="@layout/activity_camara" >
+        <argument
+            android:name="matricula"
+            app:argType="string"
+            android:defaultValue='""' />
+    </activity>
 </navigation>
