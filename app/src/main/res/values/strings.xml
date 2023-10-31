@@ -51,4 +51,6 @@
 
     </style>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="registro_de_acceso">Registro de acceso</string>
+    <string name="qr_de_alumno">QR de alumno</string>
 </resources>

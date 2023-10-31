@@ -36,52 +36,35 @@ class ServicioOyente : Service() {
         valueEventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (childSnapshot in dataSnapshot.children) {
-                    val alumnoId = childSnapshot.child("matricula").getValue(String::class.java)
+                    val tutorId = childSnapshot.child("tutorId").getValue(String::class.java)
+                    val alumnoId = childSnapshot.child("alumnoId").getValue(String::class.java)
 
-                    // Comprueba si el registro ya ha sido procesado para el alumno
-                    val registroProcesadoAlumnoRef = alumnoId?.let { registrosProcesadosRef.child(it) }
+                    // Comprueba si el registro ya ha sido procesado para el tutor
+                    val registroProcesadoAlumnoRef = tutorId?.let { registrosProcesadosRef.child(it) }
 
                     if(registroProcesadoAlumnoRef != null){
                         registroProcesadoAlumnoRef?.addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(registroProcesadoSnapshot: DataSnapshot) {
                                 if (!registroProcesadoSnapshot.hasChild(childSnapshot.key!!)) {
-                                    // El registro no ha sido procesado para este alumno
+                                    // El registro no ha sido procesado para este tutor
+                                    // Muestra un Toast
+                                    Toast.makeText(applicationContext, "Se agregó un registro de chekin", Toast.LENGTH_SHORT).show()
 
-                                    // Busca los tutores relacionados al alumno en "tutorizacion"
-                                    val tutorizacionRef = FirebaseDatabase.getInstance().getReference("tutorizacion")
-                                    tutorizacionRef.orderByChild("matricula").equalTo(alumnoId)
-                                        .addListenerForSingleValueEvent(object : ValueEventListener {
-                                            override fun onDataChange(tutorizacionSnapshot: DataSnapshot) {
-                                                for (tutorizacionChildSnapshot in tutorizacionSnapshot.children) {
-                                                    val tutorId = tutorizacionChildSnapshot.child("tutor_id").getValue(String::class.java)
+                                    val horafecha = childSnapshot.child("horafecha_check").getValue(String::class.java)
+                                    val inOut = childSnapshot.child("in_out").getValue(String::class.java)
+                                    //val matricula = childSnapshot.child("matricula").getValue(String::class.java)
 
-                                                    if (tutorId == uid) {
-                                                        // Muestra un Toast
-                                                        Toast.makeText(applicationContext, "Se agregó un registro de chekin", Toast.LENGTH_SHORT).show()
+                                    // Obtén el nombre del alumno
+                                    obtenerNombreAlumno(alumnoId) { nombreAlumno ->
+                                        // Muestra una notificación con el nombre del alumno
+                                        showNotification(horafecha, inOut, nombreAlumno)
+                                    }
 
-                                                        val horafecha = childSnapshot.child("horafecha_check").getValue(String::class.java)
-                                                        val inOut = childSnapshot.child("in_out").getValue(String::class.java)
-                                                        //val matricula = childSnapshot.child("matricula").getValue(String::class.java)
+                                    // Muestra una notificación
+                                    //showNotification(horafecha, inOut, alumnoId)
 
-                                                        // Obtén el nombre del alumno
-                                                        obtenerNombreAlumno(alumnoId) { nombreAlumno ->
-                                                            // Muestra una notificación con el nombre del alumno
-                                                            showNotification(horafecha, inOut, nombreAlumno)
-                                                        }
-
-                                                        // Muestra una notificación
-                                                        //showNotification(horafecha, inOut, alumnoId)
-
-                                                        // Agrega el ID del registro a "registrosProcesados" para este tutor
-                                                        registroProcesadoAlumnoRef.child(childSnapshot.key!!).setValue(true)
-                                                    }
-                                                }
-                                            }
-
-                                            override fun onCancelled(error: DatabaseError) {
-                                                Log.w("Registro", "Error al leer la base de datos: $error", error.toException())
-                                            }
-                                        })
+                                    // Agrega el ID del registro a "registrosProcesados" para este tutor
+                                    registroProcesadoAlumnoRef.child(childSnapshot.key!!).setValue(true)
                                 }
                             }
 
