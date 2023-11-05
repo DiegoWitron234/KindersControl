@@ -1,4 +1,4 @@
-package com.miraimx.kinderscontrol;
+package com.miraimx.kinderscontrol.tutor;
 
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -13,6 +13,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.miraimx.kinderscontrol.R;
 import com.miraimx.kinderscontrol.databinding.ActivityDisplayQrBinding;
 
 public class DisplayQRActivity extends AppCompatActivity {
@@ -38,7 +39,7 @@ public class DisplayQRActivity extends AppCompatActivity {
         }
     }
 
-    private void modoOscuro(){
+    private void modoOscuro() {
         int nightModeFlags = this.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {/* si está activo el modo oscuro lo desactiva */
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -63,7 +64,4 @@ public class DisplayQRActivity extends AppCompatActivity {
             return null;
         }
     }
-
-
-
 }

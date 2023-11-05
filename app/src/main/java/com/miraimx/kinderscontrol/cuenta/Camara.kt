@@ -1,4 +1,4 @@
-package com.miraimx.kinderscontrol
+package com.miraimx.kinderscontrol.cuenta
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,9 +7,12 @@ import androidx.core.app.ActivityCompat
 import com.miraimx.kinderscontrol.databinding.ActivityCamaraBinding
 import java.util.concurrent.ExecutorService
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.util.Log
 import android.widget.Toast
 import androidx.camera.core.CameraSelector
@@ -18,11 +21,9 @@ import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.navigation.navArgs
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-import com.google.firebase.storage.storageMetadata
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 import java.io.OutputStream
 import java.nio.ByteBuffer
 import java.util.concurrent.Executors
@@ -31,7 +32,6 @@ class Camara : AppCompatActivity() {
     private lateinit var binding: ActivityCamaraBinding
     private lateinit var cameraExecutor: ExecutorService
     private var imageCapture: ImageCapture? = null
-    private val args: CamaraArgs by navArgs()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCamaraBinding.inflate(layoutInflater)
@@ -46,7 +46,9 @@ class Camara : AppCompatActivity() {
         }
 
         // Set up the listeners for take photo and video capture buttons
-        binding.btnCamera.setOnClickListener { takePhoto() }
+        binding.btnCamera.setOnClickListener {
+            takePhoto()
+        }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
@@ -66,34 +68,31 @@ class Camara : AppCompatActivity() {
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageCapturedCallback() {
                 override fun onCaptureSuccess(image: ImageProxy) {
+                    val gradosRotacion = image.imageInfo.rotationDegrees
                     val bitmap = imageProxyToBitmap(image)
-                    val baos = ByteArrayOutputStream()
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
-                    val data = baos.toByteArray()
-
-                    val storage = Firebase.storage
-                    val reference = storage.reference
-                    val imageRef = reference.child("alumno/"+ args.matricula+".png")
-                    val metadata = storageMetadata{
-                        contentType = "alumno/png"
-                    }
-                    imageRef.putBytes(data, metadata).addOnSuccessListener {
-                        imageRef.downloadUrl.addOnSuccessListener{
-                            Toast.makeText(this@Camara, it.toString(), Toast.LENGTH_SHORT).show()
-                        }
-                        Toast.makeText(baseContext, "Imagen Tomada", Toast.LENGTH_SHORT).show()
-                        finish()
-                    }.addOnFailureListener {
-                        Log.e("Log","Imagen no subida")
-                    }
+                    val bitmapRotado = rotateBitmap(bitmap, gradosRotacion)
+                    val file = File(applicationContext.filesDir, "myImage.png")
+                    val fos = FileOutputStream(file)
+                    bitmapRotado.compress(Bitmap.CompressFormat.PNG, 100, fos)
+                    fos.close()
                     image.close()
+                    Intent().also { result ->
+                        Toast.makeText(baseContext, "Imagen Tomada", Toast.LENGTH_SHORT).show()
+                        result.putExtra("imagen", file.absolutePath)
+                        setResult(Activity.RESULT_OK, result)
+                        finish()
+                    }
                 }
-
                 override fun onError(exception: ImageCaptureException) {
                     Log.e(TAG, "Photo capture failed: ${exception.message}", exception)
                 }
             }
         )
+    }
+    fun rotateBitmap(source: Bitmap, angle: Int): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(angle.toFloat())
+        return Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
     }
 
     private fun imageProxyToBitmap(image: ImageProxy): Bitmap {
@@ -119,7 +118,7 @@ class Camara : AppCompatActivity() {
                 }
             imageCapture = ImageCapture.Builder().build()
             // Select back camera as a default
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
             try {
                 // Unbind use cases before rebinding
@@ -169,6 +168,7 @@ class Camara : AppCompatActivity() {
 
     companion object {
         private const val TAG = "CameraXApp"
+
         //private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS =

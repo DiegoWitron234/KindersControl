@@ -1,9 +1,11 @@
-package com.miraimx.kinderscontrol
+package com.miraimx.kinderscontrol.administrador
 
 import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.Toast
 import com.google.android.gms.ads.AdRequest
@@ -15,13 +17,19 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
+import com.miraimx.kinderscontrol.cuenta.Login
+import com.miraimx.kinderscontrol.ModoOscuro
+import com.miraimx.kinderscontrol.R
+import com.miraimx.kinderscontrol.cuenta.RegistrarUsuario
+import com.miraimx.kinderscontrol.cuenta.SingUpAlumno
+import com.miraimx.kinderscontrol.cuenta.SingUpEmpleado
 import com.miraimx.kinderscontrol.databinding.ActivityPanelAdminBinding
 
 class PanelAdmin : AppCompatActivity(), ModoOscuro {
 
     private lateinit var btnAgregarEmpleado: Button
-    private lateinit var btnCerrarSesion: Button
     private lateinit var binding: ActivityPanelAdminBinding
+    private var rolUsuarioRegistrar: String = "Admin"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +43,11 @@ class PanelAdmin : AppCompatActivity(), ModoOscuro {
 
         btnAgregarEmpleado = binding.btnAgregarEmpleado
 
-        botonDimensiones(binding.btnAgregarNino, binding.btnRegistroEntrada,  binding.btnRegistroSalida)
+        botonDimensiones(
+            binding.btnAgregarNino,
+            binding.btnRegistroEntrada,
+            binding.btnRegistroSalida
+        )
 
         binding.btnRegistroEntrada.setOnClickListener {
             registro("in")
@@ -44,11 +56,27 @@ class PanelAdmin : AppCompatActivity(), ModoOscuro {
         binding.btnRegistroSalida.setOnClickListener {
             registro("out")
         }
-        binding.btnAsignarTutorias.setOnClickListener { startActivity(Intent(this, Tutorizacion::class.java)) }
+        binding.btnAsignarTutorias.setOnClickListener {
+            startActivity(
+                Intent(this, Tutorizacion::class.java)
+                    .putExtra("usuario", "tutores")
+                    .putExtra("titulo", "Asignar tutor")
+                    .putExtra("subtitulo", "Buscar tutor")
+            )
+        }
+        binding.btnAsignarGrupo.setOnClickListener {
+            startActivity(
+                Intent(this, Tutorizacion::class.java)
+                    .putExtra("usuario", "empleados")
+                    .putExtra("titulo", "Asignar profesor")
+                    .putExtra("subtitulo", "Buscar profesor")
+            )
+        }
 
         btnAgregarEmpleado.setOnClickListener {
             val intent = Intent(this, RegistrarUsuario::class.java)
             intent.putExtra("rol", "Admin")
+            rolUsuarioRegistrar = "Admin"
             startActivity(intent)
         }
 
@@ -57,23 +85,31 @@ class PanelAdmin : AppCompatActivity(), ModoOscuro {
             startActivity(intent)
         }
 
-        btnCerrarSesion = findViewById(R.id.btnCerrarSesion)
-
-        btnCerrarSesion.setOnClickListener { cerrarSesion() }
+        binding.btnAgregarProfesor.setOnClickListener {
+            val intent = Intent(this, RegistrarUsuario::class.java)
+            intent.putExtra("rol", "Profesor")
+            rolUsuarioRegistrar = "Profesor"
+            startActivity(intent)
+        }
     }
+    /*override fun onStart() {
+        super.onStart()
+        verificarUsuario()
+    }*/
 
-    private fun registro(estatus: String){
+    private fun registro(estatus: String) {
         val currentUser = FirebaseAuth.getInstance().currentUser
 
-        val intent = Intent(this, LeerQR_Activity::class.java)
+        val intent = Intent(this, RegistroAcceso::class.java)
         if (currentUser != null) {
-            intent.putExtra("id",currentUser.uid)
+            intent.putExtra("id", currentUser.uid)
             intent.putExtra("estatus", estatus)
             startActivity(intent)
         }
     }
 
     private fun verificarUsuario() {
+        Toast.makeText(this@PanelAdmin, "Es admin", Toast.LENGTH_LONG).show()
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
             val uid = currentUser.uid
@@ -84,6 +120,7 @@ class PanelAdmin : AppCompatActivity(), ModoOscuro {
                         val intent = Intent(this@PanelAdmin, SingUpEmpleado::class.java)
                         intent.putExtra("id", uid)
                         intent.putExtra("correo", currentUser.email)
+                        intent.putExtra("rol", rolUsuarioRegistrar)
                         startActivity(intent)
                         Toast.makeText(this@PanelAdmin, "Registrando Empleado", Toast.LENGTH_SHORT)
                             .show()
@@ -98,29 +135,14 @@ class PanelAdmin : AppCompatActivity(), ModoOscuro {
     }
 
 
-    private fun cerrarSesion() {
-        AlertDialog.Builder(this)
-            .setMessage("¿Seguro que quieres cerrar la sesión?")
-            .setPositiveButton("Salir") { _, _ -> // Acción de confirmación
-                Firebase.auth.signOut()
-                Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, Login::class.java)
-                startActivity(intent)
-                finish()
-            }
-            .setNegativeButton("Cancelar", null)
-            .show()
-    }
 
-    override fun onStart() {
-        super.onStart()
-        verificarUsuario()
-    }    private fun botonDimensiones(
+    private fun botonDimensiones(
         btnAgregarAlumno: Button,
         btnRegistrarEntrada: Button,
         btnRegistrarSalida: Button,
     ) {
-        val buttons = arrayOf(btnAgregarEmpleado, btnAgregarAlumno, btnRegistrarSalida, btnRegistrarEntrada)
+        val buttons =
+            arrayOf(btnAgregarEmpleado, btnAgregarAlumno, btnRegistrarSalida, btnRegistrarEntrada)
         var minTextSize = Float.MAX_VALUE
 
         for (button in buttons) {
@@ -135,6 +157,29 @@ class PanelAdmin : AppCompatActivity(), ModoOscuro {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_superior, menu)
+        return true
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.cerrarSesion -> {
+                AlertDialog.Builder(this)
+                    .setMessage("¿Seguro que quieres cerrar la sesión?")
+                    .setPositiveButton("Salir") { _, _ -> // Acción de confirmación
+                        Firebase.auth.signOut()
+                        Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, Login::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+                    .setNegativeButton("Cancelar", null)
+                    .show()
+                true
+            }
 
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }

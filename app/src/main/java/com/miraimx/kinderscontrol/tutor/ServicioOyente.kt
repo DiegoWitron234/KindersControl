@@ -1,4 +1,4 @@
-package com.miraimx.kinderscontrol
+package com.miraimx.kinderscontrol.tutor
 
 
 import android.app.*
@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.miraimx.kinderscontrol.R
 
 class ServicioOyente : Service() {
     private lateinit var uid: String
@@ -43,7 +44,7 @@ class ServicioOyente : Service() {
                     val registroProcesadoAlumnoRef = tutorId?.let { registrosProcesadosRef.child(it) }
 
                     if(registroProcesadoAlumnoRef != null){
-                        registroProcesadoAlumnoRef?.addListenerForSingleValueEvent(object : ValueEventListener {
+                        registroProcesadoAlumnoRef.addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(registroProcesadoSnapshot: DataSnapshot) {
                                 if (!registroProcesadoSnapshot.hasChild(childSnapshot.key!!)) {
                                     // El registro no ha sido procesado para este tutor
@@ -109,7 +110,7 @@ class ServicioOyente : Service() {
 
     private fun showNotification(horafecha: String?, inOut: String?, nombre: String?) {
         // Crea un intent para abrir la actividad "AsignacionesTutor"
-        val intent = Intent(this, MainAsignacionActivity::class.java)
+        val intent = Intent(this, MainPanelTutor::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
 
         val pendingIntent = PendingIntent.getActivity(
@@ -133,7 +134,7 @@ class ServicioOyente : Service() {
 
     private fun createNotification(): Notification {
         // Crea una notificación persistente (en primer plano)
-        val notificationIntent = Intent(this, PanelUsuario::class.java) // Actividad principal de la aplicación
+        val notificationIntent = Intent(this, MainPanelTutor::class.java) // Actividad principal de la aplicación
         val pendingIntent = PendingIntent.getActivity(
             this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE
         )

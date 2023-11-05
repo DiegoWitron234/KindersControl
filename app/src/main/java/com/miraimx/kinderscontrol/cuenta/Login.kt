@@ -1,4 +1,4 @@
-package com.miraimx.kinderscontrol
+package com.miraimx.kinderscontrol.cuenta
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
@@ -19,7 +19,11 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
+import com.miraimx.kinderscontrol.ModoOscuro
+import com.miraimx.kinderscontrol.administrador.PanelAdmin
 import com.miraimx.kinderscontrol.databinding.ActivityLoginBinding
+import com.miraimx.kinderscontrol.profesor.MainPanelProfesor
+import com.miraimx.kinderscontrol.tutor.MainPanelTutor
 
 class Login : AppCompatActivity(), ModoOscuro {
 
@@ -93,7 +97,6 @@ class Login : AppCompatActivity(), ModoOscuro {
     override fun onStart() {
         super.onStart()
         verificacionRol()
-
     }
 
     // Función para validar el formato del correo electrónico
@@ -144,15 +147,21 @@ class Login : AppCompatActivity(), ModoOscuro {
                             "Admin" -> {
                                 // Mostrar la interfaz de administrador
                                 val intent = Intent(this@Login, PanelAdmin::class.java)
-                                intent.putExtra("Role", role)
+                                //intent.putExtra("rol", role)
                                 startActivity(intent)
                                 finish()
                             }
 
                             "Usuario" -> {
                                 // Mostrar la interfaz de usuario
-                                val intent = Intent(this@Login, PanelUsuario::class.java)
+                                val intent = Intent(this@Login, MainPanelTutor::class.java)
                                 startActivity(intent)
+                                finish()
+                            }
+
+                            "Profesor" -> {
+                                Toast.makeText(this@Login, "Es profesor", Toast.LENGTH_LONG).show()
+                                startActivity(Intent(this@Login, MainPanelProfesor::class.java))
                                 finish()
                             }
 

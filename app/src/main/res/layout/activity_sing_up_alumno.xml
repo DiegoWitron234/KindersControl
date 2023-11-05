@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondokinder"
-    tools:context=".SingUpAlumno">
+    tools:context=".cuenta.SingUpAlumno">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -70,6 +70,16 @@
                 android:id="@+id/edAluNombre"
                 style="@style/etTitulos"
                 android:hint="@string/nombre"
+                android:inputType="textPersonName" />
+
+            <TextView
+                style="@style/tvTitulos2"
+                android:text="@string/apellidos" />
+
+            <EditText
+                android:id="@+id/edAluApellido"
+                style="@style/etTitulos"
+                android:hint="@string/apellidos"
                 android:inputType="textPersonName" />
 
             <RelativeLayout
@@ -140,6 +150,21 @@
                     android:layout_toEndOf="@id/svAlumnoGrado" />
 
             </RelativeLayout>
+
+            <TextView
+                style="@style/tvTitulos2"
+                android:text="Fotografia del alumno"
+                />
+
+            <Button
+                android:id="@+id/btnFotografia"
+                style="@style/btnMenu"
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:textColorHint="@color/white"
+                android:layout_marginBottom="20dp"
+                android:hint="@string/tomar_fotografia"
+                />
 
             <Button
                 android:id="@+id/btnRegAlumno"

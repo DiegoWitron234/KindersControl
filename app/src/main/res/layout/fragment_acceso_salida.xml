@@ -1,39 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondokinder"
     android:orientation="vertical"
-    tools:context=".administrador.RegistroAcceso">
+    tools:context=".profesor.AccesoSalidaFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp">
-
-        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/adView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            ads:adSize="BANNER"
-            ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
             app:cardCornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/adView">
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:layout_width="150dp"
@@ -46,8 +31,8 @@
             android:id="@+id/tvRegistroActivity"
             style="@style/tvTitulos1"
             android:layout_gravity="center"
-            android:text="Registro"
             android:gravity="center"
+            android:text="Registro de salida"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView" />
@@ -66,8 +51,8 @@
         <TextView
             android:id="@+id/txtNombraTutorQR"
             style="@style/tvCuerpo1"
-            android:hint="Nombre del tutor"
             android:layout_marginTop="25dp"
+            android:hint="Nombre del tutor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnScan" />
@@ -121,10 +106,11 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="70dp"
             android:backgroundTint="@color/botones"
-            android:text="registrar"
+            android:text="registrar salida"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lsCheckAlumno" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </ScrollView>

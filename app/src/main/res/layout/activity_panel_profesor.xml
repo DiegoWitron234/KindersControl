@@ -4,8 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="70dp"
+    android:paddingHorizontal="20dp"
     android:background="@drawable/fondokinder"
-    tools:context=".tutor.DisplayQRActivity">
+    tools:context=".profesor.MainPanelProfesor">
 
     <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"
@@ -14,17 +16,23 @@
         android:layout_gravity="center"
         ads:adSize="BANNER"
         ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        ads:layout_constraintBottom_toBottomOf="parent"
+        ads:layout_constraintEnd_toEndOf="parent"
+        ads:layout_constraintStart_toStartOf="parent"
+        ads:layout_constraintTop_toTopOf="parent"
+        ads:layout_constraintVertical_bias="0" />
 
-    <ImageView
-        android:id="@+id/qr_image"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/navProfesorFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/adView"
+        app:navGraph="@navigation/profesor_graph" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

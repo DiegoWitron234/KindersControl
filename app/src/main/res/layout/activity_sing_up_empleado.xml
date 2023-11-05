@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondokinder"
-    tools:context=".SingUpEmpleado">
+    tools:context=".cuenta.SingUpEmpleado">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,9 +41,13 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
+                android:id="@+id/tituloRegistro"
                 style="@style/tvTitulos1"
                 android:layout_width="match_parent"
-                android:text="@string/registrar_empleado" />
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="20sp"
+                android:autoSizeMaxTextSize="35sp"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -64,12 +68,12 @@
 
             <TextView
                 style="@style/tvTitulos2"
-                android:text="@string/puesto" />
+                android:text="Apellidos" />
 
             <EditText
-                android:id="@+id/edEmpleadoPuesto"
+                android:id="@+id/edEmpleadoApellidos"
                 style="@style/etTitulos"
-                android:hint="@string/puesto"
+                android:hint="Apellidos"
                 android:inputType="textPersonName" />
 
             <TextView
@@ -82,11 +86,31 @@
                 android:hint="@string/hintCorreo"
                 android:inputType="textEmailAddress" />
 
-           <!-- <Button
-                android:id="@+id/btnCargarImagen"
-                style="@style/boton"
+            <TextView
+                style="@style/tvTitulos2"
+                android:text="Teléfono" />
+
+            <EditText
+                android:id="@+id/edEmpleadoTelefono"
+                style="@style/etTitulos"
+                android:hint="Teléfono"
+                android:inputType="phone" />
+
+            <TextView
+                android:id="@+id/tituloTomarFotografia"
+                style="@style/tvTitulos2"
+                android:text="Fotografia del administrador"
+                />
+
+            <Button
+                android:id="@+id/btnFotografia"
+                style="@style/btnMenu"
+                android:layout_width="match_parent"
                 android:layout_gravity="center"
-                android:text="Subin imagen" /> -->
+                android:textColorHint="@color/white"
+                android:layout_marginBottom="20dp"
+                android:hint="@string/tomar_fotografia"
+               />
 
             <Button
                 android:id="@+id/btnRegEmpleado"

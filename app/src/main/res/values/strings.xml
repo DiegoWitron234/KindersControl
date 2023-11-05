@@ -53,4 +53,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="registro_de_acceso">Registro de acceso</string>
     <string name="qr_de_alumno">QR de alumno</string>
+    <string name="nombre_empleado">%1$s %2$s</string>
+    <string name="tu_grupo">Tu grupo</string>
+    <string name="registrar_acceso">Registrar acceso</string>
+    <string name="apellidos">Apellidos</string>
+    <string name="tomar_fotografia">Tomar fotografía</string>
+    <string name="foto_del_tutor">Fotografía del tutor\n</string>
 </resources>

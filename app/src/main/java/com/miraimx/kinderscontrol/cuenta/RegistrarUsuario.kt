@@ -1,4 +1,4 @@
-package com.miraimx.kinderscontrol
+package com.miraimx.kinderscontrol.cuenta
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import com.miraimx.kinderscontrol.ModoOscuro
 import com.miraimx.kinderscontrol.databinding.ActivityRegistrarUsuarioBinding
 
 class RegistrarUsuario : AppCompatActivity(), ModoOscuro {

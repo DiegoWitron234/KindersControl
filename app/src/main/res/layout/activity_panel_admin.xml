@@ -5,11 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondokinder"
-    tools:context=".PanelAdmin">
+    tools:context=".administrador.PanelAdmin">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="70dp"
         android:paddingHorizontal="20dp">
 
         <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
@@ -56,10 +57,10 @@
             app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
         <TextView
-            android:id="@+id/lblAgregar"
+            android:id="@+id/txtAgregar"
             style="@style/tvTitulos2"
             android:layout_gravity="center"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="20dp"
             android:text="@string/agregar"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -79,7 +80,7 @@
             android:textColor="@color/white"
             app:layout_constraintEnd_toStartOf="@+id/btnAgregarNino"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lblAgregar" />
+            app:layout_constraintTop_toBottomOf="@+id/txtAgregar" />
 
         <Button
             android:id="@+id/btnAgregarNino"
@@ -94,18 +95,32 @@
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnAgregarEmpleado"
-            app:layout_constraintTop_toBottomOf="@+id/lblAgregar" />
+            app:layout_constraintTop_toBottomOf="@+id/txtAgregar" />
+
+        <Button
+            android:id="@+id/btnAgregarProfesor"
+            android:layout_width="150dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="10dp"
+            android:autoSizeMaxTextSize="20dp"
+            android:autoSizeTextType="uniform"
+            android:background="@drawable/estilos_boton"
+            android:text="Profesor"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnAgregarEmpleado" />
 
         <TextView
             android:id="@+id/lblEntrada"
             style="@style/tvTitulos2"
             android:layout_gravity="center"
-            android:layout_marginTop="160dp"
+            android:layout_marginTop="170dp"
             android:text="@string/registrar_entrada"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lblAdministracion" />
+            app:layout_constraintTop_toBottomOf="@id/txtAgregar" />
 
         <Button
             android:id="@+id/btnRegistroEntrada"
@@ -114,6 +129,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="8dp"
             android:autoSizeMaxTextSize="20dp"
+            android:autoSizeMinTextSize="15dp"
             android:autoSizeTextType="uniform"
             android:background="@drawable/estilos_boton"
             android:text="@string/registrar_entrada"
@@ -137,29 +153,48 @@
             app:layout_constraintStart_toEndOf="@+id/btnRegistroEntrada"
             app:layout_constraintTop_toBottomOf="@+id/lblEntrada" />
 
+        <TextView
+            android:id="@+id/lblAsignaciones"
+            style="@style/tvTitulos2"
+            android:layout_gravity="center"
+            android:layout_marginTop="90dp"
+            android:text="Administrar"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lblEntrada" />
+
         <Button
             android:id="@+id/btnAsignarTutorias"
             style="@style/botonMenu"
-            android:layout_width="200dp"
+            android:layout_width="0dp"
             android:layout_height="70dp"
             android:layout_marginTop="10dp"
-            android:text="@string/administrar_tutorias"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="5dp"
+            android:autoSizeMaxTextSize="20dp"
+            android:autoSizeMinTextSize="15dp"
+            android:autoSizeTextType="uniform"
+            android:text="Tutorias"
+            app:layout_constraintEnd_toStartOf="@id/btnAsignarGrupo"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnRegistroEntrada" />
+            app:layout_constraintTop_toBottomOf="@id/lblAsignaciones" />
 
         <Button
-            android:id="@+id/btnCerrarSesion"
+            android:id="@+id/btnAsignarGrupo"
             style="@style/botonMenu"
-            android:layout_width="200dp"
+            android:layout_width="0dp"
             android:layout_height="70dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="70dp"
-            android:text="@string/cerrar_sesi_n"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:autoSizeMaxTextSize="20dp"
+            android:autoSizeMinTextSize="15dp"
+            android:autoSizeTextType="uniform"
+            android:text="Grupo"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnAsignarTutorias" />
+            app:layout_constraintStart_toEndOf="@+id/btnAsignarTutorias"
+            app:layout_constraintTop_toBottomOf="@id/lblAsignaciones" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

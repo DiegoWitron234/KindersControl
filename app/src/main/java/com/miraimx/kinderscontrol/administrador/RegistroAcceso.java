@@ -1,4 +1,4 @@
-package com.miraimx.kinderscontrol;
+package com.miraimx.kinderscontrol.administrador;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -16,18 +16,18 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+import com.miraimx.kinderscontrol.ControlFirebaseBD;
+import com.miraimx.kinderscontrol.DatosConsultados;
+import com.miraimx.kinderscontrol.ListViewUsuarioAdapter;
+import com.miraimx.kinderscontrol.R;
+import com.miraimx.kinderscontrol.Usuario;
 import com.miraimx.kinderscontrol.databinding.ActivityLeerQrBinding;
 
 import java.text.SimpleDateFormat;
@@ -37,7 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class LeerQR_Activity extends AppCompatActivity {
+public class RegistroAcceso extends AppCompatActivity {
     private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
             result -> {
                 if (result.getContents() != null) {
@@ -50,7 +50,7 @@ public class LeerQR_Activity extends AppCompatActivity {
     private final List<Usuario> alumnoLista = new ArrayList<>();
     //private RecyclerAdapter2 recyclerAdapterAlumnos;
     private ArrayAdapter listViewAdapter;
-
+    private final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
     private ActivityLeerQrBinding binding;
 
     private int posAnteriorAlumno = -1;
@@ -133,152 +133,87 @@ public class LeerQR_Activity extends AppCompatActivity {
 
 
     private void cargarDatosTutor(String cUserId) {
-        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         Query query = database.child("tutores").orderByChild("tutor_id").equalTo(cUserId);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        ControlFirebaseBD controlFirebaseBD = new ControlFirebaseBD(new DatosConsultados() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot datos : snapshot.getChildren()) {
-                    String nombreTutor = datos.child("nombre_tutor").getValue(String.class);
-                    String telefono = datos.child("telefono_tutor").getValue(String.class);
-                    String correo = datos.child("correo_tutor").getValue(String.class);
-                    String direccion = datos.child("direccion_tutor").getValue(String.class);
-                    if (nombreTutor != null && telefono != null && correo != null && direccion != null) {
-                        binding.txtNombraTutorQR.setText(nombreTutor);
-                        binding.txtTelefonoTutorQR.setText(telefono);
-                        binding.txEmailTutorQR.setText(correo);
-                        binding.txDireccionTutorQR.setText(direccion);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onDatosConsulta(@NonNull List<String> resultados) {
+                super.onDatosConsulta(resultados);
+                binding.txtNombraTutorQR.setText(resultados.get(0));
+                binding.txtTelefonoTutorQR.setText(resultados.get(1));
+                binding.txEmailTutorQR.setText(resultados.get(2));
+                binding.txDireccionTutorQR.setText(resultados.get(3));
             }
         });
+        String[] atributos = {"nombre_tutor", "telefono_tutor", "correo_tutor", "direccion_tutor"};
+        controlFirebaseBD.consultar(query, atributos);
     }
 
     private void cargarDatos(String cUserId) {
-        alumnoLista.clear();
-        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        Query query = database.child("tutorizacion").orderByChild("tutor_id").equalTo(cUserId);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        ControlFirebaseBD controlFirebaseBD = new ControlFirebaseBD(new DatosConsultados() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                final int[] cantidadAlumnos = {0};
-
-                for (DataSnapshot registro : snapshot.getChildren()) {
-                    final String id = registro.child("matricula").getValue(String.class);
-
-                    if (id != null) {
-                        Query queryAlumno = database.child("alumnos").orderByChild("matricula").equalTo(id);
-
-                        queryAlumno.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                for (DataSnapshot alumno : snapshot.getChildren()) {
-                                    String nombreAlumno = alumno.child("nombre_alumno").getValue(String.class);
-
-                                    if (nombreAlumno != null) {
-                                        Usuario usuarioDatos = new Usuario(id, nombreAlumno, false, "");
-                                        alumnoLista.add(usuarioDatos);
-                                    }
-                                }
-
-                                cantidadAlumnos[0]++;
-
-                                if (cantidadAlumnos[0] == snapshot.getChildrenCount()) {
-                                    // Notificar al adaptador sobre los cambios
-                                    listViewAdapter.notifyDataSetChanged();
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                // Manejar la cancelación si es necesario
-                            }
-                        });
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Manejar la cancelación si es necesario
+            public void onDatosUsuario(@NonNull List<Usuario> resultados) {
+                super.onDatosUsuario(resultados);
+                listViewAdapter.notifyDataSetChanged();
             }
         });
+        controlFirebaseBD.consultaTutorizaciones(cUserId, alumnoLista);
     }
 
     private void btnRegistrarEntrada() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        List<String> alumnoSeleccion = new ArrayList<>();
-
         builder.setTitle("Confirmación");
         builder.setMessage("¿Desea realizar la asignación de los alumnos?");
 
         builder.setPositiveButton("Sí", (dialog, which) -> {
             // Aquí puedes agregar la lógica para agregar al niño al tutor
-            //Toast.makeText(LeerQR_Activity.this, "Registro de " + estatusRegistro + " exitoso", Toast.LENGTH_SHORT).show();
-
-            DatabaseReference chekinRef = FirebaseDatabase.getInstance().getReference("checkin").push();
             HashMap<String, Object> checkInfo = new HashMap<>();
-
+            String alumnoSeleccion = "";
             Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-            String fechaHoraActual = dateFormat.format(calendar.getTime());
-
-            int y = 0;
-
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss", Locale.getDefault());
+            String[] fechaHoraActual = dateFormat.format(calendar.getTime()).split(",");
             for (Usuario alumno : alumnoLista) {
                 if (alumno.getSeleccionado()) {
-                    alumnoSeleccion.add(alumno.getId());
+                    alumnoSeleccion = alumno.getId();
+                    break;
                 }
             }
 
-            while (y < alumnoSeleccion.size()) {
-                checkInfo.put("matricula", alumnoSeleccion.get(y));
-                checkInfo.put("tutor_id", idTutor);
-                checkInfo.put("empleado_id", idEmpleado);
-                checkInfo.put("in_out", estatusRegistro);
-                checkInfo.put("horafecha_check", fechaHoraActual);
-                y++;
-            }
+            checkInfo.put("profesor_id", idEmpleado);
+            checkInfo.put("matricula", alumnoSeleccion);
+            checkInfo.put("tutor_id", idTutor);
+            checkInfo.put("estatus", estatusRegistro);
+            checkInfo.put("fecha_acceso", fechaHoraActual[0]);
+            checkInfo.put("hora_acceso", fechaHoraActual[1]);
 
-            chekinRef.setValue(checkInfo).addOnCompleteListener(task -> {
+            // Cargando Datos
+            // Se cambió de checkin a acceso
+            database.child("acceso").push().setValue(checkInfo).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    Toast.makeText(LeerQR_Activity.this, "Operación exitosa", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegistroAcceso.this, "Operación exitosa", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(LeerQR_Activity.this, "No se pudo realizar la operación", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegistroAcceso.this, "No se pudo realizar la operación", Toast.LENGTH_SHORT).show();
                 }
             });
+            //Actualizar Datos
+            DatabaseReference alumnoRef = database.child("alumnos/" + alumnoSeleccion + "/acceso");
+            HashMap<String, Object> acceso = new HashMap<>();
+            acceso.put("estatus", estatusRegistro);
+            acceso.put("fecha_acceso", fechaHoraActual[0]);
+            acceso.put("hora_acceso", fechaHoraActual[1]);
+            alumnoRef.updateChildren(acceso);
 
-            while (y < alumnoSeleccion.size()) {
-                alumnoLista.get(y).setSeleccionado(false);
-            }
-
-
+            alumnoLista.get(0).setSeleccionado(false);
             Intent intent = new Intent(this, PanelAdmin.class);
             startActivity(intent);
             finish();
-
-            /*alumnoLista.get(posAnteriorAlumno).setSeleccionado(false);
-            posAnteriorAlumno = -1;
-            binding.lsCheckAlumno.clearChoices();
-            listViewAdapter.notifyDataSetChanged();
-            binding.registrarIn.setEnabled(false);
-            dialog.dismiss();*/
         });
 
         builder.setNegativeButton("No", (dialog, which) -> {
             // Aquí puedes agregar la lógica si el usuario elige "No"
-            // Toast.makeText(LeerQR_Activity.this, "No registro la entrada del niño", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         });
 
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
-
 }

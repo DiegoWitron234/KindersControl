@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondokinder"
-    tools:context=".SingUpTutor">
+    tools:context=".cuenta.SingUpTutor">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -64,6 +64,16 @@
 
             <TextView
                 style="@style/tvTitulos2"
+                android:text="@string/apellidos" />
+
+            <EditText
+                android:id="@+id/edTutorApellidos"
+                style="@style/etTitulos"
+                android:hint="@string/apellidos"
+                android:inputType="textPersonName" />
+
+            <TextView
+                style="@style/tvTitulos2"
                 android:text="@string/edad" />
 
             <EditText
@@ -103,6 +113,20 @@
                 style="@style/etTitulos"
                 android:hint="@string/direccion"
                 android:inputType="text" />
+
+            <TextView
+                style="@style/tvTitulos2"
+                android:text="@string/foto_del_tutor"
+                />
+
+            <Button
+                android:id="@+id/btnTutorFotografia"
+                style="@style/btnMenu"
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:textColorHint="@color/white"
+                android:layout_marginBottom="20dp"
+                android:hint="@string/tomar_fotografia" />
 
             <Button
                 android:id="@+id/btnRegTutor"

@@ -30,7 +30,7 @@
             android:value="ca-app-pub-3940256099942544~3347511713" />
 
         <activity
-            android:name=".MainAsignacionActivity"
+            android:name=".tutor.MainPanelTutor"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -38,47 +38,51 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Camara"
+            android:name=".cuenta.Camara"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".LeerQR_Activity"
+            android:name=".administrador.RegistroAcceso"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".DisplayQRActivity"
+            android:name=".tutor.DisplayQRActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Tutorizacion"
+            android:name=".administrador.Tutorizacion"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".PanelUsuario"
+            android:name=".tutor.PanelUsuario"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SingUpAlumno"
+            android:name=".cuenta.SingUpAlumno"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SingUpEmpleado"
+            android:name=".cuenta.SingUpEmpleado"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SingUpTutor"
+            android:name=".cuenta.SingUpTutor"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".PanelAdmin"
+            android:name=".administrador.PanelAdmin"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".RegistrarUsuario"
+            android:name=".cuenta.RegistrarUsuario"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity android:name=".profesor.MainPanelProfesor"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            />
         <activity
-            android:name=".Login"
+            android:name=".cuenta.Login"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -88,7 +92,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".ServicioOyente" />
+        <service android:name=".tutor.ServicioOyente" />
     </application>
 
 </manifest>
