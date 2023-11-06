@@ -17,13 +17,13 @@ import com.google.firebase.database.Query
 import com.miraimx.kinderscontrol.ControlFirebaseBD
 import com.miraimx.kinderscontrol.DatosConsultados
 import com.miraimx.kinderscontrol.ListViewUsuarioAdapter
-import com.miraimx.kinderscontrol.ModoOscuro
+import com.miraimx.kinderscontrol.Propiedades
 import com.miraimx.kinderscontrol.R
 import com.miraimx.kinderscontrol.Usuario
 import com.miraimx.kinderscontrol.databinding.ActivityTutorizacionBinding
 import java.util.Locale
 
-class Tutorizacion : AppCompatActivity(), ModoOscuro {
+class Tutorizacion : AppCompatActivity(), Propiedades {
 
     private val alumnoLista = mutableListOf<Usuario>()
     private val usuarioLista = mutableListOf<Usuario>()

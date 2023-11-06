@@ -5,11 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+
     tools:context=".profesor.AccesoEntradaFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="70dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/imageView"
@@ -62,7 +64,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="70dp"
             android:backgroundTint="@color/botones"
             android:text="registrar entrada"
             app:layout_constraintEnd_toEndOf="parent"

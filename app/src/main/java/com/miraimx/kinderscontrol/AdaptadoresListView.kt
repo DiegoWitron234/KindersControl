@@ -2,6 +2,7 @@ package com.miraimx.kinderscontrol
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Canvas
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.DividerItemDecoration
 import java.text.SimpleDateFormat
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -71,7 +73,6 @@ class ListViewAlumnoAdapter(
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view = inflater.inflate(R.layout.list_item_alumnos_layout, null)
-
         val nombre = listaUsuario[position].nombre
         val matricula = listaUsuario[position].matricula
         var estatus = listaUsuario[position].estatus
@@ -91,9 +92,8 @@ class ListViewAlumnoAdapter(
 
         }
 
-
         tvNombre.text = nombre
-        tvMatricula.text = matricula
+        tvMatricula.text = "Matricula: $matricula"
         tvEstatus.text = estatus
         //tvTiempo.text = tiempo
 

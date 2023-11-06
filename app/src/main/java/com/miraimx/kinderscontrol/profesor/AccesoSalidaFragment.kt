@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.journeyapps.barcodescanner.ScanContract
@@ -16,18 +15,18 @@ import com.journeyapps.barcodescanner.ScanOptions
 import com.miraimx.kinderscontrol.ControlFirebaseBD
 import com.miraimx.kinderscontrol.DatosConsultados
 import com.miraimx.kinderscontrol.ListViewUsuarioAdapter
-import com.miraimx.kinderscontrol.ModoOscuro
+import com.miraimx.kinderscontrol.Propiedades
 import com.miraimx.kinderscontrol.Usuario
 import com.miraimx.kinderscontrol.databinding.FragmentAccesoSalidaBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class AccesoSalidaFragment : Fragment(), ModoOscuro {
+class AccesoSalidaFragment : Fragment(), Propiedades {
 
     private val barcodeLauncher = registerForActivityResult(ScanContract()) { result ->
         result.contents?.let {
-            cargarDatos(it)
+            //cargarDatos(it)
             cargarDatosTutor(it)
             idTutor = it
         }
@@ -38,7 +37,6 @@ class AccesoSalidaFragment : Fragment(), ModoOscuro {
     // idTutor = "8PalsQD1XmMSEELuEh8x8maxqdv2"
     private val alumnoLista = mutableListOf<Usuario>()
 
-    // private lateinit var recyclerAdapterAlumnos: RecyclerAdapter2
     private lateinit var listViewAdapter: ArrayAdapter<Usuario>
 
     private val database = FirebaseDatabase.getInstance().reference
@@ -57,9 +55,9 @@ class AccesoSalidaFragment : Fragment(), ModoOscuro {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.registrarIn.isEnabled = false
+        binding.registrar.isEnabled = false
 
-        binding.registrarIn.setOnClickListener { btnRegistrarAcceso() }
+        binding.registrar.setOnClickListener { btnRegistrarAcceso() }
 
         binding.btnScan.setOnClickListener {
             val options = ScanOptions()
@@ -80,7 +78,7 @@ class AccesoSalidaFragment : Fragment(), ModoOscuro {
                 alumnoLista[posAnteriorAlumno].seleccionado = false
             }
             posAnteriorAlumno = i
-            binding.registrarIn.isEnabled = true
+            binding.registrar.isEnabled = true
         }
 
     }
@@ -91,10 +89,11 @@ class AccesoSalidaFragment : Fragment(), ModoOscuro {
             override fun onDatosConsulta(resultados: MutableList<String>) {
                 super.onDatosConsulta(resultados)
                 if (resultados.isNotEmpty()){
-                    binding.txtNombraTutorQR.text = resultados[0]
-                    binding.txtTelefonoTutorQR.text = resultados[1]
+                    binding.txtNombraTutorQR.text = "Tutor: $resultados[0]"
+                    binding.txtTelefonoTutorQR.text = "Teléfono $resultados[1]"
                     binding.txEmailTutorQR.text = resultados[2]
                     binding.txDireccionTutorQR.text = resultados[3]
+                    cargarDatos(cUserId, resultados[0])
                 }else{
                     Toast.makeText(requireActivity(), "QR invalido", Toast.LENGTH_SHORT).show()
                 }
@@ -104,14 +103,15 @@ class AccesoSalidaFragment : Fragment(), ModoOscuro {
         controlFirebaseBD.consultar(query, atributos)
     }
 
-    private fun cargarDatos(cUserId: String) {
+    private fun cargarDatos(cUserId: String, nombreUsuario: String) {
         val controlFirebaseBD = ControlFirebaseBD(object : DatosConsultados() {
             override fun onDatosUsuario(resultados: MutableList<Usuario>) {
                 super.onDatosUsuario(resultados)
                 listViewAdapter.notifyDataSetChanged()
             }
         })
-        controlFirebaseBD.consultaTutorizaciones(cUserId, alumnoLista)
+
+        controlFirebaseBD.consultaTutorizaciones(cUserId, nombreUsuario, alumnoLista)
     }
 
 
@@ -156,10 +156,16 @@ class AccesoSalidaFragment : Fragment(), ModoOscuro {
                     acceso["hora_acceso"] = fechaHoraActual[1]
                     alumnoRef.updateChildren(acceso)
 
-                    findNavController().navigate(
+                    /*findNavController().navigate(
                         AccesoSalidaFragmentDirections.actionAccesoSalidaFragmentPop()
-                    )
-
+                    )*/
+                    val pos = binding.lsCheckAlumno.selectedItemPosition
+                    binding.lsCheckAlumno.setItemChecked(pos, false)
+                    posAnteriorAlumno = -1
+                    binding.registrar.isEnabled = false
+                    //listViewAdapter.clear()
+                    //listViewAdapter.notifyDataSetChanged()
+                    binding.registrar
                     Toast.makeText(requireActivity(), "Operación exitosa", Toast.LENGTH_SHORT)
                         .show()
                 } else {

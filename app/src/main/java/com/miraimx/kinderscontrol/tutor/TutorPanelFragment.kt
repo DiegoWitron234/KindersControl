@@ -1,12 +1,15 @@
 package com.miraimx.kinderscontrol.tutor
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -14,10 +17,10 @@ import com.miraimx.kinderscontrol.Alumno
 import com.miraimx.kinderscontrol.ControlFirebaseBD
 import com.miraimx.kinderscontrol.DatosConsultados
 import com.miraimx.kinderscontrol.ListViewAlumnoAdapter
-import com.miraimx.kinderscontrol.ModoOscuro
+import com.miraimx.kinderscontrol.Propiedades
 import com.miraimx.kinderscontrol.databinding.FragmentTutorPanelBinding
 
-class TutorPanelFragment : Fragment(), ModoOscuro {
+class TutorPanelFragment : Fragment(), Propiedades {
 
     private lateinit var binding: FragmentTutorPanelBinding
     private lateinit var lsAsignacionesAlAdapater: ArrayAdapter<Alumno>
@@ -54,6 +57,12 @@ class TutorPanelFragment : Fragment(), ModoOscuro {
     private fun configListas() {
         lsAsignacionesAlAdapater = ListViewAlumnoAdapter(requireContext(), alumnosAsigLista)
         binding.lsAsignacionesTutor.adapter = lsAsignacionesAlAdapater
+        // Agregar un divisor
+        binding.lsAsignacionesTutor.divider = ColorDrawable(Color.TRANSPARENT)
+
+        // Establecer la altura del divisor
+        binding.lsAsignacionesTutor.dividerHeight = 10
+
         binding.lsAsignacionesTutor.setOnItemClickListener { _, _, i, _ ->
             val nombre = alumnosAsigLista[i].nombre
             val matricula = alumnosAsigLista[i].matricula

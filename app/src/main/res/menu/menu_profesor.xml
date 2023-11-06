@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/profesorPanelFragment"
+        android:title="Tu grupo"
+        android:icon="@mipmap/grupo"
+        />
+    <item
+        android:id="@+id/accesoEntradaFragment"
+        android:title="Entrada"
+        android:icon="@mipmap/entrada"
+        />
+    <item
+        android:id="@+id/accesoSalidaFragment"
+        android:title="Salida"
+        android:icon="@mipmap/salida"
+        />
+
+</menu>

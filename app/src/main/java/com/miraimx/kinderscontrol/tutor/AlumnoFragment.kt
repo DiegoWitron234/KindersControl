@@ -20,12 +20,12 @@ import com.miraimx.kinderscontrol.AccesoAlumno
 import com.miraimx.kinderscontrol.ControlFirebaseBD
 import com.miraimx.kinderscontrol.DatosConsultados
 import com.miraimx.kinderscontrol.ListViewAccesoAdapter
-import com.miraimx.kinderscontrol.ModoOscuro
+import com.miraimx.kinderscontrol.Propiedades
 import com.miraimx.kinderscontrol.R
 import com.miraimx.kinderscontrol.databinding.FragmentAlumnoBinding
 
 
-class AlumnoFragment : Fragment(), ModoOscuro {
+class AlumnoFragment : Fragment(), Propiedades {
     private lateinit var binding: FragmentAlumnoBinding
     private val args: AlumnoFragmentArgs by navArgs()
     private lateinit var matricula: String

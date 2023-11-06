@@ -50,20 +50,17 @@ class ControlFirebaseBD(private val callback: DatosConsultados) {
         }
     }
 
-    fun consultaTutorizaciones(claveUsuario: String, lista: MutableList<Usuario>) {
+    fun consultaTutorizaciones(claveUsuario: String, nombreUsuario: String, lista: MutableList<Usuario>) {
         lista.clear()
-        val query = database.child("tutorizacion").orderByChild("tutor_id").equalTo(claveUsuario)
+        val query = database.child("alumnos").orderByChild("tutores/$claveUsuario").equalTo(nombreUsuario)
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 snapshot.children.mapNotNull { registro ->
-                    val datos = registro.child("alumno").getValue<HashMap<String, Any>>()
-                    if (!datos.isNullOrEmpty()) {
-                        val matricula = datos["matricula"].toString()
-                        val nombreAlumno = datos["nombre_alumno"].toString()
-                        Log.e("LOG", matricula + nombreAlumno)
-                        if (matricula.isNotEmpty() && nombreAlumno.isNotEmpty()) {
-                            Usuario(matricula, nombreAlumno, false)
-                        } else null
+                    val matricula = registro.child("matricula").getValue<String>()
+                    val nombreAlumno = registro.child("nombre_alumno").getValue<String>()
+                    //Log.e("LOG", matricula + nombreAlumno)
+                    if (!matricula.isNullOrEmpty() && !nombreAlumno.isNullOrEmpty()) {
+                        Usuario(matricula, nombreAlumno, false)
                     } else null
                 }.also { registro ->
                     lista.addAll(registro)

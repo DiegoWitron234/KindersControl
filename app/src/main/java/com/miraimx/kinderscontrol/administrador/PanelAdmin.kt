@@ -18,18 +18,19 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.miraimx.kinderscontrol.cuenta.Login
-import com.miraimx.kinderscontrol.ModoOscuro
+import com.miraimx.kinderscontrol.Propiedades
 import com.miraimx.kinderscontrol.R
 import com.miraimx.kinderscontrol.cuenta.RegistrarUsuario
 import com.miraimx.kinderscontrol.cuenta.SingUpAlumno
 import com.miraimx.kinderscontrol.cuenta.SingUpEmpleado
 import com.miraimx.kinderscontrol.databinding.ActivityPanelAdminBinding
 
-class PanelAdmin : AppCompatActivity(), ModoOscuro {
+class PanelAdmin : AppCompatActivity(), Propiedades {
 
     private lateinit var btnAgregarEmpleado: Button
     private lateinit var binding: ActivityPanelAdminBinding
     private var rolUsuarioRegistrar: String = "Admin"
+    private var auth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,13 +93,20 @@ class PanelAdmin : AppCompatActivity(), ModoOscuro {
             startActivity(intent)
         }
     }
-    /*override fun onStart() {
+    override fun onStart() {
         super.onStart()
         verificarUsuario()
+    }
+
+    /*override fun onDestroy() {
+        super.onDestroy()
+        if (auth.currentUser != null){
+            auth.signOut()
+        }
     }*/
 
     private fun registro(estatus: String) {
-        val currentUser = FirebaseAuth.getInstance().currentUser
+        val currentUser = auth.currentUser
 
         val intent = Intent(this, RegistroAcceso::class.java)
         if (currentUser != null) {
@@ -109,9 +117,10 @@ class PanelAdmin : AppCompatActivity(), ModoOscuro {
     }
 
     private fun verificarUsuario() {
-        Toast.makeText(this@PanelAdmin, "Es admin", Toast.LENGTH_LONG).show()
-        val currentUser = FirebaseAuth.getInstance().currentUser
+
+        val currentUser = auth.currentUser
         if (currentUser != null) {
+            Toast.makeText(this@PanelAdmin, currentUser.email, Toast.LENGTH_LONG).show()
             val uid = currentUser.uid
             val uRef = FirebaseDatabase.getInstance().getReference("empleados").child(uid)
             uRef.addListenerForSingleValueEvent(object : ValueEventListener {

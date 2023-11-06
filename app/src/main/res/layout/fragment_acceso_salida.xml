@@ -52,6 +52,7 @@
             android:id="@+id/txtNombraTutorQR"
             style="@style/tvCuerpo1"
             android:layout_marginTop="25dp"
+            android:textSize="20dp"
             android:hint="Nombre del tutor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,6 +62,7 @@
             android:id="@+id/txtTelefonoTutorQR"
             style="@style/tvCuerpo1"
             android:hint="Teléfono"
+            android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtNombraTutorQR" />
@@ -69,6 +71,7 @@
             android:id="@+id/txEmailTutorQR"
             style="@style/tvCuerpo1"
             android:hint="Correo electrónico"
+            android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtTelefonoTutorQR" />
@@ -77,6 +80,7 @@
             android:id="@+id/txDireccionTutorQR"
             style="@style/tvCuerpo1"
             android:hint="Dirección"
+            android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txEmailTutorQR" />
@@ -100,7 +104,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <Button
-            android:id="@+id/registrarIn"
+            android:id="@+id/registrar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"

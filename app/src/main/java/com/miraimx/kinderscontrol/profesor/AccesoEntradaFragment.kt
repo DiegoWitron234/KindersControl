@@ -15,7 +15,7 @@ import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import com.miraimx.kinderscontrol.ControlFirebaseBD
 import com.miraimx.kinderscontrol.DatosConsultados
-import com.miraimx.kinderscontrol.ModoOscuro
+import com.miraimx.kinderscontrol.Propiedades
 import com.miraimx.kinderscontrol.databinding.FragmentAccesoEntradaBinding
 import com.miraimx.kinderscontrol.Usuario
 import com.miraimx.kinderscontrol.ListViewUsuarioAdapter
@@ -24,14 +24,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class AccesoEntradaFragment : Fragment(), ModoOscuro {
+class AccesoEntradaFragment : Fragment(), Propiedades {
 
     private lateinit var binding: FragmentAccesoEntradaBinding
 
@@ -190,9 +188,9 @@ class AccesoEntradaFragment : Fragment(), ModoOscuro {
                 jobs.joinAll()
                 Toast.makeText(requireActivity(), "Datos guardados", Toast.LENGTH_SHORT)
                     .show()
-                findNavController().navigate(
+                /*findNavController().navigate(
                     AccesoEntradaFragmentDirections.actionAccesoEntradaFragmentPop()
-                )
+                )*/
             }
         } catch (e: Exception) {
             Toast.makeText(

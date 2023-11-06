@@ -1,5 +1,7 @@
 package com.miraimx.kinderscontrol.profesor
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,11 +15,11 @@ import com.miraimx.kinderscontrol.Alumno
 import com.miraimx.kinderscontrol.ControlFirebaseBD
 import com.miraimx.kinderscontrol.DatosConsultados
 import com.miraimx.kinderscontrol.ListViewAlumnoAdapter
-import com.miraimx.kinderscontrol.ModoOscuro
+import com.miraimx.kinderscontrol.Propiedades
 import com.miraimx.kinderscontrol.R
 import com.miraimx.kinderscontrol.databinding.FragmentProfesorPanelBinding
 
-class ProfesorPanelFragment : Fragment(), ModoOscuro {
+class ProfesorPanelFragment : Fragment(), Propiedades {
 
     private lateinit var binding: FragmentProfesorPanelBinding
     private val database = FirebaseDatabase.getInstance().reference
@@ -35,14 +37,16 @@ class ProfesorPanelFragment : Fragment(), ModoOscuro {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnEntrada.setOnClickListener {
+        /*binding.btnEntrada.setOnClickListener {
             botonAcceso(ProfesorPanelFragmentDirections.actionProfesorPanelFragmentToAccesoEntradaFragment())
         }
         binding.btnSalida.setOnClickListener {
             botonAcceso(ProfesorPanelFragmentDirections.actionProfesorPanelFragmentToAccesoSalidaFragment())
-        }
+        }*/
         listViewAlumnoAdapter = ListViewAlumnoAdapter(requireActivity(), listaAlumnos)
         binding.listviewGrupo.adapter = listViewAlumnoAdapter
+        binding.listviewGrupo.divider = ColorDrawable(Color.TRANSPARENT)
+        binding.listviewGrupo.dividerHeight = 10
 
         if (currentUser != null){
             listaAlumnos.clear()

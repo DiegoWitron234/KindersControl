@@ -7,8 +7,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.onNavDestinationSelected
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -31,40 +37,13 @@ class MainPanelProfesor : AppCompatActivity() {
         MobileAds.initialize(this) {}
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
-    }
 
-    override fun onStart() {
-        super.onStart()
-        verificarUsuario()
-    }
-
-    private fun verificarUsuario() {
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        if (currentUser != null) {
-            val uid = currentUser.uid
-            val uRef = FirebaseDatabase.getInstance().getReference("empleados").child(uid)
-            uRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (!snapshot.exists()) {
-                        val intent = Intent(this@MainPanelProfesor, SingUpEmpleado::class.java)
-                        intent.putExtra("id", uid)
-                        intent.putExtra("correo", currentUser.email)
-                        intent.putExtra("rol", "Profesor")
-                        startActivity(intent)
-                        Toast.makeText(this@MainPanelProfesor, "Registrando Empleado", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(this@MainPanelProfesor, "onCancelled", Toast.LENGTH_SHORT).show()
-                }
-            })
-        }
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navProfesorFragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        setupBottomNavMenu(navController)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_superior, menu)
         return true
     }
@@ -85,7 +64,46 @@ class MainPanelProfesor : AppCompatActivity() {
                     .show()
                 true
             }
+            /*R.id.verGrupo ->{
+                true
+            }
+            R.id.registrarEntrada ->{
+                true
+            }
+            R.id.registrarSalida ->{
+                true
+            }*/
             else -> super.onOptionsItemSelected(item)
         }
     }
+    /* override fun onStart() {
+         super.onStart()
+         verificarUsuario()
+     }
+
+     private fun verificarUsuario() {
+         val currentUser = FirebaseAuth.getInstance().currentUser
+         if (currentUser != null) {
+             val uid = currentUser.uid
+             val uRef = database.getReference("tutores").child(uid)
+             uRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                 override fun onDataChange(snapshot: DataSnapshot) {
+                     if (!snapshot.exists()) {
+                         val intent = Intent(this@MainPanelTutor, SingUpEmpleado::class.java)
+                         intent.putExtra("correo", currentUser.email)
+                         startActivity(intent)
+                     }
+                 }
+                 override fun onCancelled(error: DatabaseError) {
+                     Toast.makeText(this@MainPanelTutor, "onCancelled", Toast.LENGTH_SHORT).show()
+                 }
+             })
+         }
+
+     }*/
+    private fun setupBottomNavMenu(navController: NavController) {
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomnavprofesor)
+        bottomNav?.setupWithNavController(navController)
+    }
+
 }

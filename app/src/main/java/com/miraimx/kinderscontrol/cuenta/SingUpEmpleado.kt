@@ -20,11 +20,11 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.google.firebase.storage.storageMetadata
-import com.miraimx.kinderscontrol.ModoOscuro
+import com.miraimx.kinderscontrol.Propiedades
 import com.miraimx.kinderscontrol.databinding.ActivitySingUpEmpleadoBinding
 import java.io.File
 
-class SingUpEmpleado : AppCompatActivity(), ModoOscuro {
+class SingUpEmpleado : AppCompatActivity(), Propiedades {
     private var esUsuarioActual: Boolean = false
     private lateinit var binding: ActivitySingUpEmpleadoBinding
     private var ruta: String = ""

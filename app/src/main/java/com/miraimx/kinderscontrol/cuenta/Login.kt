@@ -19,13 +19,13 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
-import com.miraimx.kinderscontrol.ModoOscuro
+import com.miraimx.kinderscontrol.Propiedades
 import com.miraimx.kinderscontrol.administrador.PanelAdmin
 import com.miraimx.kinderscontrol.databinding.ActivityLoginBinding
 import com.miraimx.kinderscontrol.profesor.MainPanelProfesor
 import com.miraimx.kinderscontrol.tutor.MainPanelTutor
 
-class Login : AppCompatActivity(), ModoOscuro {
+class Login : AppCompatActivity(), Propiedades {
 
     private lateinit var auth: FirebaseAuth
 
@@ -146,6 +146,7 @@ class Login : AppCompatActivity(), ModoOscuro {
                         when (val role = dataSnapshot.child("role").value.toString()) {
                             "Admin" -> {
                                 // Mostrar la interfaz de administrador
+                                verificarUsuario("empleados", role)
                                 val intent = Intent(this@Login, PanelAdmin::class.java)
                                 //intent.putExtra("rol", role)
                                 startActivity(intent)
@@ -154,13 +155,14 @@ class Login : AppCompatActivity(), ModoOscuro {
 
                             "Usuario" -> {
                                 // Mostrar la interfaz de usuario
+                                verificarUsuario("tutores", role)
                                 val intent = Intent(this@Login, MainPanelTutor::class.java)
                                 startActivity(intent)
                                 finish()
                             }
 
                             "Profesor" -> {
-                                Toast.makeText(this@Login, "Es profesor", Toast.LENGTH_LONG).show()
+                                verificarUsuario("empleados", role)
                                 startActivity(Intent(this@Login, MainPanelProfesor::class.java))
                                 finish()
                             }
@@ -185,6 +187,36 @@ class Login : AppCompatActivity(), ModoOscuro {
                 override fun onCancelled(databaseError: DatabaseError) {
                     // Manejar errores de lectura de la base de datos
                     Toast.makeText(this@Login, "Error al leer la RTDB", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+    }
+
+
+    private fun verificarUsuario(tabla: String, rol: String) {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            val uid = currentUser.uid
+            val uRef = FirebaseDatabase.getInstance().getReference(tabla).child(uid)
+            uRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (!snapshot.exists()) {
+                        val intent = if (tabla == "empleados") {
+                            Intent(this@Login, SingUpEmpleado::class.java)
+                        }else{
+                            Intent(this@Login, SingUpTutor::class.java)
+                        }
+                        intent.putExtra("id", uid)
+                        intent.putExtra("correo", currentUser.email)
+                        intent.putExtra("rol", rol)
+                        startActivity(intent)
+                        Toast.makeText(this@Login, "Registrando usuario", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@Login, "onCancelled", Toast.LENGTH_SHORT).show()
                 }
             })
         }

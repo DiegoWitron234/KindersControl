@@ -41,7 +41,6 @@ public class RegistroAcceso extends AppCompatActivity {
     private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
             result -> {
                 if (result.getContents() != null) {
-                    cargarDatos(result.getContents());
                     cargarDatosTutor(result.getContents());
                 }
             });
@@ -72,19 +71,19 @@ public class RegistroAcceso extends AppCompatActivity {
         idEmpleado = getIntent().getStringExtra("id");
         estatusRegistro = getIntent().getStringExtra("estatus");
 
-        binding.registrarIn.setEnabled(false);
+        binding.registrar.setEnabled(false);
         TextView txtTitulo = findViewById(R.id.tvRegistroActivity);
 
 
         if (estatusRegistro.equals("in")) {
-            binding.registrarIn.setText("Registrar entrada");
+            binding.registrar.setText("Registrar entrada");
             txtTitulo.setText("Registro de entrada");
         } else {
-            binding.registrarIn.setText("Registrar salida");
+            binding.registrar.setText("Registrar salida");
             txtTitulo.setText("Registro de salida");
         }
 
-        binding.registrarIn.setOnClickListener(view -> btnRegistrarEntrada());
+        binding.registrar.setOnClickListener(view -> btnRegistrarEntrada());
 
         binding.btnScan.setOnClickListener(view -> {
             ScanOptions options = new ScanOptions();
@@ -105,7 +104,7 @@ public class RegistroAcceso extends AppCompatActivity {
                 alumnoLista.get(posAnteriorAlumno).setSeleccionado(false);
             }
             posAnteriorAlumno = i;
-            binding.registrarIn.setEnabled(true);
+            binding.registrar.setEnabled(true);
         });
     }
 
@@ -124,7 +123,7 @@ public class RegistroAcceso extends AppCompatActivity {
             } else {
                 Toast.makeText(this, result.getContents(), Toast.LENGTH_SHORT).show();
                 idTutor = result.getContents();
-                cargarDatos(idTutor);
+                //cargarDatos(idTutor);
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -142,13 +141,14 @@ public class RegistroAcceso extends AppCompatActivity {
                 binding.txtTelefonoTutorQR.setText(resultados.get(1));
                 binding.txEmailTutorQR.setText(resultados.get(2));
                 binding.txDireccionTutorQR.setText(resultados.get(3));
+                cargarDatos(cUserId, resultados.get(0));
             }
         });
         String[] atributos = {"nombre_tutor", "telefono_tutor", "correo_tutor", "direccion_tutor"};
         controlFirebaseBD.consultar(query, atributos);
     }
 
-    private void cargarDatos(String cUserId) {
+    private void cargarDatos(String cUserId, String nombreUsuario) {
         ControlFirebaseBD controlFirebaseBD = new ControlFirebaseBD(new DatosConsultados() {
             @Override
             public void onDatosUsuario(@NonNull List<Usuario> resultados) {
@@ -156,7 +156,7 @@ public class RegistroAcceso extends AppCompatActivity {
                 listViewAdapter.notifyDataSetChanged();
             }
         });
-        controlFirebaseBD.consultaTutorizaciones(cUserId, alumnoLista);
+        controlFirebaseBD.consultaTutorizaciones(cUserId, nombreUsuario, alumnoLista);
     }
 
     private void btnRegistrarEntrada() {

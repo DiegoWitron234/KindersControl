@@ -10,10 +10,10 @@
         android:id="@+id/txtNombreProfesor"
         style="@style/tvTitulos1"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="70dp"
         android:layout_marginTop="0dp"
-        android:autoSizeMaxTextSize="30sp"
-        android:autoSizeMinTextSize="20sp"
+        android:autoSizeMaxTextSize="40sp"
+        android:autoSizeMinTextSize="30sp"
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
         android:gravity="center"
@@ -38,68 +38,34 @@
             android:src="@drawable/logokinder" />
     </androidx.cardview.widget.CardView>
 
-
-    <TextView
-        android:id="@+id/txtRegistrar"
-        style="@style/tvTitulos1"
-        android:text="@string/registrar_acceso"
-        android:textColor="@color/textColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <Button
-        android:id="@+id/btnEntrada"
-        style="@style/btnMenu"
-        android:layout_width="150dp"
-        android:layout_marginVertical="20dp"
-        android:layout_marginEnd="5dp"
-        android:autoSizeMaxTextSize="20dp"
-        android:autoSizeMinTextSize="15dp"
-        android:autoSizeTextType="uniform"
-        android:text="@string/registrar_entrada"
-        app:layout_constraintEnd_toStartOf="@id/btnSalida"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtRegistrar" />
-
-    <Button
-        android:id="@+id/btnSalida"
-        style="@style/btnMenu"
-        android:layout_width="150dp"
-        android:layout_marginVertical="20dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="20dp"
-        android:autoSizeMaxTextSize="20dp"
-        android:autoSizeMinTextSize="15dp"
-        android:autoSizeTextType="uniform"
-        android:text="@string/entrada_salida"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btnEntrada"
-        app:layout_constraintTop_toBottomOf="@id/txtRegistrar" />
-
     <TextView
         android:id="@+id/txtGrupo"
-        style="@style/tvTitulos1"
+        style="@style/tvTitulos2"
+        android:layout_height="0dp"
         android:layout_marginHorizontal="20dp"
         android:text="@string/tu_grupo"
         android:textColor="@color/textColor"
+        android:autoSizeMaxTextSize="30sp"
+        android:autoSizeMinTextSize="25sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toStartOf="@id/btnDescargarLista"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnEntrada" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <ImageButton
         android:id="@+id/btnDescargarLista"
         style="@style/btnMenu"
-        android:layout_width="52dp"
-        android:layout_height="52dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginTop="10dp"
         android:background="@mipmap/descargar"
         android:contentDescription="Boton descargar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/txtGrupo"
-        app:layout_constraintTop_toBottomOf="@id/btnSalida" />
+        app:layout_constraintTop_toBottomOf="@id/imageView" />
 
     <ListView
         android:id="@+id/listviewGrupo"
@@ -110,19 +76,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtGrupo" />
-
-
-    <!-- <Button
-         android:id="@+id/btnCerrarSesion"
-         style="@style/btnMenu"
-         android:layout_width="150dp"
-         android:layout_marginVertical="20dp"
-         android:autoSizeMaxTextSize="20dp"
-         android:autoSizeMinTextSize="15dp"
-         android:autoSizeTextType="uniform"
-         android:text="@string/cerrar_sesion"
-         app:layout_constraintStart_toEndOf="@id/imageView"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintTop_toBottomOf="@id/txtNombreProfesor"/>
- -->
 </androidx.constraintlayout.widget.ConstraintLayout>

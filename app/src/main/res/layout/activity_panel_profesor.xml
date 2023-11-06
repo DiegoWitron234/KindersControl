@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="70dp"
-    android:paddingHorizontal="20dp"
     android:background="@drawable/fondokinder"
     tools:context=".profesor.MainPanelProfesor">
 
@@ -26,13 +24,24 @@
         android:id="@+id/navProfesorFragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
+        android:layout_marginHorizontal="20dp"
         android:layout_marginTop="20dp"
         android:layout_height="0dp"
         app:defaultNavHost="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomnavprofesor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/adView"
         app:navGraph="@navigation/profesor_graph" />
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomnavprofesor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:menu="@menu/menu_profesor"
+        app:layout_constraintTop_toBottomOf="@id/navProfesorFragment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

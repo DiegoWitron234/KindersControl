@@ -25,10 +25,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
-import com.miraimx.kinderscontrol.ModoOscuro
+import com.miraimx.kinderscontrol.Propiedades
 import com.miraimx.kinderscontrol.databinding.ActivityRegistrarUsuarioBinding
 
-class RegistrarUsuario : AppCompatActivity(), ModoOscuro {
+class RegistrarUsuario : AppCompatActivity(), Propiedades {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var campoNuevoCorreo: EditText

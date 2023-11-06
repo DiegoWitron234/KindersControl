@@ -22,12 +22,12 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.google.firebase.storage.storageMetadata
-import com.miraimx.kinderscontrol.ModoOscuro
+import com.miraimx.kinderscontrol.Propiedades
 import com.miraimx.kinderscontrol.R
 import com.miraimx.kinderscontrol.databinding.ActivitySingUpTutorBinding
 import java.io.File
 
-class SingUpTutor : AppCompatActivity(), ModoOscuro {
+class SingUpTutor : AppCompatActivity(), Propiedades {
 
     private lateinit var binding: ActivitySingUpTutorBinding
     private var fotoAlmacenada: String? = null
