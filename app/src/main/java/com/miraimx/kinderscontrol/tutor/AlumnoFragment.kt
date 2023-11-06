@@ -47,14 +47,15 @@ class AlumnoFragment : Fragment(), Propiedades {
         val datosAlumnos = args.datosAlumno
         lsAccesoAlumnoAdapter = ListViewAccesoAdapter(requireContext(), alumnosAccesoLista)
         matricula = datosAlumnos[1]
-        binding.imbEditar.setOnClickListener {
+
+        /*binding.imbEditar.setOnClickListener {
             /*findNavController().navigate(
                 AlumnoFragmentDirections.actionAlumnoFragmentToCamara(
                     matricula = matricula
                 )
             )*/
             //startActivity(Intent(requireContext(), Camara::class.java))
-        }
+        }*/
 
         binding.imbQR.setOnTouchListener { v, event ->
             when (event.action) {
