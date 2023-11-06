@@ -100,7 +100,10 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
     }
 
     private fun busquedas(srvAlumno: SearchView, srvTutores: SearchView) {
+
         srvAlumno.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            val atbAlumnos = arrayOf("nombre_alumno", "apellidos_alumno")
+
             override fun onQueryTextSubmit(p0: String?): Boolean {
                 return true
             }
@@ -111,8 +114,8 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
                         consulta(
                             "alumnos",
                             normalizerText(p0),
-                            "matricula",
-                            "nombre_alumno",
+                            arrayOf("matricula"),
+                            atbAlumnos,
                             alumnoLista,
                             false
                         )
@@ -120,8 +123,8 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
                         consulta(
                             "alumnos",
                             normalizerText(p0),
-                            "nombre_alumno",
-                            "matricula",
+                            atbAlumnos,
+                            arrayOf("matricula"),
                             alumnoLista,
                             true
                         )
@@ -133,6 +136,7 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
         })
 
         srvTutores.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            val atbUsuario = arrayOf("nombre_${atributoUsuario}", "apellidos_${atributoUsuario}")
             override fun onQueryTextSubmit(p0: String?): Boolean {
                 return true
             }
@@ -142,8 +146,8 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
                     consulta(
                         tablaUsuario,
                         normalizerText(p0),
-                        "${atributoUsuario}_id",
-                        "nombre_${atributoUsuario}",
+                        arrayOf("${atributoUsuario}_id"),
+                        atbUsuario,
                         usuarioLista,
                         false
                     )
@@ -157,8 +161,8 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
     private fun consulta(
         tabla: String,
         nombre: String,
-        atributoId: String,
-        atributoBuscar: String,
+        atributoId:Array<String>,
+        atributoBuscar: Array<String>,
         lista: MutableList<Usuario>,
         orden: Boolean
     ) {

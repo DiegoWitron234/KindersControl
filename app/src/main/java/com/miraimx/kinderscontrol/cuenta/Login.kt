@@ -24,6 +24,8 @@ import com.miraimx.kinderscontrol.administrador.PanelAdmin
 import com.miraimx.kinderscontrol.databinding.ActivityLoginBinding
 import com.miraimx.kinderscontrol.profesor.MainPanelProfesor
 import com.miraimx.kinderscontrol.tutor.MainPanelTutor
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 class Login : AppCompatActivity(), Propiedades {
 
@@ -132,6 +134,7 @@ class Login : AppCompatActivity(), Propiedades {
         // Obtener una referencia a la base de datos
         val database = FirebaseDatabase.getInstance()
         val currentUser = FirebaseAuth.getInstance().currentUser
+        val scope = CoroutineScope(Dispatchers.IO)
 
         // Verificar si el usuario está autenticado
         if (currentUser != null) {

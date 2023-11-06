@@ -120,7 +120,6 @@ class PanelAdmin : AppCompatActivity(), Propiedades {
 
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            Toast.makeText(this@PanelAdmin, currentUser.email, Toast.LENGTH_LONG).show()
             val uid = currentUser.uid
             val uRef = FirebaseDatabase.getInstance().getReference("empleados").child(uid)
             uRef.addListenerForSingleValueEvent(object : ValueEventListener {

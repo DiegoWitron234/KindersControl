@@ -94,9 +94,11 @@ class TutorPanelFragment : Fragment(), Propiedades {
         val controlFirebaseBD = ControlFirebaseBD(object : DatosConsultados() {
             override fun onDatosConsulta(resultados: MutableList<String>) {
                 super.onDatosConsulta(resultados)
-                val nombreTutor = resultados[0]
-                binding.nombreTutor.text = nombreTutor
-                cargarDatos(uid, nombreTutor)
+                if  (resultados.isNotEmpty()){
+                    val nombreTutor = resultados[0]
+                    binding.nombreTutor.text = nombreTutor
+                    cargarDatos(uid, nombreTutor)
+                }
             }
         })
         val query =

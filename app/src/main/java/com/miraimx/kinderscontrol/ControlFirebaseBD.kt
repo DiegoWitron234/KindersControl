@@ -1,6 +1,5 @@
 package com.miraimx.kinderscontrol
 
-import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -16,43 +15,88 @@ class ControlFirebaseBD(private val callback: DatosConsultados) {
     fun consultaTutorizacion(
         tabla: String,
         nombre: String,
-        atributoId: String,
-        atributoBuscar: String,
+        atributoId: Array<String>,
+        atributoBuscar: Array<String>,
         lista: MutableList<Usuario>,
         orden: Boolean
     ) {
         if (nombre.isNotBlank()) {
             val database = database.child(tabla)
-            val alumnosQuery =
-                database.orderByChild(atributoBuscar).startAt(nombre).endAt(nombre + "\uf8ff")
-            alumnosQuery.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    lista.clear() // Borra la lista antes de agregar nuevos resultados
+            consulta(database, tabla, nombre, atributoId, atributoBuscar, 0, lista, orden)
+        }
+    }
+
+    private fun consulta(
+        database: DatabaseReference,
+        tabla: String,
+        nombre: String,
+        atributoId: Array<String>,
+        atributoBuscar: Array<String>,
+        index: Int,
+        lista: MutableList<Usuario>,
+        orden: Boolean
+    ) {
+        val query = database.orderByChild(atributoBuscar[index]).startAt(nombre).endAt(nombre + "\uf8ff")
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                lista.clear() // Borra la lista antes de agregar nuevos resultados
+                if (snapshot.exists()) {
                     snapshot.children.mapNotNull { usuario ->
-                        val id = usuario.child(atributoId).getValue(String::class.java)
-                        val nombreUsuario =
-                            usuario.child(atributoBuscar).getValue(String::class.java)
-                        if (!nombreUsuario.isNullOrEmpty() && !id.isNullOrEmpty()) {
-                            Usuario(
-                                if (orden) nombreUsuario else id,
-                                if (orden) id else nombreUsuario,
-                                false,
-                            )
-                        } else null
+                        val id = usuario.child(atributoId[0]).getValue(String::class.java)
+                        val nombreUsuario = usuario.child(atributoBuscar[index]).getValue(String::class.java)
+                        val apellidosUsuario = usuario.child(atributoBuscar[1 - index]).getValue<String>()
+                        datosUsuario(tabla, usuario, nombreUsuario, apellidosUsuario, id, orden)
                     }.also { usuarios ->
                         lista.addAll(usuarios)
                         callback.onDatosUsuario(lista)
                     }
+                } else if (index == 0 && atributoBuscar[1].isNotEmpty()) {
+                    // Si no se encontraron resultados con atributoBuscar[0], intenta con atributoBuscar[1]
+                    consulta(database, tabla, nombre, atributoId, atributoBuscar, 1, lista, orden)
                 }
+            }
 
-                override fun onCancelled(error: DatabaseError) {}
-            })
-        }
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
-    fun consultaTutorizaciones(claveUsuario: String, nombreUsuario: String, lista: MutableList<Usuario>) {
+    private fun datosUsuario(
+        tabla: String,
+        usuario: DataSnapshot,
+        nombreUsuario: String?,
+        apellidosUsuario: String?,
+        id: String?,
+        orden: Boolean
+    ): Usuario? {
+        if (!nombreUsuario.isNullOrEmpty() && !id.isNullOrEmpty() && !apellidosUsuario.isNullOrEmpty()) {
+            if (tabla == "empleados") {
+                val puesto = usuario.child("puesto").getValue<String>()
+                if (!puesto.isNullOrEmpty() && puesto == "Profesor") {
+                    return Usuario(
+                        if (orden) "$nombreUsuario $apellidosUsuario" else id,
+                        if (orden) id else "$nombreUsuario $apellidosUsuario",
+                        false,
+                    )
+                }
+            } else {
+                return Usuario(
+                    if (orden) "$nombreUsuario $apellidosUsuario" else id,
+                    if (orden) id else "$nombreUsuario $apellidosUsuario",
+                    false,
+                )
+            }
+        }
+        return null
+    }
+
+    fun consultaTutorizaciones(
+        claveUsuario: String,
+        nombreUsuario: String,
+        lista: MutableList<Usuario>
+    ) {
         lista.clear()
-        val query = database.child("alumnos").orderByChild("tutores/$claveUsuario").equalTo(nombreUsuario)
+        val query =
+            database.child("alumnos").orderByChild("tutores/$claveUsuario").equalTo(nombreUsuario)
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 snapshot.children.mapNotNull { registro ->

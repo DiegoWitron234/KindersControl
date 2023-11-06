@@ -104,11 +104,11 @@ class SingUpTutor : AppCompatActivity(), Propiedades {
 
     private fun validarDatos(
         nombre: String,
+        apellidos: String,
         edad: String,
         telefono: String,
-        direccion: String,
         correo: String?,
-        apellidos: String
+        direccion: String,
     ): Boolean {
         val regex = Regex("^[0-9]{10}$")
 
@@ -138,7 +138,7 @@ class SingUpTutor : AppCompatActivity(), Propiedades {
         val edNombre = findViewById<EditText>(R.id.edTutorNombre).text.toString()
         val edApellidos = binding.edTutorApellidos.text.toString()
         val edEdad = findViewById<EditText>(R.id.edTutorEdad).text.toString()
-        val edTelefono = findViewById<EditText>(R.id.edTutorTelefono).text.toString()
+        val edTelefono = binding.edTutorTelefono.text.toString()
         val edDireccion = findViewById<EditText>(R.id.edTutorDireccion).text.toString()
 
         if (validarDatos(
@@ -233,7 +233,7 @@ class SingUpTutor : AppCompatActivity(), Propiedades {
         return hashMapOf(
             "tutor_id" to idUsuario,
             "nombre_tutor" to edNombre,
-            "apeliidos_tutor" to edApellidos,
+            "apellidos_tutor" to edApellidos,
             "edad_tutor" to edEdad,
             "telefono_tutor" to edTelefono,
             "direccion_tutor" to edDireccion,
