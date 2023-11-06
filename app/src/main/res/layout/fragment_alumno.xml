@@ -21,7 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
+   <!-- <ImageButton
         android:id="@+id/imbEditar"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -31,7 +31,7 @@
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtAlumnoNombre" />
-
+    -->
     <ImageButton
         android:id="@+id/imbQR"
         android:layout_width="50dp"
@@ -41,7 +41,7 @@
         android:contentDescription="@string/qr_de_alumno"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toEndOf="@id/imbEditar"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtAlumnoNombre" />
 
     <ImageView

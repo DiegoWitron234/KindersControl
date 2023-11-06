@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.journeyapps.barcodescanner.ScanContract
@@ -68,6 +67,8 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
             barcodeLauncher.launch(options)
         }
 
+        binding.btnAceptarEntrada.isEnabled = false
+
         binding.btnAceptarEntrada.setOnClickListener {
             btnRegistrarAcceso()
         }
@@ -81,40 +82,23 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
             override fun onDatosConsulta(resultados: MutableList<String>) {
                 super.onDatosConsulta(resultados)
                 if (resultados.isNotEmpty()){
+                    binding.btnAceptarEntrada.isEnabled = true
                     val matricula = resultados[0]
                     val nombre = resultados[1]
                     //Toast.makeText(requireActivity(), nombre + matricula, Toast.LENGTH_LONG).show()
                     if (listaMatriculas.isNotEmpty()) {
                         listaMatriculas.map { alumno ->
                             if (alumno != matricula) {
-                                listaAlumnos.add(
-                                    Usuario(
-                                        matricula,
-                                        nombre,
-                                        false
-                                    )
+                                listaAlumnos.add(Usuario(matricula, nombre, false)
                                 )
                                 listaMatriculas.add(matricula)
-                                Toast.makeText(
-                                    requireActivity(),
-                                    "Alumno registrado",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                Toast.makeText(requireActivity(),"Alumno registrado", Toast.LENGTH_SHORT).show()
                             } else {
-                                Toast.makeText(
-                                    requireActivity(),
-                                    "El alumno ya se encuentra en la lista",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                Toast.makeText(requireActivity(),"El alumno ya se encuentra en la lista",Toast.LENGTH_SHORT).show()
                             }
                         }
                     } else {
-                        listaAlumnos.add(
-                            Usuario(
-                                matricula,
-                                nombre,
-                                false
-                            )
+                        listaAlumnos.add(Usuario(matricula,nombre,false)
                         )
                         listaMatriculas.add(matricula)
                     }
@@ -159,6 +143,8 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
 
             val jobs = mutableListOf<Job>()
 
+
+
             for (alumno in listaAlumnos) {
                 // Crea un mapa para almacenar los datos de este alumno
                 val alumnoInfo = hashMapOf(
@@ -188,9 +174,6 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
                 jobs.joinAll()
                 Toast.makeText(requireActivity(), "Datos guardados", Toast.LENGTH_SHORT)
                     .show()
-                /*findNavController().navigate(
-                    AccesoEntradaFragmentDirections.actionAccesoEntradaFragmentPop()
-                )*/
             }
         } catch (e: Exception) {
             Toast.makeText(

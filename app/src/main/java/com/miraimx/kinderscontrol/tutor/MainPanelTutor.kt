@@ -26,6 +26,7 @@ import com.miraimx.kinderscontrol.cuenta.SingUpTutor
 class MainPanelTutor : AppCompatActivity() {
     private lateinit var binding: ActivityPanelTutorBinding
     private val database = FirebaseDatabase.getInstance()
+    private lateinit var serviceIntent: Intent
 
     companion object {
         val PERMISOS = arrayListOf(
@@ -42,33 +43,12 @@ class MainPanelTutor : AppCompatActivity() {
         binding.adView.loadAd(adRequest)
 
         verificarPermisos()
-    }
-
-   /* override fun onStart() {
-        super.onStart()
-        verificarUsuario()
-    }
-
-    private fun verificarUsuario() {
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        if (currentUser != null) {
-            val uid = currentUser.uid
-            val uRef = database.getReference("tutores").child(uid)
-            uRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (!snapshot.exists()) {
-                        val intent = Intent(this@MainPanelTutor, SingUpTutor::class.java)
-                        intent.putExtra("correo", currentUser.email)
-                        startActivity(intent)
-                    }
-                }
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(this@MainPanelTutor, "onCancelled", Toast.LENGTH_SHORT).show()
-                }
-            })
+        shouldShowRequestPermissionRationale("android.permission.POST_NOTIFICATIONS")
+        if (tienePermisos()) {
+            serviceIntent = Intent(this, ServicioOyente::class.java)
+            startService(serviceIntent)
         }
-
-    }*/
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_superior, menu)
@@ -83,6 +63,7 @@ class MainPanelTutor : AppCompatActivity() {
                     .setPositiveButton("Salir") { _, _ -> // Acción de confirmación
                         Firebase.auth.signOut()
                         Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show()
+                        stopService(serviceIntent)
                         val intent = Intent(this, Login::class.java)
                         startActivity(intent)
                         finish()

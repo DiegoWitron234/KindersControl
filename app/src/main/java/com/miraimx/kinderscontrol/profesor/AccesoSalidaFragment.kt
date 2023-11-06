@@ -89,8 +89,8 @@ class AccesoSalidaFragment : Fragment(), Propiedades {
             override fun onDatosConsulta(resultados: MutableList<String>) {
                 super.onDatosConsulta(resultados)
                 if (resultados.isNotEmpty()){
-                    binding.txtNombraTutorQR.text = "Tutor: $resultados[0]"
-                    binding.txtTelefonoTutorQR.text = "Teléfono $resultados[1]"
+                    binding.txtNombraTutorQR.text = "Tutor: ${resultados[0]}"
+                    binding.txtTelefonoTutorQR.text = "Teléfono ${resultados[1]}"
                     binding.txEmailTutorQR.text = resultados[2]
                     binding.txDireccionTutorQR.text = resultados[3]
                     cargarDatos(cUserId, resultados[0])
