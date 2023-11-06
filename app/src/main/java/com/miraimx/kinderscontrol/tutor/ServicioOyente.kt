@@ -29,7 +29,7 @@ class ServicioOyente : Service() {
         createNotificationChannel()
 
         // Configura el oyente de Firebase
-        checkinRef = FirebaseDatabase.getInstance().getReference("checkin")
+        checkinRef = FirebaseDatabase.getInstance().getReference("accesos")
         registrosProcesadosRef = FirebaseDatabase.getInstance().getReference("registrosProcesados")
 
         //Agregar el oyente
@@ -37,8 +37,8 @@ class ServicioOyente : Service() {
         valueEventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (childSnapshot in dataSnapshot.children) {
-                    val tutorId = childSnapshot.child("tutorId").getValue(String::class.java)
-                    val alumnoId = childSnapshot.child("alumnoId").getValue(String::class.java)
+                    val tutorId = childSnapshot.child("tutor_id").getValue(String::class.java)
+                    val alumnoId = childSnapshot.child("matricula").getValue(String::class.java)
 
                     // Comprueba si el registro ya ha sido procesado para el tutor
                     val registroProcesadoAlumnoRef = tutorId?.let { registrosProcesadosRef.child(it) }
@@ -51,8 +51,8 @@ class ServicioOyente : Service() {
                                     // Muestra un Toast
                                     Toast.makeText(applicationContext, "Se agregó un registro de chekin", Toast.LENGTH_SHORT).show()
 
-                                    val horafecha = childSnapshot.child("horafecha_check").getValue(String::class.java)
-                                    val inOut = childSnapshot.child("in_out").getValue(String::class.java)
+                                    val horafecha = childSnapshot.child("hora_acceso").getValue(String::class.java)
+                                    val inOut = childSnapshot.child("estatus").getValue(String::class.java)
                                     //val matricula = childSnapshot.child("matricula").getValue(String::class.java)
 
                                     // Obtén el nombre del alumno

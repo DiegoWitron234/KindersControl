@@ -46,17 +46,17 @@ class PanelAdmin : AppCompatActivity(), Propiedades {
 
         botonDimensiones(
             binding.btnAgregarNino,
-            binding.btnRegistroEntrada,
-            binding.btnRegistroSalida
+           // binding.btnRegistroEntrada,
+           // binding.btnRegistroSalida
         )
 
-        binding.btnRegistroEntrada.setOnClickListener {
+       /* binding.btnRegistroEntrada.setOnClickListener {
             registro("in")
-        }
+        }*/
 
-        binding.btnRegistroSalida.setOnClickListener {
+        /*binding.btnRegistroSalida.setOnClickListener {
             registro("out")
-        }
+        }*/
         binding.btnAsignarTutorias.setOnClickListener {
             startActivity(
                 Intent(this, Tutorizacion::class.java)
@@ -147,11 +147,11 @@ class PanelAdmin : AppCompatActivity(), Propiedades {
 
     private fun botonDimensiones(
         btnAgregarAlumno: Button,
-        btnRegistrarEntrada: Button,
-        btnRegistrarSalida: Button,
+        //btnRegistrarEntrada: Button,
+        //btnRegistrarSalida: Button,
     ) {
         val buttons =
-            arrayOf(btnAgregarEmpleado, btnAgregarAlumno, btnRegistrarSalida, btnRegistrarEntrada)
+            arrayOf(btnAgregarEmpleado, btnAgregarAlumno)
         var minTextSize = Float.MAX_VALUE
 
         for (button in buttons) {

@@ -111,7 +111,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnAgregarEmpleado" />
 
-        <TextView
+        <!-- <TextView
             android:id="@+id/lblEntrada"
             style="@style/tvTitulos2"
             android:layout_gravity="center"
@@ -151,18 +151,18 @@
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnRegistroEntrada"
-            app:layout_constraintTop_toBottomOf="@+id/lblEntrada" />
+            app:layout_constraintTop_toBottomOf="@+id/lblEntrada" /> -->
 
         <TextView
             android:id="@+id/lblAsignaciones"
             style="@style/tvTitulos2"
             android:layout_gravity="center"
-            android:layout_marginTop="90dp"
+            android:layout_marginTop="10dp"
             android:text="Administrar"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lblEntrada" />
+            app:layout_constraintTop_toBottomOf="@id/btnAgregarProfesor" />
 
         <Button
             android:id="@+id/btnAsignarTutorias"
