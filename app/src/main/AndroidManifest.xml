@@ -24,12 +24,6 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.KindersControl"
         tools:targetApi="31">
-        <activity
-            android:name=".profesor.ListaAsistencia"
-            android:exported="false"
-            android:label="@string/title_activity_lista_asistencia"
-            android:theme="@style/Base.Theme.KindersControl" />
-
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713" />
