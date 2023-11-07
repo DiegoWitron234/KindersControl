@@ -42,13 +42,13 @@ class ProfesorPanelFragment : Fragment(), Propiedades {
         listViewAlumnoAdapter = ListViewAlumnoAdapter(requireActivity(), listaAlumnos)
         binding.listviewGrupo.adapter = listViewAlumnoAdapter
         binding.listviewGrupo.divider = ColorDrawable(Color.TRANSPARENT)
-        binding.listviewGrupo.dividerHeight = 10
-
         if (currentUser != null){
             listaAlumnos.clear()
             cargaDatos()
         }
-
+        binding.btnDescargarLista.setOnClickListener{
+            startActivity(Intent(requireContext(), ListaAsistencia::class.java))
+        }
     }
 
     private fun cargaDatos() {
