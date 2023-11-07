@@ -53,10 +53,6 @@ class ProfesorPanelFragment : Fragment(), Propiedades {
             listaAlumnos.clear()
             cargaDatos()
         }
-
-        binding.btnDescargarLista.setOnClickListener{
-            startActivity(Intent(requireContext(), ListaAsistencia::class.java))
-        }
     }
 
     private fun botonAcceso(acceso: NavDirections) {
