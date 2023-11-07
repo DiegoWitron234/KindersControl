@@ -24,6 +24,11 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.KindersControl"
         tools:targetApi="31">
+        <activity
+            android:name=".profesor.ListaAsistencia"
+            android:exported="false"
+            android:label="@string/title_activity_lista_asistencia"
+            android:theme="@style/Base.Theme.KindersControl" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -31,10 +36,6 @@
 
         <activity
             android:name=".tutor.MainPanelTutor"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".AsistenciaAlumnos"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -51,10 +52,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".administrador.Tutorizacion"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".tutor.PanelUsuario"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -77,10 +74,10 @@
             android:name=".cuenta.RegistrarUsuario"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".profesor.MainPanelProfesor"
+        <activity
+            android:name=".profesor.MainPanelProfesor"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".cuenta.Login"
             android:exported="true"

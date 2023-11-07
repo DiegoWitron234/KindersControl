@@ -36,15 +36,18 @@ class ControlFirebaseBD(private val callback: DatosConsultados) {
         lista: MutableList<Usuario>,
         orden: Boolean
     ) {
-        val query = database.orderByChild(atributoBuscar[index]).startAt(nombre).endAt(nombre + "\uf8ff")
+        val query =
+            database.orderByChild(atributoBuscar[index]).startAt(nombre).endAt(nombre + "\uf8ff")
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 lista.clear() // Borra la lista antes de agregar nuevos resultados
                 if (snapshot.exists()) {
                     snapshot.children.mapNotNull { usuario ->
                         val id = usuario.child(atributoId[0]).getValue(String::class.java)
-                        val nombreUsuario = usuario.child(atributoBuscar[index]).getValue(String::class.java)
-                        val apellidosUsuario = usuario.child(atributoBuscar[1 - index]).getValue<String>()
+                        val nombreUsuario =
+                            usuario.child(atributoBuscar[index]).getValue(String::class.java)
+                        val apellidosUsuario =
+                            usuario.child(atributoBuscar[1 - index]).getValue<String>()
                         datosUsuario(tabla, usuario, nombreUsuario, apellidosUsuario, id, orden)
                     }.also { usuarios ->
                         lista.addAll(usuarios)
@@ -75,14 +78,14 @@ class ControlFirebaseBD(private val callback: DatosConsultados) {
                     return Usuario(
                         if (orden) "$nombreUsuario $apellidosUsuario" else id,
                         if (orden) id else "$nombreUsuario $apellidosUsuario",
-                        false,
+                        false, ""
                     )
                 }
             } else {
                 return Usuario(
                     if (orden) "$nombreUsuario $apellidosUsuario" else id,
                     if (orden) id else "$nombreUsuario $apellidosUsuario",
-                    false,
+                    false, ""
                 )
             }
         }
@@ -104,7 +107,7 @@ class ControlFirebaseBD(private val callback: DatosConsultados) {
                     val nombreAlumno = registro.child("nombre_alumno").getValue<String>()
                     //Log.e("LOG", matricula + nombreAlumno)
                     if (!matricula.isNullOrEmpty() && !nombreAlumno.isNullOrEmpty()) {
-                        Usuario(matricula, nombreAlumno, false)
+                        Usuario(matricula, nombreAlumno, false, "")
                     } else null
                 }.also { registro ->
                     lista.addAll(registro)
@@ -113,29 +116,6 @@ class ControlFirebaseBD(private val callback: DatosConsultados) {
             }
 
             override fun onCancelled(error: DatabaseError) {}
-        })
-    }
-
-    fun consultar(consulta: Query, listaAtributos: Array<String>) {
-        val listaResultados: MutableList<String> = mutableListOf()
-        consulta.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                snapshot.children.mapNotNull { registro ->
-                    listaAtributos.mapNotNull { atributo ->
-                        val dato = registro.child(atributo).getValue<String>()
-                        if (!dato.isNullOrEmpty()) {
-                            dato
-                        } else null
-                    }.also { atributos ->
-                        listaResultados.addAll(atributos)
-                    }
-                }.also {
-                    callback.onDatosConsulta(listaResultados)
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {}
-
         })
     }
 
@@ -148,6 +128,7 @@ class ControlFirebaseBD(private val callback: DatosConsultados) {
                 snapshot.children.mapNotNull { alumno ->
                     val matricula = alumno.child("matricula").getValue<String>()
                     val nombre = alumno.child("nombre_alumno").getValue<String>()
+                    val apellidos = alumno.child("apellidos_alumno").getValue<String>() ?: ""
                     val tiposangre = alumno.child("tiposangre_alumno").getValue<String>()
                     val edad = alumno.child("edad_alumno").getValue<String>()
                     val grado = alumno.child("grado").getValue<String>() ?: ""
@@ -167,6 +148,7 @@ class ControlFirebaseBD(private val callback: DatosConsultados) {
                         Alumno(
                             matricula!!,
                             nombre!!,
+                            apellidos,
                             tiposangre!!,
                             edad!!,
                             grado,
@@ -216,20 +198,49 @@ class ControlFirebaseBD(private val callback: DatosConsultados) {
             })
     }
 
-    fun fbConsulta(query: Query, listaAtr: MutableList<HashMap<String, Any>>) {
-        query.addListenerForSingleValueEvent(object : ValueEventListener {
+
+    fun consultar(consulta: Query, listaAtributos: Array<String>) {
+        val listaResultados: MutableList<String> = mutableListOf()
+        consulta.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                snapshot.children.mapNotNull { documento ->
-                    val registro = documento.getValue<HashMap<String, Any>>()
-                    if (!registro.isNullOrEmpty()) {
-                        listaAtr.add(registro)
+                snapshot.children.mapNotNull { registro ->
+                    listaAtributos.mapNotNull { atributo ->
+                        val dato = registro.child(atributo).getValue<String>()
+                        if (!dato.isNullOrEmpty()) {
+                            dato
+                        } else null
+                    }.also { atributos ->
+                        listaResultados.addAll(atributos)
                     }
                 }.also {
-                    callback.onDatos(listaAtr)
+                    callback.onDatosConsulta(listaResultados)
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {}
+
+        })
+    }
+    fun consultarNodosInternos(
+        query: Query,
+        callback: (MutableList<Pair<String?, String?>>) -> Unit
+    ) {
+        val datos = mutableListOf<Pair<String?, String?>>()
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                snapshot.children.map { registro ->
+                    val clave = registro.key
+                    val valor = registro.getValue<String>()
+                    if (!valor.isNullOrEmpty() || !clave.isNullOrEmpty()) {
+                        datos.add(Pair(clave, valor))
+                    }
+                }.also {
+                    callback(datos)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+
         })
     }
 }

@@ -50,6 +50,7 @@
     <style name="AppTheme" parent="TextAppearance.AppCompat">
 
     </style>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="registro_de_acceso">Registro de acceso</string>
     <string name="qr_de_alumno">QR de alumno</string>
@@ -59,4 +60,5 @@
     <string name="apellidos">Apellidos</string>
     <string name="tomar_fotografia">Tomar fotografía</string>
     <string name="foto_del_tutor">Fotografía del tutor\n</string>
+    <string name="title_activity_lista_asistencia">ListaAsistencia</string>
 </resources>

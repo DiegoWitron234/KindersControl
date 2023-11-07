@@ -32,8 +32,7 @@ class ServicioOyente : Service() {
         checkinRef = FirebaseDatabase.getInstance().getReference("accesos")
         registrosProcesadosRef = FirebaseDatabase.getInstance().getReference("registrosProcesados")
 
-        //Agregar el oyente
-
+        //Crear el oyente
         valueEventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (childSnapshot in dataSnapshot.children) {
@@ -41,10 +40,10 @@ class ServicioOyente : Service() {
                     val alumnoId = childSnapshot.child("matricula").getValue(String::class.java)
 
                     // Comprueba si el registro ya ha sido procesado para el tutor
-                    val registroProcesadoAlumnoRef = tutorId?.let { registrosProcesadosRef.child(it) }
+                    val registroProcesadoTutorRef = tutorId?.let { registrosProcesadosRef.child(it) }
 
-                    if(registroProcesadoAlumnoRef != null){
-                        registroProcesadoAlumnoRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                    if(registroProcesadoTutorRef != null){
+                        registroProcesadoTutorRef.addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(registroProcesadoSnapshot: DataSnapshot) {
                                 if (!registroProcesadoSnapshot.hasChild(childSnapshot.key!!)) {
                                     // El registro no ha sido procesado para este tutor
@@ -65,7 +64,7 @@ class ServicioOyente : Service() {
                                     //showNotification(horafecha, inOut, alumnoId)
 
                                     // Agrega el ID del registro a "registrosProcesados" para este tutor
-                                    registroProcesadoAlumnoRef.child(childSnapshot.key!!).setValue(true)
+                                    registroProcesadoTutorRef.child(childSnapshot.key!!).setValue(true)
                                 }
                             }
 
@@ -89,7 +88,7 @@ class ServicioOyente : Service() {
             }
         }
 
-        // Agrega el oyente a la referencia de la base de datos
+        // Agregar el oyente a la referencia de la base de datos
 
         checkinRef.addValueEventListener(valueEventListener)
 

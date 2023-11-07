@@ -18,6 +18,7 @@ import com.miraimx.kinderscontrol.ListViewUsuarioAdapter
 import com.miraimx.kinderscontrol.Propiedades
 import com.miraimx.kinderscontrol.Usuario
 import com.miraimx.kinderscontrol.databinding.FragmentAccesoSalidaBinding
+import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -88,18 +89,25 @@ class AccesoSalidaFragment : Fragment(), Propiedades {
         val controlFirebaseBD = ControlFirebaseBD(object : DatosConsultados() {
             override fun onDatosConsulta(resultados: MutableList<String>) {
                 super.onDatosConsulta(resultados)
-                if (resultados.isNotEmpty()){
-                    binding.txtNombraTutorQR.text = "Tutor: ${resultados[0]}"
-                    binding.txtTelefonoTutorQR.text = "Teléfono ${resultados[1]}"
-                    binding.txEmailTutorQR.text = resultados[2]
-                    binding.txDireccionTutorQR.text = resultados[3]
-                    cargarDatos(cUserId, resultados[0])
-                }else{
+                if (resultados.isNotEmpty()) {
+                    val nombre = "${resultados[0] + resultados[1]}"
+                    binding.txtNombraTutorQR.text = "Tutor: $nombre"
+                    binding.txtTelefonoTutorQR.text = "Teléfono: ${resultados[2]}"
+                    binding.txEmailTutorQR.text = "Email: ${resultados[3]}"
+                    binding.txDireccionTutorQR.text = "Dirección: ${resultados[4]}"
+                    cargarDatos(cUserId, nombre)
+                } else {
                     Toast.makeText(requireActivity(), "QR invalido", Toast.LENGTH_SHORT).show()
                 }
             }
         })
-        val atributos = arrayOf("nombre_tutor", "telefono_tutor", "correo_tutor", "direccion_tutor")
+        val atributos = arrayOf(
+            "nombre_tutor",
+            "apellidos_tutor",
+            "telefono_tutor",
+            "correo_tutor",
+            "direccion_tutor"
+        )
         controlFirebaseBD.consultar(query, atributos)
     }
 
@@ -135,47 +143,45 @@ class AccesoSalidaFragment : Fragment(), Propiedades {
                 }
             }
 
-            val checkInfo = hashMapOf(
-                "profesor_id" to idProfesor,
-                "matricula" to alumnoSeleccion,
-                "estatus" to "out",
-                "fecha_acceso" to fechaHoraActual[0],
-                "hora_acceso" to fechaHoraActual[1],
-                "tutor_id" to idTutor
-            )
+            obtenerTutores(alumnoSeleccion, object : Callback {
+                override fun onCallback(value: MutableList<Pair<String?, String?>>) {
+                    val tutores = HashMap<String?, String?>()
 
-            // Cargando Datos
-            // Se cambió de checkin a acceso
-            database.child("accesos").push().setValue(checkInfo).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    //Actualizar Datos
-                    val alumnoRef = database.child("alumnos/$alumnoSeleccion/accesos")
-                    val acceso = HashMap<String, Any>()
-                    acceso["estatus"] = "out"
-                    acceso["fecha_acceso"] = fechaHoraActual[0]
-                    acceso["hora_acceso"] = fechaHoraActual[1]
-                    alumnoRef.updateChildren(acceso)
-
-                    /*findNavController().navigate(
-                        AccesoSalidaFragmentDirections.actionAccesoSalidaFragmentPop()
-                    )*/
-                    val pos = binding.lsCheckAlumno.selectedItemPosition
-                    binding.lsCheckAlumno.setItemChecked(pos, false)
-                    posAnteriorAlumno = -1
-                    binding.registrar.isEnabled = false
-                    //listViewAdapter.clear()
-                    //listViewAdapter.notifyDataSetChanged()
-                    binding.registrar
-                    Toast.makeText(requireActivity(), "Operación exitosa", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    Toast.makeText(
-                        requireActivity(),
-                        "No se pudo realizar la operación",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    for (tutor in value) {
+                        tutores[tutor.first] = tutor.second
+                    }
+                    val checkInfo = hashMapOf(
+                        "profesor_id" to idProfesor,
+                        "matricula" to alumnoSeleccion,
+                        "estatus" to "out",
+                        "fecha_acceso" to fechaHoraActual[0],
+                        "hora_acceso" to fechaHoraActual[1],
+                        "tutor_acceso" to idTutor,
+                        "tutores" to tutores
+                    )
+                    registrarDatos(checkInfo, fechaHoraActual, alumnoSeleccion) { resultado ->
+                        if (resultado) {
+                            val pos = binding.lsCheckAlumno.selectedItemPosition
+                            binding.lsCheckAlumno.setItemChecked(pos, false)
+                            posAnteriorAlumno = -1
+                            binding.registrar.isEnabled = false
+                            binding.registrar
+                            Toast.makeText(
+                                requireActivity(),
+                                "Operación exitosa",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        } else {
+                            Toast.makeText(
+                                requireActivity(),
+                                "No se pudo realizar la operación",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                 }
-            }
+            })
             alumnoLista[0].seleccionado = false
         }
 
@@ -186,6 +192,42 @@ class AccesoSalidaFragment : Fragment(), Propiedades {
 
         val dialog: AlertDialog = builder.create()
         dialog.show()
+    }
+
+    private fun registrarDatos(
+        checkInfo: HashMap<String, Serializable?>,
+        fechaHoraActual: List<String>,
+        alumnoSeleccion: String,
+        callback: (Boolean) -> Unit
+    ) {
+        // Cargando Datos
+        // Se cambió de checkin a acceso
+        database.child("accesos").push().setValue(checkInfo).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                //Actualizar Datos
+                val alumnoRef = database.child("alumnos/$alumnoSeleccion/accesos")
+                val acceso = HashMap<String, Any>()
+                acceso["estatus"] = "out"
+                acceso["fecha_acceso"] = fechaHoraActual[0]
+                acceso["hora_acceso"] = fechaHoraActual[1]
+                alumnoRef.updateChildren(acceso)
+                callback(true)
+            } else {
+                callback(false)
+            }
+        }
+    }
+
+    private fun obtenerTutores(matricula: String, callback: Callback) {
+        val query = database.child("alumnos/${matricula}/tutores")
+        val controlFirebaseBD = ControlFirebaseBD(object : DatosConsultados() {})
+        controlFirebaseBD.consultarNodosInternos(query) { listaTutores ->
+            callback.onCallback(listaTutores)
+        }
+    }
+
+    interface Callback {
+        fun onCallback(value: MutableList<Pair<String?, String?>>)
     }
 
 }

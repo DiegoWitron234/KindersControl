@@ -5,5 +5,6 @@
         <item name="colorPrimary">@color/botones</item>
         <item name="colorSecondary">@color/textColor</item>
     </style>
+
     <style name="Theme.KindersControl" parent="Base.Theme.KindersControl" />
 </resources>

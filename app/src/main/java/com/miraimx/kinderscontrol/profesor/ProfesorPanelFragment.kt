@@ -1,5 +1,6 @@
 package com.miraimx.kinderscontrol.profesor
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
@@ -37,12 +39,6 @@ class ProfesorPanelFragment : Fragment(), Propiedades {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /*binding.btnEntrada.setOnClickListener {
-            botonAcceso(ProfesorPanelFragmentDirections.actionProfesorPanelFragmentToAccesoEntradaFragment())
-        }
-        binding.btnSalida.setOnClickListener {
-            botonAcceso(ProfesorPanelFragmentDirections.actionProfesorPanelFragmentToAccesoSalidaFragment())
-        }*/
         listViewAlumnoAdapter = ListViewAlumnoAdapter(requireActivity(), listaAlumnos)
         binding.listviewGrupo.adapter = listViewAlumnoAdapter
         binding.listviewGrupo.divider = ColorDrawable(Color.TRANSPARENT)
@@ -52,12 +48,7 @@ class ProfesorPanelFragment : Fragment(), Propiedades {
             listaAlumnos.clear()
             cargaDatos()
         }
-    }
 
-    private fun botonAcceso(acceso: NavDirections) {
-        findNavController().navigate(
-            acceso
-        )
     }
 
     private fun cargaDatos() {

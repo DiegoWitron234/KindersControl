@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -64,7 +63,7 @@ class TutorPanelFragment : Fragment(), Propiedades {
         binding.lsAsignacionesTutor.dividerHeight = 10
 
         binding.lsAsignacionesTutor.setOnItemClickListener { _, _, i, _ ->
-            val nombre = alumnosAsigLista[i].nombre
+            val nombre = "${alumnosAsigLista[i].nombre} ${alumnosAsigLista[i].apellidos}"
             val matricula = alumnosAsigLista[i].matricula
             val edad = alumnosAsigLista[i].edad
             val sangre = alumnosAsigLista[i].tipoSangre
@@ -95,15 +94,17 @@ class TutorPanelFragment : Fragment(), Propiedades {
             override fun onDatosConsulta(resultados: MutableList<String>) {
                 super.onDatosConsulta(resultados)
                 if  (resultados.isNotEmpty()){
-                    val nombreTutor = resultados[0]
-                    binding.nombreTutor.text = nombreTutor
-                    cargarDatos(uid, nombreTutor)
+                    // Nombre + apellidos
+                    val apellido = if (resultados.size == 2) resultados[1] else ""
+                    val nombre = "${resultados[0]} $apellido"
+                    binding.nombreTutor.text = nombre
+                    cargarDatos(uid, nombre)
                 }
             }
         })
         val query =
             dbRef.child("tutores").orderByChild("tutor_id").equalTo(uid)
-        val datos = arrayOf("nombre_tutor")
+        val datos = arrayOf("nombre_tutor", "apellidos_tutor")
         controlFirebaseBD.consultar(query, datos)
     }
 }
