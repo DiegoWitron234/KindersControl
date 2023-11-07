@@ -1,5 +1,6 @@
 package com.miraimx.kinderscontrol.profesor
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -52,6 +53,10 @@ class ProfesorPanelFragment : Fragment(), Propiedades {
             listaAlumnos.clear()
             cargaDatos()
         }
+
+        binding.btnDescargarLista.setOnClickListener{
+            startActivity(Intent(requireContext(), ListaAsistencia::class.java))
+        }
     }
 
     private fun botonAcceso(acceso: NavDirections) {
@@ -93,4 +98,5 @@ class ProfesorPanelFragment : Fragment(), Propiedades {
         val query = database.child("alumnos").orderByChild("profesor_id").equalTo(currentUser?.uid)
         controlFirebaseBD.consultaAsignacion(query, listaAlumnos)
     }
+
 }
