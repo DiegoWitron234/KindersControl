@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.miraimx.kinderscontrol"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -93,4 +93,8 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.6.1")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.4")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.4")
+
+    //Hoja de cálculo
+    implementation("org.apache.poi:poi:5.2.0")
+    implementation ("org.apache.poi:poi-ooxml:5.2.0")
 }

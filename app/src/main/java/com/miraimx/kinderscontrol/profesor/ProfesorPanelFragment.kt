@@ -84,4 +84,5 @@ class ProfesorPanelFragment : Fragment(), Propiedades {
         val query = database.child("alumnos").orderByChild("profesor_id").equalTo(currentUser?.uid)
         controlFirebaseBD.consultaAsignacion(query, listaAlumnos)
     }
+
 }
