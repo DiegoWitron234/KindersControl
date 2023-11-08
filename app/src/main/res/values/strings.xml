@@ -61,4 +61,7 @@
     <string name="tomar_fotografia">Tomar fotografía</string>
     <string name="foto_del_tutor">Fotografía del tutor\n</string>
     <string name="title_activity_lista_asistencia">ListaAsistencia</string>
+    <string name="cambiar_contrasena">Cambiar contraseña</string>
+    <string name="eliminar_cuenta">Eliminar cuenta</string>
+    <string name="cambiar_correo">Cambiar correo</string>
 </resources>
