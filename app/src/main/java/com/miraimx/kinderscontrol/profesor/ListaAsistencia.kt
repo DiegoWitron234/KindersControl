@@ -72,7 +72,8 @@ class ListaAsistencia : AppCompatActivity() {
             }
 
             val values = ContentValues().apply {
-                put(MediaStore.MediaColumns.DISPLAY_NAME, "asistencia.xlsx")
+                val fechaActual = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+                put(MediaStore.MediaColumns.DISPLAY_NAME, "asistencia_$fechaActual.xlsx")
                 put(MediaStore.MediaColumns.MIME_TYPE, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                 put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
             }
@@ -86,8 +87,6 @@ class ListaAsistencia : AppCompatActivity() {
             }
             Toast.makeText(this, "Archivo exportado", Toast.LENGTH_SHORT).show()
         }
-
-
     }
 }
 
