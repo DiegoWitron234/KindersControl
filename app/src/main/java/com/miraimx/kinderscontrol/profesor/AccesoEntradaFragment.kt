@@ -9,7 +9,11 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.getValue
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import com.miraimx.kinderscontrol.ControlFirebaseBD
@@ -81,29 +85,39 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
         val controlFirebaseBD = ControlFirebaseBD(object : DatosConsultados() {
             override fun onDatosConsulta(resultados: MutableList<String>) {
                 super.onDatosConsulta(resultados)
-                if (resultados.isNotEmpty()){
+                if (resultados.isNotEmpty()) {
                     binding.btnAceptarEntrada.isEnabled = true
                     val matricula = resultados[0]
                     val nombre = resultados[1]
+                    //val tutor = resultados[2]
                     //Toast.makeText(requireActivity(), nombre + matricula, Toast.LENGTH_LONG).show()
                     if (listaMatriculas.isNotEmpty()) {
                         listaMatriculas.map { alumno ->
                             if (alumno != matricula) {
-                                listaAlumnos.add(Usuario(matricula, nombre, false)
+                                listaAlumnos.add(
+                                    Usuario(matricula, nombre, false, "")
                                 )
                                 listaMatriculas.add(matricula)
-                                Toast.makeText(requireActivity(),"Alumno registrado", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    requireActivity(),
+                                    "Alumno registrado",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             } else {
-                                Toast.makeText(requireActivity(),"El alumno ya se encuentra en la lista",Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    requireActivity(),
+                                    "El alumno ya se encuentra en la lista",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     } else {
-                        listaAlumnos.add(Usuario(matricula,nombre,false)
-                        )
+                        listaAlumnos.add(Usuario(matricula, nombre, false, ""))
                         listaMatriculas.add(matricula)
+                        //obtenerTutores(matricula)
                     }
                     listAlumnoAdapter.notifyDataSetChanged()
-                }else{
+                } else {
                     Toast.makeText(requireActivity(), "QR invalido", Toast.LENGTH_SHORT).show()
                 }
 
@@ -132,7 +146,7 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
         dialog.show()
     }
 
-    private fun registrar(){
+    private fun registrar() {
         try {
             val idProfesor = FirebaseAuth.getInstance().currentUser?.uid
             val calendar = Calendar.getInstance()
@@ -143,35 +157,54 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
 
             val jobs = mutableListOf<Job>()
 
-
+            val tutores = HashMap<String?, String?>()
 
             for (alumno in listaAlumnos) {
-                // Crea un mapa para almacenar los datos de este alumno
-                val alumnoInfo = hashMapOf(
-                    "profesor_id" to idProfesor,
-                    "matricula" to alumno.id,
-                    "estatus" to "in",
-                    "fecha_acceso" to fechaHoraActual[0],
-                    "hora_acceso" to fechaHoraActual[1],
-                )
-                jobs.add(scope.launch {
-                    database.child("accesos").push().setValue(alumnoInfo).await()
+                tutores.clear()
+                obtenerNodos(alumno.id, object: Callback {
+                    override fun onCallback(value: MutableList<Pair<String?, String?>>) {
+                        for (tutor in value){
+                            tutores[tutor.first] = tutor.second
+                        }
+                        val alumnoInfo = hashMapOf(
+                            "profesor_id" to idProfesor,
+                            "matricula" to alumno.id,
+                            "tutores" to tutores,
+                            "estatus" to "in",
+                            "fecha_acceso" to fechaHoraActual[0],
+                            "hora_acceso" to fechaHoraActual[1],
+                        )
+                        jobs.add(scope.launch {
+                            try {
+                                database.child("accesos").push().setValue(alumnoInfo).await()
+                            } catch (e: Exception) {
+                                //
+                            }
+                        })
+                    }
                 })
             }
-
+            val acceso = HashMap<String, Any>()
             for (alumno in listaAlumnos) {
+                acceso.clear()
                 val alumnoRef = database.child("alumnos/${alumno.id}/accesos")
-                val acceso = HashMap<String, Any>()
                 acceso["estatus"] = "in"
                 acceso["fecha_acceso"] = fechaHoraActual[0]
                 acceso["hora_acceso"] = fechaHoraActual[1]
                 jobs.add(scope.launch {
-                    alumnoRef.updateChildren(acceso).await()
+                    try {
+                        alumnoRef.setValue(acceso).await()
+                    } catch (e: Exception) {
+                        //
+                    }
                 })
             }
 
             scope.launch(Dispatchers.Main) {
                 jobs.joinAll()
+                listaAlumnos.clear()
+                listAlumnoAdapter.notifyDataSetChanged()
+                binding.btnAceptarEntrada.isEnabled = false
                 Toast.makeText(requireActivity(), "Datos guardados", Toast.LENGTH_SHORT)
                     .show()
             }
@@ -182,5 +215,17 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
                 Toast.LENGTH_SHORT
             ).show()
         }
+    }
+
+    private fun obtenerNodos(matricula: String, callback: Callback) {
+        val query = database.child("alumnos/${matricula}/tutores")
+        val controlFirebaseBD = ControlFirebaseBD(object : DatosConsultados(){})
+        controlFirebaseBD.consultarNodosInternos(query) { listaTutores ->
+            callback.onCallback(listaTutores)
+        }
+    }
+
+    interface Callback {
+        fun onCallback(value: MutableList<Pair<String?, String?>>)
     }
 }

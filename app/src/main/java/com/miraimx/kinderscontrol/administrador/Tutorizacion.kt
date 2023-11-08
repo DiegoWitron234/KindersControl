@@ -161,7 +161,7 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
     private fun consulta(
         tabla: String,
         nombre: String,
-        atributoId:Array<String>,
+        atributoId: Array<String>,
         atributoBuscar: Array<String>,
         lista: MutableList<Usuario>,
         orden: Boolean
@@ -196,6 +196,8 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
         lateinit var usuarioNombre: String
         lateinit var alumnoSeleccion: String
         lateinit var alumnoNombre: String
+        var listaAtributos: Array<String>
+        var size = 0
         val alumnoRef = database.child("alumnos")
         val datos = hashMapOf<String, Any>()
         var ruta = ""
@@ -234,11 +236,29 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
                         }
                     }
                     val alumnoRefe = database.child("alumnos")
-                    alumnoRefe.child("/$alumnoSeleccion$ruta").updateChildren(datos).addOnCompleteListener{
-                        Toast.makeText(this@Tutorizacion, "Alumno asignado", Toast.LENGTH_SHORT).show()
-                    }.addOnFailureListener {
-                        Toast.makeText(this@Tutorizacion, "No se pudo asignar al alumno", Toast.LENGTH_SHORT).show()
+
+                    val mensajeExito = "Alumno asignado"
+                    val mensajeFallo = "No se pudo asignar al alumno"
+                    val duracionToast = Toast.LENGTH_SHORT
+
+                    alumnoRefe.child("/$alumnoSeleccion$ruta").updateChildren(datos)
+                        .addOnCompleteListener {
+                            Toast.makeText(this@Tutorizacion, mensajeExito, duracionToast).show()
+                        }.addOnFailureListener {
+                        Toast.makeText(this@Tutorizacion, mensajeFallo, duracionToast).show()
                     }
+
+                    if (size == 2) {
+                        if (resultados.size < 2) {
+                            alumnoRef.child("/$alumnoSeleccion")
+                                .updateChildren(hashMapOf<String, Any>("tutor_main" to usuarioSeleccion))
+                                .addOnFailureListener {
+                                    Toast.makeText(this@Tutorizacion, mensajeFallo, duracionToast)
+                                        .show()
+                                }
+                        }
+                    }
+
                     alumnoLista.clear()
                     usuarioLista.clear()
                     lsTutoresAdapter.notifyDataSetChanged()
@@ -251,20 +271,29 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
             })
 
             val query: Query
-            if (tablaUsuario == "tutores"){
+
+            if (tablaUsuario == "tutores") {
                 ruta = "/tutores"
                 datos[usuarioSeleccion] = usuarioNombre
                 query = alumnoRef.orderByChild("tutores/${usuarioSeleccion}").equalTo(usuarioNombre)
                 atbUsuario = ""
-            }else{
+                size = 2
+                listaAtributos = Array(size) { "" }
+                listaAtributos[0] = "matricula"
+                listaAtributos[1] = "tutor_main"
+            } else {
                 datos["profesor_id"] = usuarioSeleccion
                 atbUsuario = "profesor_id"
                 query = alumnoRef.orderByChild(atbUsuario).equalTo(usuarioSeleccion)
-                Toast.makeText(this@Tutorizacion, "$atbUsuario: $usuarioNombre", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@Tutorizacion, "$atbUsuario: $usuarioNombre", Toast.LENGTH_LONG)
+                    .show()
+                size = 1
+                listaAtributos = Array(size) { "" }
+                listaAtributos[0] = "matricula"
             }
             controlFirebaseBD.consultar(
                 query,
-                arrayOf("matricula")
+                listaAtributos
             )
 
         }
@@ -275,46 +304,6 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
         }
         val dialog = builder.create()
         dialog.show()
-    }
-
-    private fun escrituraDatos(
-        resultados: MutableList<String>,
-        alumnoSeleccion: String,
-        alumnoNombre: String,
-        usuarioSeleccion: String,
-    ) {
-        val tutorizacionRef = database.child("tutorizacion")
-        for (resultado in resultados) {
-            Log.e("Log", resultado)
-            if (resultado == alumnoSeleccion) {
-                Toast.makeText(
-                    this@Tutorizacion,
-                    "El niño ya se encuentra asignado",
-                    Toast.LENGTH_SHORT
-                ).show()
-                return
-            }
-        }
-        Toast.makeText(this@Tutorizacion, "Asignación exitosa", Toast.LENGTH_SHORT)
-            .show()
-        val alumno = hashMapOf(
-            "matricula" to alumnoSeleccion,
-            "nombre_alumno" to alumnoNombre
-        )
-        val tutorizacionInfo = hashMapOf<String, Any>(
-            "tutor_id" to usuarioSeleccion,
-            "alumno" to alumno
-        )
-        tutorizacionRef.push().setValue(tutorizacionInfo)
-            .addOnCompleteListener { task ->
-                if (!task.isSuccessful) {
-                    Toast.makeText(
-                        this@Tutorizacion,
-                        "No se pudo realizar la operación",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
     }
 
     private fun selectLister() {

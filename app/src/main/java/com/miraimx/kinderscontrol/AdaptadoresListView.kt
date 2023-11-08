@@ -74,6 +74,7 @@ class ListViewAlumnoAdapter(
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view = inflater.inflate(R.layout.list_item_alumnos_layout, null)
         val nombre = listaUsuario[position].nombre
+        val apellidos = listaUsuario[position].apellidos
         val matricula = listaUsuario[position].matricula
         var estatus = listaUsuario[position].estatus
         val tiempo =
@@ -92,7 +93,7 @@ class ListViewAlumnoAdapter(
 
         }
 
-        tvNombre.text = nombre
+        tvNombre.text = "$nombre $apellidos"
         tvMatricula.text = "Matricula: $matricula"
         tvEstatus.text = estatus
         //tvTiempo.text = tiempo

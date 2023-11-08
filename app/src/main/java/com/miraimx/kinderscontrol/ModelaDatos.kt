@@ -4,6 +4,7 @@ data class Usuario(
     val id: String,
     val nombre: String,
     var seleccionado: Boolean,
+    var identificador: String
 )
 
 data class AccesoAlumno(
@@ -19,6 +20,7 @@ data class AccesoAlumno(
 data class Alumno(
     val matricula: String,
     val nombre: String,
+    val apellidos: String,
     val tipoSangre: String,
     val edad: String,
     val grado: String,
