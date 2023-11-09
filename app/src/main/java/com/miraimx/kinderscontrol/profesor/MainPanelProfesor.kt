@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.miraimx.kinderscontrol.R
+import com.miraimx.kinderscontrol.cuenta.Configuracion
 import com.miraimx.kinderscontrol.cuenta.Login
 import com.miraimx.kinderscontrol.cuenta.SingUpEmpleado
 import com.miraimx.kinderscontrol.databinding.ActivityPanelProfesorBinding
@@ -64,43 +65,14 @@ class MainPanelProfesor : AppCompatActivity() {
                     .show()
                 true
             }
-            /*R.id.verGrupo ->{
+            R.id.configuracion ->{
+                startActivity(Intent(this, Configuracion::class.java))
                 true
             }
-            R.id.registrarEntrada ->{
-                true
-            }
-            R.id.registrarSalida ->{
-                true
-            }*/
             else -> super.onOptionsItemSelected(item)
         }
     }
-    /* override fun onStart() {
-         super.onStart()
-         verificarUsuario()
-     }
 
-     private fun verificarUsuario() {
-         val currentUser = FirebaseAuth.getInstance().currentUser
-         if (currentUser != null) {
-             val uid = currentUser.uid
-             val uRef = database.getReference("tutores").child(uid)
-             uRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                 override fun onDataChange(snapshot: DataSnapshot) {
-                     if (!snapshot.exists()) {
-                         val intent = Intent(this@MainPanelTutor, SingUpEmpleado::class.java)
-                         intent.putExtra("correo", currentUser.email)
-                         startActivity(intent)
-                     }
-                 }
-                 override fun onCancelled(error: DatabaseError) {
-                     Toast.makeText(this@MainPanelTutor, "onCancelled", Toast.LENGTH_SHORT).show()
-                 }
-             })
-         }
-
-     }*/
     private fun setupBottomNavMenu(navController: NavController) {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomnavprofesor)
         bottomNav?.setupWithNavController(navController)

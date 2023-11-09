@@ -10,10 +10,10 @@
         android:id="@+id/txtAlumnoNombre"
         style="@style/tvTitulos1"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="50dp"
         android:layout_marginTop="0dp"
         android:autoSizeMaxTextSize="30sp"
-        android:autoSizeMinTextSize="25sp"
+        android:autoSizeMinTextSize="20sp"
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
         android:gravity="center"
@@ -21,17 +21,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-   <!-- <ImageButton
-        android:id="@+id/imbEditar"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@mipmap/edit"
-        android:contentDescription="Editar datos"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtAlumnoNombre" />
-    -->
     <ImageButton
         android:id="@+id/imbQR"
         android:layout_width="50dp"
@@ -45,9 +34,10 @@
         app:layout_constraintTop_toBottomOf="@+id/txtAlumnoNombre" />
 
     <ImageView
-        android:id="@+id/imgProfesor"
+        android:id="@+id/imgAlumno"
         android:layout_width="200dp"
         android:layout_height="200dp"
+        android:layout_marginTop="5dp"
         android:src="@drawable/logokinder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
@@ -59,10 +49,12 @@
         style="@style/tvDatos"
         android:layout_width="0dp"
         android:layout_height="50dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/imgProfesor"
+        app:layout_constraintStart_toEndOf="@id/imgAlumno"
         app:layout_constraintTop_toBottomOf="@id/imbQR" />
 
     <TextView
@@ -70,10 +62,11 @@
         style="@style/tvDatos"
         android:layout_width="0dp"
         android:layout_height="50dp"
+        android:layout_marginStart="5dp"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/imgProfesor"
+        app:layout_constraintStart_toEndOf="@id/imgAlumno"
         app:layout_constraintTop_toBottomOf="@id/txtALumnoMatricula" />
 
     <TextView
@@ -81,10 +74,11 @@
         style="@style/tvDatos"
         android:layout_width="0dp"
         android:layout_height="50dp"
+        android:layout_marginStart="5dp"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/imgProfesor"
+        app:layout_constraintStart_toEndOf="@id/imgAlumno"
         app:layout_constraintTop_toBottomOf="@id/txtALumnoEdad" />
 
     <TextView
@@ -92,10 +86,11 @@
         style="@style/tvDatos"
         android:layout_width="0dp"
         android:layout_height="50dp"
+        android:layout_marginStart="5dp"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/imgProfesor"
+        app:layout_constraintStart_toEndOf="@id/imgAlumno"
         app:layout_constraintTop_toBottomOf="@id/txtAlumnoSangre" />
 
     <TextView
@@ -106,7 +101,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imgProfesor" />
+        app:layout_constraintTop_toBottomOf="@id/imgAlumno" />
 
     <ListView
         android:id="@+id/lvRegistrosAcceso"

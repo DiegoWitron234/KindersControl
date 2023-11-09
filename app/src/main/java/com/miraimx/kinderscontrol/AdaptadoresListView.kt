@@ -2,16 +2,15 @@ package com.miraimx.kinderscontrol
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Canvas
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.recyclerview.widget.DividerItemDecoration
 import java.text.SimpleDateFormat
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -69,6 +68,7 @@ class ListViewAlumnoAdapter(
 ) :
     ArrayAdapter<Alumno>(context, android.R.layout.simple_selectable_list_item, listaUsuario),
     ConvertidorTiempo {
+    private val controlFirebaseStg = ControlFirebaseStg()
     @SuppressLint("ViewHolder", "InflateParams", "NewApi")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -83,6 +83,7 @@ class ListViewAlumnoAdapter(
         val tvNombre = view.findViewById<TextView>(R.id.tvAlumDatosNombre)
         val tvMatricula = view.findViewById<TextView>(R.id.tvAlumDatosMatricula)
         val tvEstatus = view.findViewById<TextView>(R.id.tvAlumDatosEstatus)
+        val tvImg = view.findViewById<ImageView>(R.id.imagenAlumno)
         //val tvTiempo = view.findViewById<TextView>(R.id.tvAlumDatosTiempo)
 
         if (estatus != "Sin registro"){
@@ -96,6 +97,7 @@ class ListViewAlumnoAdapter(
         tvNombre.text = "$nombre $apellidos"
         tvMatricula.text = "Matricula: $matricula"
         tvEstatus.text = estatus
+        controlFirebaseStg.cargarImagen("alumnos/$matricula.png", tvImg, context)
         //tvTiempo.text = tiempo
 
         return view

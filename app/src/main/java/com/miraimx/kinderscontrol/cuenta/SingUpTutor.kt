@@ -24,7 +24,9 @@ import com.google.firebase.storage.ktx.storage
 import com.google.firebase.storage.storageMetadata
 import com.miraimx.kinderscontrol.Propiedades
 import com.miraimx.kinderscontrol.R
+import com.miraimx.kinderscontrol.administrador.PanelAdmin
 import com.miraimx.kinderscontrol.databinding.ActivitySingUpTutorBinding
+import com.miraimx.kinderscontrol.profesor.MainPanelProfesor
 import java.io.File
 
 class SingUpTutor : AppCompatActivity(), Propiedades {
@@ -163,6 +165,8 @@ class SingUpTutor : AppCompatActivity(), Propiedades {
                 )
             }
         }
+        startActivity(Intent(this, MainPanelProfesor::class.java))
+        finish()
     }
 
     private fun subirFoto(onSuccess: (String) -> Unit) {

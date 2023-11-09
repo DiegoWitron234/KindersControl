@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.miraimx.kinderscontrol.R
+import com.miraimx.kinderscontrol.cuenta.Configuracion
 import com.miraimx.kinderscontrol.databinding.ActivityPanelTutorBinding
 import com.miraimx.kinderscontrol.cuenta.Login
 import com.miraimx.kinderscontrol.cuenta.SingUpTutor
@@ -70,6 +71,10 @@ class MainPanelTutor : AppCompatActivity() {
                     }
                     .setNegativeButton("Cancelar", null)
                     .show()
+                true
+            }
+            R.id.configuracion ->{
+                startActivity(Intent(this, Configuracion::class.java))
                 true
             }
 

@@ -18,6 +18,7 @@ import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.miraimx.kinderscontrol.AccesoAlumno
 import com.miraimx.kinderscontrol.ControlFirebaseBD
+import com.miraimx.kinderscontrol.ControlFirebaseStg
 import com.miraimx.kinderscontrol.DatosConsultados
 import com.miraimx.kinderscontrol.ListViewAccesoAdapter
 import com.miraimx.kinderscontrol.Propiedades
@@ -44,18 +45,10 @@ class AlumnoFragment : Fragment(), Propiedades {
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val controlFirebaseStg = ControlFirebaseStg()
         val datosAlumnos = args.datosAlumno
         lsAccesoAlumnoAdapter = ListViewAccesoAdapter(requireContext(), alumnosAccesoLista)
         matricula = datosAlumnos[1]
-
-        /*binding.imbEditar.setOnClickListener {
-            /*findNavController().navigate(
-                AlumnoFragmentDirections.actionAlumnoFragmentToCamara(
-                    matricula = matricula
-                )
-            )*/
-            //startActivity(Intent(requireContext(), Camara::class.java))
-        }*/
 
         binding.imbQR.setOnTouchListener { v, event ->
             when (event.action) {
@@ -65,13 +58,7 @@ class AlumnoFragment : Fragment(), Propiedades {
 
                 MotionEvent.ACTION_UP -> {
                     v.animate().scaleX(1f).scaleY(1f).setDuration(200).start()
-                    val builder = AlertDialog.Builder(requireContext())
-                    val vista = layoutInflater.inflate(R.layout.qralumno, null)
-                    vista.findViewById<ImageView>(R.id.qrAlumno)
-                        .setImageBitmap(generateQRCode(matricula))
-                    builder.setView(vista)
-                    builder.create()
-                    builder.show()
+                    mostrarQR()
                 }
             }
             // No consumimos el evento y permitimos que se procese más
@@ -82,11 +69,26 @@ class AlumnoFragment : Fragment(), Propiedades {
         binding.txtAlumnoNombre.text = datosAlumnos[0]
         binding.txtALumnoMatricula.text = "Matricula: $matricula"
         binding.txtALumnoEdad.text = "Edad: ${datosAlumnos[2]}"
-        binding.txtAlumnoSangre.text ="T. Sangre: ${datosAlumnos[3]}"
-        binding.txtALumnoAula.text =  "Grupo: ${datosAlumnos[4]}"
+        binding.txtAlumnoSangre.text = "T. Sangre: ${datosAlumnos[3]}"
+        binding.txtALumnoAula.text = "Grupo: ${datosAlumnos[4]}"
+        controlFirebaseStg.cargarImagen(
+            "alumnos/$matricula.png",
+            binding.imgAlumno,
+            requireActivity()
+        )
 
         alumnosAccesoLista.clear()
         cargarDatos(matricula)
+    }
+
+    private fun mostrarQR(){
+        val builder = AlertDialog.Builder(requireContext())
+        val vista = layoutInflater.inflate(R.layout.qralumno, null)
+        vista.findViewById<ImageView>(R.id.qrAlumno)
+            .setImageBitmap(generateQRCode(matricula))
+        builder.setView(vista)
+        builder.create()
+        builder.show()
     }
 
     private fun cargarDatos(cUserId: String) {

@@ -28,5 +28,4 @@ data class Alumno(
     var estatus: String,
     val fecha: String,
     val hora: String,
-    val foto: String
 )

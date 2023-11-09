@@ -21,13 +21,17 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.google.firebase.storage.storageMetadata
 import com.miraimx.kinderscontrol.Propiedades
+import com.miraimx.kinderscontrol.administrador.PanelAdmin
 import com.miraimx.kinderscontrol.databinding.ActivitySingUpEmpleadoBinding
+import com.miraimx.kinderscontrol.profesor.MainPanelProfesor
+import com.miraimx.kinderscontrol.tutor.MainPanelTutor
 import java.io.File
 
 class SingUpEmpleado : AppCompatActivity(), Propiedades {
     private var esUsuarioActual: Boolean = false
     private lateinit var binding: ActivitySingUpEmpleadoBinding
     private var ruta: String = ""
+    private lateinit var puesto: String
     private var fotoAlmacenada: String? = null
     val currentUser = FirebaseAuth.getInstance().currentUser
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +50,7 @@ class SingUpEmpleado : AppCompatActivity(), Propiedades {
 
         val emailEmpleado = intent?.getStringExtra("correo")
 
-        val puesto = intent.getStringExtra("rol")
+        puesto = intent.getStringExtra("rol").toString()
 
         ruta = if (puesto == "Admin") {
             binding.tituloRegistro.text = "Registrar nuevo administrador"
@@ -169,6 +173,15 @@ class SingUpEmpleado : AppCompatActivity(), Propiedades {
                 )
             }
         }
+        val intent = Intent(
+            this,
+            when (puesto) {
+                "Admin" -> PanelAdmin::class.java
+                else -> MainPanelProfesor::class.java
+            }
+        )
+        startActivity(intent)
+        finish()
     }
 
     private fun subirFoto(onSuccess: (String) -> Unit) {
@@ -249,7 +262,7 @@ class SingUpEmpleado : AppCompatActivity(), Propiedades {
             "apellidos_empleado" to edApellidos,
             "telefono_empleado" to edTelefono,
             "correo_empleado" to emailEmpleado,
-            "foto_empelado" to fotoEnlace,
+            "foto_empleado" to fotoEnlace,
             "puesto" to puesto
         )
     }

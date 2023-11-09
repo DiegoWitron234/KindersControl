@@ -20,6 +20,7 @@ import com.google.firebase.ktx.Firebase
 import com.miraimx.kinderscontrol.cuenta.Login
 import com.miraimx.kinderscontrol.Propiedades
 import com.miraimx.kinderscontrol.R
+import com.miraimx.kinderscontrol.cuenta.Configuracion
 import com.miraimx.kinderscontrol.cuenta.RegistrarUsuario
 import com.miraimx.kinderscontrol.cuenta.SingUpAlumno
 import com.miraimx.kinderscontrol.cuenta.SingUpEmpleado
@@ -186,7 +187,10 @@ class PanelAdmin : AppCompatActivity(), Propiedades {
                     .show()
                 true
             }
-
+            R.id.configuracion ->{
+                startActivity(Intent(this, Configuracion::class.java))
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

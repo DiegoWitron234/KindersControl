@@ -4,17 +4,17 @@
     <item
         android:id="@+id/profesorPanelFragment"
         android:title="Tu grupo"
-        android:icon="@mipmap/grupo"
+        android:icon="@drawable/grupo"
         />
     <item
         android:id="@+id/accesoEntradaFragment"
         android:title="Entrada"
-        android:icon="@mipmap/entrada"
+        android:icon="@drawable/entrada"
         />
     <item
         android:id="@+id/accesoSalidaFragment"
         android:title="Salida"
-        android:icon="@mipmap/salida"
+        android:icon="@drawable/salida"
         />
 
 </menu>

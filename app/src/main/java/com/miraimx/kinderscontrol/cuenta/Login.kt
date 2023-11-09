@@ -144,30 +144,21 @@ class Login : AppCompatActivity(), Propiedades {
             userRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
-
                         // Aquí puedes tomar decisiones basadas en el rol del usuario
                         when (val role = dataSnapshot.child("role").value.toString()) {
                             "Admin" -> {
                                 // Mostrar la interfaz de administrador
                                 verificarUsuario("empleados", role)
-                                val intent = Intent(this@Login, PanelAdmin::class.java)
                                 //intent.putExtra("rol", role)
-                                startActivity(intent)
-                                finish()
                             }
 
                             "Usuario" -> {
                                 // Mostrar la interfaz de usuario
                                 verificarUsuario("tutores", role)
-                                val intent = Intent(this@Login, MainPanelTutor::class.java)
-                                startActivity(intent)
-                                finish()
                             }
 
                             "Profesor" -> {
                                 verificarUsuario("empleados", role)
-                                startActivity(Intent(this@Login, MainPanelProfesor::class.java))
-                                finish()
                             }
 
                             else -> {
@@ -197,31 +188,44 @@ class Login : AppCompatActivity(), Propiedades {
 
 
     private fun verificarUsuario(tabla: String, rol: String) {
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        if (currentUser != null) {
-            val uid = currentUser.uid
-            val uRef = FirebaseDatabase.getInstance().getReference(tabla).child(uid)
-            uRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (!snapshot.exists()) {
-                        val intent = if (tabla == "empleados") {
-                            Intent(this@Login, SingUpEmpleado::class.java)
-                        }else{
-                            Intent(this@Login, SingUpTutor::class.java)
-                        }
-                        intent.putExtra("id", uid)
-                        intent.putExtra("correo", currentUser.email)
-                        intent.putExtra("rol", rol)
-                        startActivity(intent)
-                        Toast.makeText(this@Login, "Registrando usuario", Toast.LENGTH_SHORT)
-                            .show()
+        val currentUser = FirebaseAuth.getInstance().currentUser ?: return
+        val uid = currentUser.uid
+        val uRef = FirebaseDatabase.getInstance().getReference(tabla).child(uid)
+        uRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (!snapshot.exists()) {
+                    val intent = Intent(
+                        this@Login,
+                        if (tabla == "empleados") SingUpEmpleado::class.java else SingUpTutor::class.java
+                    ).apply {
+                        putExtra("id", uid)
+                        putExtra("correo", currentUser.email)
+                        putExtra("rol", rol)
                     }
+
+                    Toast.makeText(this@Login, "Registrando usuario", Toast.LENGTH_SHORT)
+                        .show()
+                    startActivity(intent)
+                    finish()
+                } else {
+                    val intent = Intent(
+                        this@Login,
+                        when (rol) {
+                            "Admin" -> PanelAdmin::class.java
+                            "Usuario" -> MainPanelTutor::class.java
+                            else -> MainPanelProfesor::class.java
+                        }
+                    )
+                    startActivity(intent)
+                    finish()
                 }
 
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(this@Login, "onCancelled", Toast.LENGTH_SHORT).show()
-                }
-            })
-        }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@Login, "onCancelled", Toast.LENGTH_SHORT).show()
+
+            }
+        })
     }
 }

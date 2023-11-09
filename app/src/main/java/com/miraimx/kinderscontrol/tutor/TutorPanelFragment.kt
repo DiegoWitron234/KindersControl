@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.miraimx.kinderscontrol.Alumno
 import com.miraimx.kinderscontrol.ControlFirebaseBD
+import com.miraimx.kinderscontrol.ControlFirebaseStg
 import com.miraimx.kinderscontrol.DatosConsultados
 import com.miraimx.kinderscontrol.ListViewAlumnoAdapter
 import com.miraimx.kinderscontrol.Propiedades
@@ -31,7 +32,7 @@ class TutorPanelFragment : Fragment(), Propiedades {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding =FragmentTutorPanelBinding.inflate(inflater, container, false)
+        binding = FragmentTutorPanelBinding.inflate(inflater, container, false)
         cancelarModoOscuro(requireActivity())
         return binding.root
     }
@@ -93,11 +94,16 @@ class TutorPanelFragment : Fragment(), Propiedades {
         val controlFirebaseBD = ControlFirebaseBD(object : DatosConsultados() {
             override fun onDatosConsulta(resultados: MutableList<String>) {
                 super.onDatosConsulta(resultados)
-                if  (resultados.isNotEmpty()){
+                if (resultados.isNotEmpty()) {
                     // Nombre + apellidos
                     val apellido = if (resultados.size == 2) resultados[1] else ""
                     val nombre = "${resultados[0]} $apellido"
-                    binding.nombreTutor.text = nombre
+                    ControlFirebaseStg().cargarImagen(
+                        "tutores/$uid.png",
+                        binding.imagenUsuario,
+                        requireActivity()
+                    )
+                    binding.nombreTutor.text = nombre.ifEmpty { "Bienvenido" }
                     cargarDatos(uid, nombre)
                 }
             }
@@ -107,4 +113,5 @@ class TutorPanelFragment : Fragment(), Propiedades {
         val datos = arrayOf("nombre_tutor", "apellidos_tutor")
         controlFirebaseBD.consultar(query, datos)
     }
+
 }

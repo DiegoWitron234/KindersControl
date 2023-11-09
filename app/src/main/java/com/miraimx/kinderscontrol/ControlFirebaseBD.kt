@@ -137,7 +137,6 @@ class ControlFirebaseBD(private val callback: DatosConsultados) {
                         alumno.child("accesos/estatus").getValue<String>() ?: "Sin registro"
                     val fecha = alumno.child("accesos/fecha_acceso").getValue<String>() ?: ""
                     val hora = alumno.child("accesos/hora_acceso").getValue<String>() ?: ""
-
                     if (listOf(
                             matricula,
                             nombre,
@@ -156,7 +155,6 @@ class ControlFirebaseBD(private val callback: DatosConsultados) {
                             estatus,
                             fecha,
                             hora,
-                            ""
                         )
                     } else null
                 }.also { alumnos ->
@@ -204,11 +202,9 @@ class ControlFirebaseBD(private val callback: DatosConsultados) {
         consulta.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 snapshot.children.mapNotNull { registro ->
-                    listaAtributos.mapNotNull { atributo ->
+                    listaAtributos.map { atributo ->
                         val dato = registro.child(atributo).getValue<String>()
-                        if (!dato.isNullOrEmpty()) {
-                            dato
-                        } else null
+                        if (!dato.isNullOrEmpty()) dato else ""
                     }.also { atributos ->
                         listaResultados.addAll(atributos)
                     }

@@ -8,13 +8,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.navigation.NavDirections
-import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.miraimx.kinderscontrol.Alumno
 import com.miraimx.kinderscontrol.ControlFirebaseBD
+import com.miraimx.kinderscontrol.ControlFirebaseStg
 import com.miraimx.kinderscontrol.DatosConsultados
 import com.miraimx.kinderscontrol.ListViewAlumnoAdapter
 import com.miraimx.kinderscontrol.Propiedades
@@ -42,11 +40,12 @@ class ProfesorPanelFragment : Fragment(), Propiedades {
         listViewAlumnoAdapter = ListViewAlumnoAdapter(requireActivity(), listaAlumnos)
         binding.listviewGrupo.adapter = listViewAlumnoAdapter
         binding.listviewGrupo.divider = ColorDrawable(Color.TRANSPARENT)
-        if (currentUser != null){
+        binding.listviewGrupo.dividerHeight = 10
+        if (currentUser != null) {
             listaAlumnos.clear()
             cargaDatos()
         }
-        binding.btnDescargarLista.setOnClickListener{
+        binding.btnDescargarLista.setOnClickListener {
             startActivity(Intent(requireContext(), ListaAsistencia::class.java))
         }
     }
@@ -56,11 +55,20 @@ class ProfesorPanelFragment : Fragment(), Propiedades {
 
             override fun onDatosConsulta(resultados: MutableList<String>) {
                 super.onDatosConsulta(resultados)
-                if (resultados.isNotEmpty()){
+                if (resultados.isNotEmpty()) {
                     val nombre = resultados[0]
                     val apellidos = resultados[1]
+                    ControlFirebaseStg().cargarImagen(
+                        "profesores/${currentUser?.uid}.png",
+                        binding.imagenUsuario,
+                        requireActivity()
+                    )
                     binding.txtNombreProfesor.text =
-                        getString(R.string.nombre_empleado, nombre, apellidos)
+                        getString(
+                            R.string.nombre_empleado,
+                            nombre,
+                            apellidos
+                        ).ifEmpty { "Bievenido" }
                 }
             }
 
@@ -80,7 +88,7 @@ class ProfesorPanelFragment : Fragment(), Propiedades {
         controlFirebaseBD.consultar(query, datos)
     }
 
-    private fun datosGrupo(controlFirebaseBD: ControlFirebaseBD){
+    private fun datosGrupo(controlFirebaseBD: ControlFirebaseBD) {
         val query = database.child("alumnos").orderByChild("profesor_id").equalTo(currentUser?.uid)
         controlFirebaseBD.consultaAsignacion(query, listaAlumnos)
     }
