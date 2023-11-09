@@ -242,7 +242,8 @@ class SingUpTutor : AppCompatActivity(), Propiedades {
             "telefono_tutor" to edTelefono,
             "direccion_tutor" to edDireccion,
             "correo_tutor" to emailEmpleado,
-            "foto_tutor" to fotoEnlace
+            "foto_tutor" to fotoEnlace,
+            "estado" to true
         )
     }
 

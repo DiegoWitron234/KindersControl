@@ -263,7 +263,8 @@ class SingUpEmpleado : AppCompatActivity(), Propiedades {
             "telefono_empleado" to edTelefono,
             "correo_empleado" to emailEmpleado,
             "foto_empleado" to fotoEnlace,
-            "puesto" to puesto
+            "puesto" to puesto,
+            "estado" to true
         )
     }
 

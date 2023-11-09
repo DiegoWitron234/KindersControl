@@ -208,7 +208,8 @@ class SingUpAlumno : AppCompatActivity(), Propiedades {
             "tiposangre_alumno" to edTSangre,
             "grado" to edGrado,
             "grupo" to edGrupo,
-            "foto_alumno" to fotoEnlace
+            "foto_alumno" to fotoEnlace,
+            "estado" to true
         )
     }
 
