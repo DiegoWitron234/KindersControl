@@ -16,6 +16,10 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 
 class Configuracion : AppCompatActivity() {
@@ -112,13 +116,35 @@ class Configuracion : AppCompatActivity() {
                 val email = campoCorreo.text.toString()
                 val password = campoContrasena.text.toString()
                 val credentials = EmailAuthProvider.getCredential(email, password)
+                val uid = user?.uid
 
                 user?.reauthenticate(credentials)
                     ?.addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             // La reautenticación fue exitosa, el usuario está autenticado nuevamente.
                             // Ahora podemos cambiar el correo electrónico.
+
+                            val database = FirebaseDatabase.getInstance()
+                            val myRef = database.getReference("users")
                             val nuevoCorreo = campoNuevoCorreo.text.toString()
+
+                            if (uid != null) {
+                                myRef.child(uid).addListenerForSingleValueEvent(object : ValueEventListener {
+                                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                        if (dataSnapshot.exists()) {
+                                            // uid encontrado, agregamos el correo_usuario
+                                            myRef.child(uid).child("correo_usuario").setValue(nuevoCorreo)
+                                        }
+                                    }
+
+                                    override fun onCancelled(databaseError: DatabaseError) {
+                                        // Error al leer los datos
+                                        println("Error al leer los datos: " + databaseError.code)
+                                    }
+                                })
+                            }
+
+
                             user.updateEmail(nuevoCorreo)
                                 .addOnCompleteListener { updateTask ->
                                     if (updateTask.isSuccessful) {
@@ -266,23 +292,64 @@ class Configuracion : AppCompatActivity() {
                 // Mostrar el cuadro de diálogo de confirmación
                 AlertDialog.Builder(this)
                     .setMessage("¿Seguro que quieres eliminar tu cuenta?")
-                    .setPositiveButton("Salir") { dialog, which -> // Acción de confirmación
+                    .setPositiveButton("Sí") { dialog, which -> // Acción de confirmación
                         val user = Firebase.auth.currentUser
 
                         // Reautenticar al usuario antes de cambiar el correo electrónico
                         val email = campoCorreo.text.toString()
                         val password = campoContrasena.text.toString()
                         val credentials = EmailAuthProvider.getCredential(email, password)
+                        val uid = user?.uid
+
+
 
                         user?.reauthenticate(credentials)
                             ?.addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
                                     // La reautenticación fue exitosa, el usuario está autenticado nuevamente.
                                     // Ahora podemos eliminar la cuenta-
+
+                                    //Cambiamos el estado en la RTDB a false
+
+                                    val database = FirebaseDatabase.getInstance()
+                                    val myRef = database.getReference("users")
+
+                                    if (uid != null) {
+                                        myRef.child(uid).addListenerForSingleValueEvent(object :
+                                            ValueEventListener {
+                                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                                if (dataSnapshot.exists()) {
+                                                    // uid encontrado, cambiamos el estado a false
+                                                    myRef.child(uid).child("estado").setValue(false)
+                                                    Log.w("Mensaje", "Estado de RTDB cambiado.")
+                                                    println("Estado de la RTDB cambiado")
+                                                    Toast.makeText(
+                                                        this@Configuracion,
+                                                        "Cuenta inhabilitada de la RTDB",
+                                                        Toast.LENGTH_LONG
+                                                    ).show()
+                                                }
+                                            }
+
+                                            override fun onCancelled(databaseError: DatabaseError) {
+                                                // Error al leer los datos
+                                                println("Error al leer los datos: " + databaseError.code)
+                                                Toast.makeText(
+                                                    this@Configuracion,
+                                                    "No se pudo inhabilitar de la RTDB 2",
+                                                    Toast.LENGTH_LONG
+                                                )
+                                                    .show()
+                                            }
+                                        })
+                                    }
+
+                                    //Eliminamos el usuario en Auth
                                     user.delete()
                                         .addOnCompleteListener { task ->
                                             if (task.isSuccessful) {
-                                                Log.d(TAG, "User account deleted.")
+                                                Log.d(TAG, "Cuenta de usuario Auth eliminada.")
+
                                                 Toast.makeText(this, "Cuenta eliminada exitosamente.", Toast.LENGTH_SHORT).show()
                                                 // Cerrar todas las demás actividades y volver a MainActivity
                                                 val intent = Intent(this, Login::class.java)
