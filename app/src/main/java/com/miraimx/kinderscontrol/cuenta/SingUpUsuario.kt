@@ -27,11 +27,13 @@ import com.miraimx.kinderscontrol.profesor.MainPanelProfesor
 import com.miraimx.kinderscontrol.tutor.MainPanelTutor
 import java.io.File
 
-class SingUpEmpleado : AppCompatActivity(), Propiedades {
+class SingUpUsuario : AppCompatActivity(), Propiedades {
     private var esUsuarioActual: Boolean = false
+
     private lateinit var binding: ActivitySingUpEmpleadoBinding
-    private var ruta: String = ""
-    private lateinit var puesto: String
+    private var rutaStorage: String = ""
+    private var rutaRTDB: String = ""
+    private lateinit var rol: String
     private var fotoAlmacenada: String? = null
     val currentUser = FirebaseAuth.getInstance().currentUser
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,14 +50,18 @@ class SingUpEmpleado : AppCompatActivity(), Propiedades {
 
         val edCorreo = binding.edEmpleadoCorreo
 
-        val emailEmpleado = intent?.getStringExtra("correo")
+        //val emailEmpleado = intent?.getStringExtra("correo")
 
-        puesto = intent.getStringExtra("rol").toString()
+        rol = intent.getStringExtra("rol").toString()
 
-        ruta = if (puesto == "Admin") {
+        rutaStorage = if (rol == "Admin") {
             binding.tituloRegistro.text = "Registrar nuevo administrador"
             binding.tituloTomarFotografia.text = "Fotografía del administrador"
             "administradores"
+        } else if (rol == "Tutor") {
+            binding.tituloRegistro.text = "Registrar nuevo tutor"
+            binding.tituloTomarFotografia.text = "Fotografía del tutor"
+            "tutores"
         } else {
             binding.tituloRegistro.text = "Registrar nuevo profesor"
             binding.tituloTomarFotografia.text = "Fotografía del profesor"
@@ -63,7 +69,7 @@ class SingUpEmpleado : AppCompatActivity(), Propiedades {
         }
 
 
-        edCorreo.setText(emailEmpleado)
+        edCorreo.setText(currentUser?.email)
 
         // Recibe el enlace de la activity Camera
         val activityResultLauncher = registerForActivityResult(
@@ -88,8 +94,8 @@ class SingUpEmpleado : AppCompatActivity(), Propiedades {
         // Listener para el botón "Registrar"
         binding.btnRegEmpleado.setOnClickListener {
             if (currentUser != null && fotoAlmacenada != null) {
-                registrar(currentUser.uid, emailEmpleado, puesto!!)
-            }else{
+                registrar(currentUser.uid, currentUser.email, rol)
+            } else {
                 Toast.makeText(this, "NO es posible registrar", Toast.LENGTH_SHORT).show()
             }
         }
@@ -112,14 +118,14 @@ class SingUpEmpleado : AppCompatActivity(), Propiedades {
     }
 
     private fun alerta(mensaje: String, flag: Int) {
-        AlertDialog.Builder(this@SingUpEmpleado)
+        AlertDialog.Builder(this@SingUpUsuario)
             .setMessage(mensaje)
             .setPositiveButton("Salir") { _, _ -> // Acción de confirmación
                 if (flag != 0) {
-                    Toast.makeText(this@SingUpEmpleado, "Sesión cerrada", Toast.LENGTH_SHORT)
+                    Toast.makeText(this@SingUpUsuario, "Sesión cerrada", Toast.LENGTH_SHORT)
                         .show()
                     Firebase.auth.signOut()
-                    val intent = Intent(this@SingUpEmpleado, Login::class.java)
+                    val intent = Intent(this@SingUpUsuario, Login::class.java)
                     intent.addFlags(flag)
                     startActivity(intent)
                 }
@@ -156,27 +162,28 @@ class SingUpEmpleado : AppCompatActivity(), Propiedades {
         return true
     }
 
-    private fun registrar(idEmpleado: String?, emailEmpleado: String?, puesto: String) {
+    private fun registrar(idUsuario: String?, emailUsuario: String?, rol: String) {
         val edNombre = binding.edEmpleadoNombre.text.toString()
         val edApellidos = binding.edEmpleadoApellidos.text.toString()
         val edTelefono = binding.edEmpleadoTelefono.text.toString()
-        if (validarDatos(edNombre, edApellidos, emailEmpleado, edTelefono)) {
+        if (validarDatos(edNombre, edApellidos, emailUsuario, edTelefono)) {
             subirFoto { url ->
                 guardarEnDatabase(
-                    idEmpleado,
+                    idUsuario,
                     edNombre,
                     edApellidos,
                     edTelefono,
-                    emailEmpleado,
-                    puesto,
+                    emailUsuario,
+                    rol,
                     url
                 )
             }
         }
         val intent = Intent(
             this,
-            when (puesto) {
+            when (rol) {
                 "Admin" -> PanelAdmin::class.java
+                "Tutor" -> MainPanelTutor::class.java
                 else -> MainPanelProfesor::class.java
             }
         )
@@ -187,7 +194,7 @@ class SingUpEmpleado : AppCompatActivity(), Propiedades {
     private fun subirFoto(onSuccess: (String) -> Unit) {
         val storage = Firebase.storage
         val reference = storage.reference
-        val imageRef = reference.child("$ruta/${currentUser!!.uid}.png")
+        val imageRef = reference.child("$rutaStorage/${currentUser!!.uid}.png")
         val metadata = storageMetadata {
             contentType = imageRef.toString()
         }
@@ -209,28 +216,32 @@ class SingUpEmpleado : AppCompatActivity(), Propiedades {
     }
 
     private fun guardarEnDatabase(
-        idEmpleado: String?,
+        idUsuario: String?,
         edNombre: String,
         edApellidos: String,
         edTelefono: String,
-        emailEmpleado: String?,
-        puesto: String,
+        emailUsuario: String?,
+        rol: String,
         fotoEnlace: String
     ) {
         val database = FirebaseDatabase.getInstance()
-        val empleadoRef = database.getReference("empleados")
+        val empleadoRef = database.getReference("usuarios")
 
         // Determina si el empleado es un usuario actual o un nuevo usuario
-        val id = determinarTipoDeUsuario(idEmpleado, empleadoRef)
+        //val id = determinarTipoDeUsuario(idUsuario, empleadoRef)
 
         // Crea la información del empleado
-        val empleadoInfo = crearInfo(id, edNombre, edApellidos, edTelefono, emailEmpleado, puesto, fotoEnlace)
+        val empleadoInfo =
+            crearInfo(idUsuario, edNombre, edApellidos, edTelefono, emailUsuario, rol, fotoEnlace)
 
         // Guarda la información del empleado en la base de datos
-        guardarInfo(empleadoRef.child(id!!), empleadoInfo)
+        guardarInfo(empleadoRef.child(idUsuario!!), empleadoInfo)
     }
 
-    private fun determinarTipoDeUsuario(idEmpleado: String?, empleadoRef: DatabaseReference): String? {
+    private fun determinarTipoDeUsuario(
+        idEmpleado: String?,
+        empleadoRef: DatabaseReference
+    ): String? {
         return if (idEmpleado != null) {
             esUsuarioActual = true
             empleadoRef.child(idEmpleado)
@@ -242,7 +253,7 @@ class SingUpEmpleado : AppCompatActivity(), Propiedades {
             if (id != null) {
                 empleadoRef.child(id)
             }
-            Toast.makeText(this@SingUpEmpleado, "Es usuario Nuevo", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@SingUpUsuario, "Es usuario nuevo", Toast.LENGTH_LONG).show()
             id
         }
     }
@@ -252,29 +263,30 @@ class SingUpEmpleado : AppCompatActivity(), Propiedades {
         edNombre: String,
         edApellidos: String,
         edTelefono: String,
-        emailEmpleado: String?,
-        puesto: String,
+        emailUsuario: String?,
+        rol: String,
         fotoEnlace: String
     ): HashMap<String, Any?> {
         return hashMapOf(
-            "empleado_id" to id,
-            "nombre_empleado" to edNombre,
-            "apellidos_empleado" to edApellidos,
-            "telefono_empleado" to edTelefono,
-            "correo_empleado" to emailEmpleado,
-            "foto_empleado" to fotoEnlace,
-            "puesto" to puesto,
+            "usuario_id" to id,
+            "nombre_usuario" to edNombre,
+            "apellidos_usuario" to edApellidos,
+            "telefono_usurio" to edTelefono,
+            "correo_usuario" to emailUsuario,
+            "foto_usuario" to fotoEnlace,
+            "rol" to rol,
             "estado" to true
         )
     }
 
-    private fun guardarInfo(empleadoRef: DatabaseReference, empleadoInfo: HashMap<String, Any?>) {
-        empleadoRef.setValue(empleadoInfo).addOnCompleteListener { task ->
+    private fun guardarInfo(usuarioRef: DatabaseReference, usuarioInfo: HashMap<String, Any?>) {
+        usuarioRef.setValue(usuarioInfo).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                Toast.makeText(this@SingUpEmpleado, "Empleado registrado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@SingUpUsuario, "Usuario registrado", Toast.LENGTH_SHORT).show()
                 finish()
             } else {
-                Toast.makeText(this@SingUpEmpleado, "Ha ocurrido un error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@SingUpUsuario, "Ha ocurrido un error", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }

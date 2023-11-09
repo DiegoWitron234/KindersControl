@@ -15,6 +15,7 @@ class ControlFirebaseBD(private val callback: DatosConsultados) {
     fun consultaTutorizacion(
         tabla: String,
         nombre: String,
+        rol: String,
         atributoId: Array<String>,
         atributoBuscar: Array<String>,
         lista: MutableList<Usuario>,
@@ -22,7 +23,7 @@ class ControlFirebaseBD(private val callback: DatosConsultados) {
     ) {
         if (nombre.isNotBlank()) {
             val database = database.child(tabla)
-            consulta(database, tabla, nombre, atributoId, atributoBuscar, 0, lista, orden)
+            consulta(database, tabla, nombre, atributoId, atributoBuscar, 0, lista, orden, rol)
         }
     }
 
@@ -34,7 +35,8 @@ class ControlFirebaseBD(private val callback: DatosConsultados) {
         atributoBuscar: Array<String>,
         index: Int,
         lista: MutableList<Usuario>,
-        orden: Boolean
+        orden: Boolean,
+        rol: String
     ) {
         val query =
             database.orderByChild(atributoBuscar[index]).startAt(nombre).endAt(nombre + "\uf8ff")
@@ -48,14 +50,14 @@ class ControlFirebaseBD(private val callback: DatosConsultados) {
                             usuario.child(atributoBuscar[index]).getValue(String::class.java)
                         val apellidosUsuario =
                             usuario.child(atributoBuscar[1 - index]).getValue<String>()
-                        datosUsuario(tabla, usuario, nombreUsuario, apellidosUsuario, id, orden)
+                        datosUsuario(tabla, usuario, nombreUsuario, apellidosUsuario, id, orden, rol)
                     }.also { usuarios ->
                         lista.addAll(usuarios)
                         callback.onDatosUsuario(lista)
                     }
                 } else if (index == 0 && atributoBuscar[1].isNotEmpty()) {
                     // Si no se encontraron resultados con atributoBuscar[0], intenta con atributoBuscar[1]
-                    consulta(database, tabla, nombre, atributoId, atributoBuscar, 1, lista, orden)
+                    consulta(database, tabla, nombre, atributoId, atributoBuscar, 1, lista, orden, rol)
                 }
             }
 
@@ -69,12 +71,13 @@ class ControlFirebaseBD(private val callback: DatosConsultados) {
         nombreUsuario: String?,
         apellidosUsuario: String?,
         id: String?,
-        orden: Boolean
+        orden: Boolean,
+        rol: String
     ): Usuario? {
         if (!nombreUsuario.isNullOrEmpty() && !id.isNullOrEmpty() && !apellidosUsuario.isNullOrEmpty()) {
-            if (tabla == "empleados") {
-                val puesto = usuario.child("puesto").getValue<String>()
-                if (!puesto.isNullOrEmpty() && puesto == "Profesor") {
+            if (tabla == "usuarios") {
+                val tipoUsuario = usuario.child("rol").getValue<String>()
+                if (!tipoUsuario.isNullOrEmpty() && tipoUsuario == rol) {
                     return Usuario(
                         if (orden) "$nombreUsuario $apellidosUsuario" else id,
                         if (orden) id else "$nombreUsuario $apellidosUsuario",
@@ -99,7 +102,7 @@ class ControlFirebaseBD(private val callback: DatosConsultados) {
     ) {
         lista.clear()
         val query =
-            database.child("alumnos").orderByChild("tutores/$claveUsuario").equalTo(nombreUsuario)
+            database.child("alumnos").orderByChild("usuarios/$claveUsuario").equalTo(nombreUsuario)
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 snapshot.children.mapNotNull { registro ->

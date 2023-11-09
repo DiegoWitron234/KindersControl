@@ -36,8 +36,8 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
     private var posAnteriorTutor = -1
     private lateinit var binding: ActivityTutorizacionBinding
     private val database = FirebaseDatabase.getInstance().reference
-    private lateinit var tablaUsuario: String
-    private lateinit var atributoUsuario: String
+    private lateinit var rol: String
+    //private lateinit var atributoUsuario: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,15 +50,11 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
 
-        tablaUsuario = intent.getStringExtra("usuario").toString()
+        rol = intent.getStringExtra("rol").toString()
         binding.tvAsignar.text = intent.getStringExtra("titulo").toString()
         binding.tvBuscarUsuario.text = intent.getStringExtra("subtitulo").toString()
 
-        atributoUsuario = if (tablaUsuario == "tutores") {
-            "tutor"
-        } else {
-            "empleado"
-        }
+        //atributoUsuario = rol
 
         buscarAlumnos = findViewById(R.id.buscarAlumno)
         buscarTutores = findViewById(R.id.buscarTutor)
@@ -136,7 +132,7 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
         })
 
         srvTutores.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            val atbUsuario = arrayOf("nombre_${atributoUsuario}", "apellidos_${atributoUsuario}")
+            val atbUsuario = arrayOf("nombre_usuario", "apellidos_usuario")
             override fun onQueryTextSubmit(p0: String?): Boolean {
                 return true
             }
@@ -144,9 +140,9 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
             override fun onQueryTextChange(p0: String?): Boolean {
                 if (p0 != null) {
                     consulta(
-                        tablaUsuario,
+                        "usuarios",
                         normalizerText(p0),
-                        arrayOf("${atributoUsuario}_id"),
+                        arrayOf("usuario_id"),
                         atbUsuario,
                         usuarioLista,
                         false
@@ -176,6 +172,7 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
         databaseController.consultaTutorizacion(
             tabla,
             nombre,
+            rol,
             atributoId,
             atributoBuscar,
             lista,
@@ -272,7 +269,8 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
 
             val query: Query
 
-            if (tablaUsuario == "tutores") {
+            if (rol == "Tutor") {
+                // Asignar elemento al nodo tutores
                 ruta = "/tutores"
                 datos[usuarioSeleccion] = usuarioNombre
                 query = alumnoRef.orderByChild("tutores/${usuarioSeleccion}").equalTo(usuarioNombre)
@@ -282,11 +280,10 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
                 listaAtributos[0] = "matricula"
                 listaAtributos[1] = "tutor_main"
             } else {
+                // Asignar profesor
                 datos["profesor_id"] = usuarioSeleccion
                 atbUsuario = "profesor_id"
                 query = alumnoRef.orderByChild(atbUsuario).equalTo(usuarioSeleccion)
-                Toast.makeText(this@Tutorizacion, "$atbUsuario: $usuarioNombre", Toast.LENGTH_LONG)
-                    .show()
                 size = 1
                 listaAtributos = Array(size) { "" }
                 listaAtributos[0] = "matricula"

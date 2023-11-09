@@ -109,8 +109,8 @@ class TutorPanelFragment : Fragment(), Propiedades {
             }
         })
         val query =
-            dbRef.child("tutores").orderByChild("tutor_id").equalTo(uid)
-        val datos = arrayOf("nombre_tutor", "apellidos_tutor")
+            dbRef.child("usuarios").orderByChild("usuario_id").equalTo(uid)
+        val datos = arrayOf("nombre_usuario", "apellidos_usuario")
         controlFirebaseBD.consultar(query, datos)
     }
 

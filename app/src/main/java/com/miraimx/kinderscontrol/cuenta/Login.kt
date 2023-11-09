@@ -91,7 +91,7 @@ class Login : AppCompatActivity(), Propiedades {
         binding.textRegistrar.setOnClickListener {
             // Intent para ir a la activity de registro de usuario
             val intent = Intent(this, RegistrarUsuario::class.java)
-            intent.putExtra("rol", "Usuario")
+            intent.putExtra("rol", "Tutor")
             startActivity(intent)
         }
     }
@@ -139,26 +139,26 @@ class Login : AppCompatActivity(), Propiedades {
         // Verificar si el usuario está autenticado
         if (currentUser != null) {
             val uid = currentUser.uid
-            val userRef = database.getReference("users").child(uid)
+            val userRef = database.getReference("usuarios").child(uid)
 
             userRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
                         // Aquí puedes tomar decisiones basadas en el rol del usuario
-                        when (val role = dataSnapshot.child("role").value.toString()) {
+                        when (val role = dataSnapshot.child("rol").value.toString()) {
                             "Admin" -> {
                                 // Mostrar la interfaz de administrador
-                                verificarUsuario("empleados", role)
+                                verificarUsuario(role)
                                 //intent.putExtra("rol", role)
                             }
 
-                            "Usuario" -> {
+                            "Tutor" -> {
                                 // Mostrar la interfaz de usuario
-                                verificarUsuario("tutores", role)
+                                verificarUsuario(role)
                             }
 
                             "Profesor" -> {
-                                verificarUsuario("empleados", role)
+                                verificarUsuario(role)
                             }
 
                             else -> {
@@ -187,16 +187,16 @@ class Login : AppCompatActivity(), Propiedades {
     }
 
 
-    private fun verificarUsuario(tabla: String, rol: String) {
+    private fun verificarUsuario(rol: String) {
         val currentUser = FirebaseAuth.getInstance().currentUser ?: return
         val uid = currentUser.uid
-        val uRef = FirebaseDatabase.getInstance().getReference(tabla).child(uid)
+        val uRef = FirebaseDatabase.getInstance().getReference("usuarios").child(uid)
         uRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (!snapshot.exists()) {
                     val intent = Intent(
                         this@Login,
-                        if (tabla == "empleados") SingUpEmpleado::class.java else SingUpTutor::class.java
+                        SingUpUsuario::class.java
                     ).apply {
                         putExtra("id", uid)
                         putExtra("correo", currentUser.email)
@@ -212,14 +212,13 @@ class Login : AppCompatActivity(), Propiedades {
                         this@Login,
                         when (rol) {
                             "Admin" -> PanelAdmin::class.java
-                            "Usuario" -> MainPanelTutor::class.java
+                            "Tutor" -> MainPanelTutor::class.java
                             else -> MainPanelProfesor::class.java
                         }
                     )
                     startActivity(intent)
                     finish()
                 }
-
             }
 
             override fun onCancelled(error: DatabaseError) {

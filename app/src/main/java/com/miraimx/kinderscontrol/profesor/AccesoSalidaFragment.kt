@@ -85,7 +85,7 @@ class AccesoSalidaFragment : Fragment(), Propiedades {
     }
 
     private fun cargarDatosTutor(cUserId: String) {
-        val query = database.child("tutores").orderByChild("tutor_id").equalTo(cUserId)
+        val query = database.child("usuarios").orderByChild("usuario_id").equalTo(cUserId)
         val controlFirebaseBD = ControlFirebaseBD(object : DatosConsultados() {
             override fun onDatosConsulta(resultados: MutableList<String>) {
                 super.onDatosConsulta(resultados)
@@ -102,11 +102,11 @@ class AccesoSalidaFragment : Fragment(), Propiedades {
             }
         })
         val atributos = arrayOf(
-            "nombre_tutor",
-            "apellidos_tutor",
-            "telefono_tutor",
-            "correo_tutor",
-            "direccion_tutor"
+            "nombre_usuario",
+            "apellidos_usuario",
+            "telefono_usuario",
+            "correo_usuario",
+            "direccion_usuario"
         )
         controlFirebaseBD.consultar(query, atributos)
     }

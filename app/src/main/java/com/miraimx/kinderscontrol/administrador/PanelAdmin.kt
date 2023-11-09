@@ -23,7 +23,7 @@ import com.miraimx.kinderscontrol.R
 import com.miraimx.kinderscontrol.cuenta.Configuracion
 import com.miraimx.kinderscontrol.cuenta.RegistrarUsuario
 import com.miraimx.kinderscontrol.cuenta.SingUpAlumno
-import com.miraimx.kinderscontrol.cuenta.SingUpEmpleado
+import com.miraimx.kinderscontrol.cuenta.SingUpUsuario
 import com.miraimx.kinderscontrol.databinding.ActivityPanelAdminBinding
 
 class PanelAdmin : AppCompatActivity(), Propiedades {
@@ -61,7 +61,7 @@ class PanelAdmin : AppCompatActivity(), Propiedades {
         binding.btnAsignarTutorias.setOnClickListener {
             startActivity(
                 Intent(this, Tutorizacion::class.java)
-                    .putExtra("usuario", "tutores")
+                    .putExtra("rol", "Tutor")
                     .putExtra("titulo", "Asignar tutor")
                     .putExtra("subtitulo", "Buscar tutor")
             )
@@ -69,7 +69,7 @@ class PanelAdmin : AppCompatActivity(), Propiedades {
         binding.btnAsignarGrupo.setOnClickListener {
             startActivity(
                 Intent(this, Tutorizacion::class.java)
-                    .putExtra("usuario", "empleados")
+                    .putExtra("rol", "Profesor")
                     .putExtra("titulo", "Asignar profesor")
                     .putExtra("subtitulo", "Buscar profesor")
             )
@@ -126,7 +126,7 @@ class PanelAdmin : AppCompatActivity(), Propiedades {
             uRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (!snapshot.exists()) {
-                        val intent = Intent(this@PanelAdmin, SingUpEmpleado::class.java)
+                        val intent = Intent(this@PanelAdmin, SingUpUsuario::class.java)
                         intent.putExtra("id", uid)
                         intent.putExtra("correo", currentUser.email)
                         intent.putExtra("rol", rolUsuarioRegistrar)

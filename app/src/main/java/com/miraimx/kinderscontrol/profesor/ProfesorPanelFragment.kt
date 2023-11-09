@@ -83,8 +83,8 @@ class ProfesorPanelFragment : Fragment(), Propiedades {
 
     private fun datosProfesor(controlFirebaseBD: ControlFirebaseBD) {
         val query =
-            database.child("empleados").orderByChild("empleado_id").equalTo(currentUser?.uid)
-        val datos = arrayOf("nombre_empleado", "apellidos_empleado")
+            database.child("usuarios").orderByChild("usuario_id").equalTo(currentUser?.uid)
+        val datos = arrayOf("nombre_usuario", "apellidos_usuario")
         controlFirebaseBD.consultar(query, datos)
     }
 

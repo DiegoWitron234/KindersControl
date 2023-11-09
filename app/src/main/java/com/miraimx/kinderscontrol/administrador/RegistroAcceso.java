@@ -132,7 +132,7 @@ public class RegistroAcceso extends AppCompatActivity {
 
 
     private void cargarDatosTutor(String cUserId) {
-        Query query = database.child("tutores").orderByChild("tutor_id").equalTo(cUserId);
+        Query query = database.child("usuarios").orderByChild("usuario_id").equalTo(cUserId);
         ControlFirebaseBD controlFirebaseBD = new ControlFirebaseBD(new DatosConsultados() {
             @Override
             public void onDatosConsulta(@NonNull List<String> resultados) {
@@ -144,7 +144,7 @@ public class RegistroAcceso extends AppCompatActivity {
                 cargarDatos(cUserId, resultados.get(0));
             }
         });
-        String[] atributos = {"nombre_tutor", "telefono_tutor", "correo_tutor", "direccion_tutor"};
+        String[] atributos = {"nombre_usuario", "telefono_usuario", "correo_usuario", "direccion_usuario"};
         controlFirebaseBD.consultar(query, atributos);
     }
 

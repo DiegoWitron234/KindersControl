@@ -155,17 +155,10 @@ class RegistrarUsuario : AppCompatActivity(), Propiedades {
                 if (task.isSuccessful) {
                     Log.d(TAG, "createUserWithEmail:success")
                     Toast.makeText(this, "Usuario registrado", Toast.LENGTH_SHORT).show()
-                    val user = auth.currentUser
-                    if (user != null) {
-                        val uid = user.uid
-                        val database = FirebaseDatabase.getInstance()
-                        val usersRef = database.getReference("users")
-                        val userData = hashMapOf(
-                            "role" to rol
-                        )
-                        usersRef.child(uid).setValue(userData)
-                        finish()
-                    }
+                    startActivity(Intent(this, SingUpUsuario::class.java).apply {
+                        putExtra("rol", rol)
+                    })
+                    finish()
                 } else {
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
                     Toast.makeText(
@@ -177,3 +170,16 @@ class RegistrarUsuario : AppCompatActivity(), Propiedades {
             }
     }
 }
+
+/*
+      val user = auth.currentUser
+                    if (user != null) {
+                        val uid = user.uid
+                        val database = FirebaseDatabase.getInstance()
+                        val usersRef = database.getReference("users")
+                        val userData = hashMapOf(
+                            "role" to rol
+                        )
+                        usersRef.child(uid).setValue(userData)
+                    }
+ */

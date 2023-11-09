@@ -8,24 +8,16 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.miraimx.kinderscontrol.R
 import com.miraimx.kinderscontrol.cuenta.Configuracion
 import com.miraimx.kinderscontrol.cuenta.Login
-import com.miraimx.kinderscontrol.cuenta.SingUpEmpleado
 import com.miraimx.kinderscontrol.databinding.ActivityPanelProfesorBinding
 
 class MainPanelProfesor : AppCompatActivity() {

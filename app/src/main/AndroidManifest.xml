@@ -62,7 +62,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".cuenta.SingUpEmpleado"
+            android:name=".cuenta.SingUpUsuario"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
