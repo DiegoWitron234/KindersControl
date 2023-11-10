@@ -47,31 +47,18 @@ class PanelAdmin : AppCompatActivity(), Propiedades {
 
         botonDimensiones(
             binding.btnAgregarNino,
-           // binding.btnRegistroEntrada,
-           // binding.btnRegistroSalida
         )
 
-       /* binding.btnRegistroEntrada.setOnClickListener {
-            registro("in")
-        }*/
-
-        /*binding.btnRegistroSalida.setOnClickListener {
-            registro("out")
-        }*/
         binding.btnAsignarTutorias.setOnClickListener {
             startActivity(
                 Intent(this, Tutorizacion::class.java)
                     .putExtra("rol", "Tutor")
-                    .putExtra("titulo", "Asignar tutor")
-                    .putExtra("subtitulo", "Buscar tutor")
             )
         }
         binding.btnAsignarGrupo.setOnClickListener {
             startActivity(
-                Intent(this, Tutorizacion::class.java)
+                Intent(this, MainGrupo::class.java)
                     .putExtra("rol", "Profesor")
-                    .putExtra("titulo", "Asignar profesor")
-                    .putExtra("subtitulo", "Buscar profesor")
             )
         }
 
@@ -94,17 +81,6 @@ class PanelAdmin : AppCompatActivity(), Propiedades {
             startActivity(intent)
         }
     }
-    override fun onStart() {
-        super.onStart()
-        verificarUsuario()
-    }
-
-    /*override fun onDestroy() {
-        super.onDestroy()
-        if (auth.currentUser != null){
-            auth.signOut()
-        }
-    }*/
 
     private fun registro(estatus: String) {
         val currentUser = auth.currentUser
@@ -142,8 +118,6 @@ class PanelAdmin : AppCompatActivity(), Propiedades {
             })
         }
     }
-
-
 
     private fun botonDimensiones(
         btnAgregarAlumno: Button,

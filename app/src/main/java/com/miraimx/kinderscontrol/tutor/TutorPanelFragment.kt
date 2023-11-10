@@ -86,7 +86,7 @@ class TutorPanelFragment : Fragment(), Propiedades {
             }
         })
         val query =
-            dbRef.child("alumnos").orderByChild("tutores/$claveUsuario").equalTo(nombreTutor)
+            dbRef.child("alumnos").orderByChild("tutores/$claveUsuario").equalTo(claveUsuario)
         controlFirebaseBD.consultaAsignacion(query, alumnosAsigLista)
     }
 

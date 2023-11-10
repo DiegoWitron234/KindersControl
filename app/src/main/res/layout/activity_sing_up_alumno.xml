@@ -162,14 +162,20 @@
                 android:layout_width="match_parent"
                 android:layout_gravity="center"
                 android:textColorHint="@color/white"
-                android:layout_marginBottom="20dp"
                 android:hint="@string/tomar_fotografia"
+                />
+            <TextView
+                android:id="@+id/mensajeFotografia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 />
 
             <Button
                 android:id="@+id/btnRegAlumno"
                 style="@style/boton"
                 android:layout_gravity="center"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="70dp"
                 android:text="@string/registrar" />
         </LinearLayout>

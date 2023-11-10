@@ -220,7 +220,7 @@ class ControlFirebaseBD(private val callback: DatosConsultados) {
 
         })
     }
-    fun consultarNodosInternos(
+    fun consultarNodos(
         query: Query,
         callback: (MutableList<Pair<String?, String?>>) -> Unit
     ) {
@@ -239,7 +239,6 @@ class ControlFirebaseBD(private val callback: DatosConsultados) {
             }
 
             override fun onCancelled(error: DatabaseError) {}
-
         })
     }
 }

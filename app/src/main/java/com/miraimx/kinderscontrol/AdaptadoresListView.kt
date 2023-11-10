@@ -123,6 +123,26 @@ interface ConvertidorTiempo {
     }
 }
 
-
+class ListViewGrupo(
+    context: Context,
+    private val listaGrupo: MutableList<Pair<String,String>>
+) :
+    ArrayAdapter<Pair<String, String>>(
+        context,
+        android.R.layout.simple_selectable_list_item,
+        listaGrupo
+    ){
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("ViewHolder", "InflateParams")
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view = inflater.inflate(R.layout.list_item_accesodatos_layout, null)
+        val tvmatricula = view.findViewById<TextView>(R.id.tvAccesoDatosEstatus)
+        val tvnombre = view.findViewById<TextView>(R.id.tvAccesoFecha)
+        tvmatricula.text = listaGrupo[position].first
+        tvnombre.text = listaGrupo[position].second
+        return view
+    }
+}
 
 

@@ -3,6 +3,7 @@ package com.miraimx.kinderscontrol.cuenta
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -57,6 +58,10 @@ class SingUpAlumno : AppCompatActivity(), Propiedades {
                 val datos = data?.getStringExtra("imagen")
                 if (!datos.isNullOrEmpty()) {
                     fotoAlmacenada = datos
+                    binding.mensajeFotografia.apply {
+                        text = "Fotografía guardada"
+                        setTextColor(Color.GREEN)
+                    }
                 }
             }
         }
@@ -73,7 +78,6 @@ class SingUpAlumno : AppCompatActivity(), Propiedades {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (!s.isNullOrEmpty()) {
-
                     binding.btnFotografia.isEnabled = true
                     matricula = binding.matricula.text.toString()
                     ruta = "alumnos/$matricula"
@@ -149,25 +153,33 @@ class SingUpAlumno : AppCompatActivity(), Propiedades {
     }
 
     private fun subirFoto(onSuccess: (String) -> Unit) {
-        val storage = Firebase.storage
-        val reference = storage.reference
-        val imageRef = reference.child("$ruta.png")
-        val metadata = storageMetadata {
-            contentType = imageRef.toString()
-        }
-        val file = fotoAlmacenada?.let { File(it) }
-        val fileUri = Uri.fromFile(file)
-        imageRef.putFile(fileUri, metadata).addOnSuccessListener {
-            imageRef.downloadUrl.addOnSuccessListener { uri ->
-                val fotoEnlace = uri.toString()
-                onSuccess(fotoEnlace)
-
-                if (file != null && file.exists()) {
-                    file.delete()
-                }
+        if (fotoAlmacenada != null) {
+            val storage = Firebase.storage
+            val reference = storage.reference
+            val imageRef = reference.child("$ruta.png")
+            val metadata = storageMetadata {
+                contentType = imageRef.toString()
             }
-        }.addOnFailureListener {
-            Log.e("Log", "Imagen no subida")
+            val file = fotoAlmacenada?.let { File(it) }
+            val fileUri = Uri.fromFile(file)
+            imageRef.putFile(fileUri, metadata).addOnSuccessListener {
+                imageRef.downloadUrl.addOnSuccessListener { uri ->
+                    val fotoEnlace = uri.toString()
+                    onSuccess(fotoEnlace)
+
+                    if (file != null && file.exists()) {
+                        file.delete()
+                    }
+                }
+            }.addOnFailureListener {
+                Log.e("Log", "Imagen no subida")
+            }
+        } else {
+            Toast.makeText(this, "Por favor tome una foto", Toast.LENGTH_SHORT).show()
+            binding.mensajeFotografia.apply {
+                text = "No se ha guardado alguna foto"
+                setTextColor(Color.RED)
+            }
         }
     }
 
@@ -184,7 +196,8 @@ class SingUpAlumno : AppCompatActivity(), Propiedades {
         val alumnoRef = database.getReference("alumnos").child(matricula!!)
 
         // Crea la información del empleado
-        val alumnoInfo = crearInfo(edNombre, edApellidos, edEdad, edTSangre, edGrado, edGrupo, fotoEnlace)
+        val alumnoInfo =
+            crearInfo(edNombre, edApellidos, edEdad, edTSangre, edGrado, edGrupo, fotoEnlace)
 
         // Guarda la información del empleado en la base de datos
         guardarInfo(alumnoRef, alumnoInfo)
@@ -241,8 +254,7 @@ class SingUpAlumno : AppCompatActivity(), Propiedades {
 
 
     private fun adapterScroll(vista: Spinner, lista: List<String>) {
-        val arrayAdapter =
-            ArrayAdapter(this, android.R.layout.simple_list_item_1, lista)
+        val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, lista)
         vista.adapter = arrayAdapter
     }
 }

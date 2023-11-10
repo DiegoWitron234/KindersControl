@@ -22,7 +22,6 @@ import com.miraimx.kinderscontrol.R
 import com.miraimx.kinderscontrol.cuenta.Configuracion
 import com.miraimx.kinderscontrol.databinding.ActivityPanelTutorBinding
 import com.miraimx.kinderscontrol.cuenta.Login
-import com.miraimx.kinderscontrol.cuenta.SingUpTutor
 
 class MainPanelTutor : AppCompatActivity() {
     private lateinit var binding: ActivityPanelTutorBinding

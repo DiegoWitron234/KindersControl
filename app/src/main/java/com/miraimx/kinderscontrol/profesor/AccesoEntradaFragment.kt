@@ -216,7 +216,7 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
     private fun obtenerNodos(matricula: String, callback: Callback) {
         val query = database.child("alumnos/${matricula}/tutores")
         val controlFirebaseBD = ControlFirebaseBD(object : DatosConsultados(){})
-        controlFirebaseBD.consultarNodosInternos(query) { listaTutores ->
+        controlFirebaseBD.consultarNodos(query) { listaTutores ->
             callback.onCallback(listaTutores)
         }
     }

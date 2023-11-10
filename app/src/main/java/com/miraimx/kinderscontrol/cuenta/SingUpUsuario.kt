@@ -3,6 +3,9 @@ package com.miraimx.kinderscontrol.cuenta
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -80,6 +83,10 @@ class SingUpUsuario : AppCompatActivity(), Propiedades {
                 val datos = data?.getStringExtra("imagen")
                 if (!datos.isNullOrEmpty()) {
                     fotoAlmacenada = datos
+                    binding.mensajeFotografia.apply {
+                        text = "Fotografía guardada"
+                        setTextColor(Color.GREEN)
+                    }
                 }
             }
         }
@@ -93,10 +100,11 @@ class SingUpUsuario : AppCompatActivity(), Propiedades {
 
         // Listener para el botón "Registrar"
         binding.btnRegEmpleado.setOnClickListener {
-            if (currentUser != null && fotoAlmacenada != null) {
+            if (currentUser != null) {
                 registrar(currentUser.uid, currentUser.email, rol)
             } else {
-                Toast.makeText(this, "NO es posible registrar", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "No es posible registrar el usuario", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -192,27 +200,36 @@ class SingUpUsuario : AppCompatActivity(), Propiedades {
     }
 
     private fun subirFoto(onSuccess: (String) -> Unit) {
-        val storage = Firebase.storage
-        val reference = storage.reference
-        val imageRef = reference.child("$rutaStorage/${currentUser!!.uid}.png")
-        val metadata = storageMetadata {
-            contentType = imageRef.toString()
-        }
-
-        val file = fotoAlmacenada?.let { File(it) }
-        val fileUri = Uri.fromFile(file)
-        imageRef.putFile(fileUri, metadata).addOnSuccessListener {
-            imageRef.downloadUrl.addOnSuccessListener { uri ->
-                val fotoEnlace = uri.toString()
-                onSuccess(fotoEnlace)
-
-                if (file != null && file.exists()) {
-                    file.delete()
-                }
+        if (fotoAlmacenada != null) {
+            val storage = Firebase.storage
+            val reference = storage.reference
+            val imageRef = reference.child("$rutaStorage/${currentUser!!.uid}.png")
+            val metadata = storageMetadata {
+                contentType = imageRef.toString()
             }
-        }.addOnFailureListener {
-            Log.e("Log", "Imagen no subida")
+
+            val file = fotoAlmacenada?.let { File(it) }
+            val fileUri = Uri.fromFile(file)
+            imageRef.putFile(fileUri, metadata).addOnSuccessListener {
+                imageRef.downloadUrl.addOnSuccessListener { uri ->
+                    val fotoEnlace = uri.toString()
+                    onSuccess(fotoEnlace)
+
+                    if (file != null && file.exists()) {
+                        file.delete()
+                    }
+                }
+            }.addOnFailureListener {
+                Log.e("Log", "Imagen no subida")
+            }
+        } else {
+            Toast.makeText(this, "Por favor tome una foto", Toast.LENGTH_SHORT).show()
+            binding.mensajeFotografia.apply {
+                text = "No se ha guardado alguna foto"
+                setTextColor(Color.RED)
+            }
         }
+
     }
 
     private fun guardarEnDatabase(

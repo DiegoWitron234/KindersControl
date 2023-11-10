@@ -125,7 +125,7 @@ class Configuracion : AppCompatActivity() {
                             // Ahora podemos cambiar el correo electrónico.
 
                             val database = FirebaseDatabase.getInstance()
-                            val myRef = database.getReference("users")
+                            val myRef = database.getReference("usuarios")
                             val nuevoCorreo = campoNuevoCorreo.text.toString()
 
                             if (uid != null) {

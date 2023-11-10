@@ -6,6 +6,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
 import android.widget.SearchView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -44,6 +45,9 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
         binding = ActivityTutorizacionBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val titulo: String
+        val subtitulo: String
+
         cancelarModoOscuro(this)
 
         MobileAds.initialize(this) {}
@@ -51,10 +55,16 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
         binding.adView.loadAd(adRequest)
 
         rol = intent.getStringExtra("rol").toString()
-        binding.tvAsignar.text = intent.getStringExtra("titulo").toString()
-        binding.tvBuscarUsuario.text = intent.getStringExtra("subtitulo").toString()
 
-        //atributoUsuario = rol
+        if (rol == "Tutor"){
+            titulo = "Asignar tutor"
+            subtitulo = "Buscar tutor"
+        }else{
+            titulo = "Asignar profesor"
+            subtitulo = "Buscar profesor"
+        }
+        binding.tvAsignar.text = titulo
+        binding.tvBuscarUsuario.text = subtitulo
 
         buscarAlumnos = findViewById(R.id.buscarAlumno)
         buscarTutores = findViewById(R.id.buscarTutor)
@@ -73,6 +83,12 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
         lsTutoresAdapter = ListViewUsuarioAdapter(this, usuarioLista)
         listAlumno.adapter = lsAlumnoAdapter
         listTutores.adapter = lsTutoresAdapter
+
+        val textView = TextView(this)
+        listTutores.emptyView = textView
+
+        listAlumno.emptyView = textView
+
         listAlumno.setOnItemClickListener { _, _, i, _ ->
             val elementoSeleccionado = alumnoLista[i]
             elementoSeleccionado.seleccionado = true
@@ -272,8 +288,8 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
             if (rol == "Tutor") {
                 // Asignar elemento al nodo tutores
                 ruta = "/tutores"
-                datos[usuarioSeleccion] = usuarioNombre
-                query = alumnoRef.orderByChild("tutores/${usuarioSeleccion}").equalTo(usuarioNombre)
+                datos[usuarioSeleccion] = usuarioSeleccion
+                query = alumnoRef.orderByChild("tutores/${usuarioSeleccion}").equalTo(usuarioSeleccion)
                 atbUsuario = ""
                 size = 2
                 listaAtributos = Array(size) { "" }
