@@ -10,8 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="70dp"
-        android:paddingHorizontal="20dp">
+        android:paddingHorizontal="20dp"
+        android:paddingBottom="70dp">
 
         <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/adView"
@@ -155,17 +155,17 @@
 
         <TextView
             android:id="@+id/tvConsulta"
+            style="@style/tvTitulos2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Consultar"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnAsignarTutorias"
-            style="@style/tvTitulos2"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnAsignarTutorias" />
 
         <Button
             android:id="@+id/btnConsultarProfesores"
+            style="@style/botonMenu"
             android:layout_width="0dp"
             android:layout_height="70dp"
             android:layout_marginTop="10dp"
@@ -180,6 +180,7 @@
 
         <Button
             android:id="@+id/btnConsultarAlumnos"
+            style="@style/botonMenu"
             android:layout_width="0dp"
             android:layout_height="70dp"
             android:layout_marginStart="5dp"
