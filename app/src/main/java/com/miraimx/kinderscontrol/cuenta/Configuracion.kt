@@ -27,6 +27,7 @@ class Configuracion : AppCompatActivity() {
     private lateinit var textViewCambiarCorreo: TextView
     private lateinit var textViewCambiarContraseña: TextView
     private lateinit var textViewBorrarCuenta: TextView
+    private lateinit var textViewCambiarDatos: TextView
     private lateinit var campoNuevoCorreo: EditText
     private lateinit var campoConfirmarCorreo: EditText
     private lateinit var botonGuardar: Button
@@ -51,6 +52,7 @@ class Configuracion : AppCompatActivity() {
         textViewCambiarCorreo = findViewById(R.id.textViewCambiarCorreo)
         textViewCambiarContraseña = findViewById(R.id.textViewCambiarContrasena)
         textViewBorrarCuenta = findViewById(R.id.textViewEliminarCuenta)
+        textViewCambiarDatos = findViewById(R.id.textViewCambiarDatos)
 
 
         textViewCambiarCorreo.setOnClickListener {
@@ -371,6 +373,48 @@ class Configuracion : AppCompatActivity() {
                     }
                     .setNegativeButton("Cancelar", null)
                     .show()
+            }
+        }
+
+        textViewCambiarDatos.setOnClickListener {
+            val user = Firebase.auth.currentUser
+            val uid = user?.uid
+            val database = FirebaseDatabase.getInstance()
+
+            // Verificar si el usuario está autenticado
+            if (uid != null) {
+                val userRef = database.getReference("usuarios").child(uid)
+
+                userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            val role = dataSnapshot.child("rol").value.toString()
+                            val intent = Intent(
+                                this@Configuracion,
+                                SingUpUsuario::class.java
+                            ).apply {
+                                putExtra("id", uid)
+                                putExtra("correo", user.email)
+                                putExtra("rol", role)
+                            }
+                            startActivity(intent)
+                            }
+                        else {
+                            // El nodo de rol no existe para este usuario
+                            Toast.makeText(
+                                this@Configuracion,
+                                "El usuario no está en la RTBD",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        // Manejar errores de lectura de la base de datos
+                        Toast.makeText(this@Configuracion, "Error al leer la RTDB", Toast.LENGTH_SHORT).show()
+                    }
+                })
             }
         }
     }
