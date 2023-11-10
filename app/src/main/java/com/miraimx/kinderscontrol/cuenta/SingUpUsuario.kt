@@ -3,9 +3,9 @@ package com.miraimx.kinderscontrol.cuenta
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import android.content.res.ColorStateList
+import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -63,11 +63,13 @@ class SingUpUsuario : AppCompatActivity(), Propiedades {
                 binding.tituloTomarFotografia.text = "Fotografía del administrador"
                 "administradores"
             }
+
             "Tutor" -> {
                 binding.tituloRegistro.text = "Registrar nuevo tutor"
                 binding.tituloTomarFotografia.text = "Fotografía del tutor"
                 "tutores"
             }
+
             else -> {
                 binding.tituloRegistro.text = "Registrar nuevo profesor"
                 binding.tituloTomarFotografia.text = "Fotografía del profesor"
@@ -75,20 +77,6 @@ class SingUpUsuario : AppCompatActivity(), Propiedades {
             }
         }
 
-        //No manches Raúl, tienes el poderoso lenguaje Kotlin y andas haciendo estas tonterías
-            /*if (rol == "Admin") {
-                binding.tituloRegistro.text = "Registrar nuevo administrador"
-                binding.tituloTomarFotografia.text = "Fotografía del administrador"
-                "administradores"
-            } else if (rol == "Tutor") {
-                binding.tituloRegistro.text = "Registrar nuevo tutor"
-                binding.tituloTomarFotografia.text = "Fotografía del tutor"
-                "tutores"
-            } else {
-                binding.tituloRegistro.text = "Registrar nuevo profesor"
-                binding.tituloTomarFotografia.text = "Fotografía del profesor"
-                "profesores"
-            }*/
         edCorreo.setText(currentUser?.email)
 
         // Recibe el enlace de la activity Camera
@@ -131,7 +119,7 @@ class SingUpUsuario : AppCompatActivity(), Propiedades {
                 val mensaje: String
                 if (esUsuarioActual) {
                     mensaje = "¿Seguro que quieres cerrar la sesión?"
-                    val flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    val flags = FLAG_ACTIVITY_CLEAR_TASK or FLAG_ACTIVITY_NEW_TASK
                     alerta(mensaje, flags)
                 } else {
                     mensaje = "¿Seguro que quiere salir del registro?"
@@ -211,7 +199,7 @@ class SingUpUsuario : AppCompatActivity(), Propiedades {
                 "Tutor" -> MainPanelTutor::class.java
                 else -> MainPanelProfesor::class.java
             }
-        )
+        ).apply { flags = FLAG_ACTIVITY_NEW_TASK and FLAG_ACTIVITY_CLEAR_TASK }
         startActivity(intent)
         finish()
     }
@@ -260,35 +248,12 @@ class SingUpUsuario : AppCompatActivity(), Propiedades {
         val database = FirebaseDatabase.getInstance()
         val empleadoRef = database.getReference("usuarios")
 
-        // Determina si el empleado es un usuario actual o un nuevo usuario
-        //val id = determinarTipoDeUsuario(idUsuario, empleadoRef)
-
         // Crea la información del empleado
         val empleadoInfo =
             crearInfo(idUsuario, edNombre, edApellidos, edTelefono, emailUsuario, rol, fotoEnlace)
 
         // Guarda la información del empleado en la base de datos
         guardarInfo(empleadoRef.child(idUsuario!!), empleadoInfo)
-    }
-
-    private fun determinarTipoDeUsuario(
-        idEmpleado: String?,
-        empleadoRef: DatabaseReference
-    ): String? {
-        return if (idEmpleado != null) {
-            esUsuarioActual = true
-            empleadoRef.child(idEmpleado)
-            idEmpleado
-        } else {
-            esUsuarioActual = false
-            val nuevoEmpleado = empleadoRef.push()
-            val id = nuevoEmpleado.key
-            if (id != null) {
-                empleadoRef.child(id)
-            }
-            Toast.makeText(this@SingUpUsuario, "Es usuario nuevo", Toast.LENGTH_LONG).show()
-            id
-        }
     }
 
     private fun crearInfo(

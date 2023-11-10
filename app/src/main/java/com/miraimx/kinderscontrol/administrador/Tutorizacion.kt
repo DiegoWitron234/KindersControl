@@ -15,7 +15,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.Query
-import com.miraimx.kinderscontrol.ControlFirebaseBD
+import com.miraimx.kinderscontrol.ControlLecturaFirebaseBD
 import com.miraimx.kinderscontrol.DatosConsultados
 import com.miraimx.kinderscontrol.ListViewUsuarioAdapter
 import com.miraimx.kinderscontrol.Propiedades
@@ -38,7 +38,7 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
     private lateinit var binding: ActivityTutorizacionBinding
     private val database = FirebaseDatabase.getInstance().reference
     private lateinit var rol: String
-    //private lateinit var atributoUsuario: String
+    private lateinit var aula: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,12 +56,14 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
 
         rol = intent.getStringExtra("rol").toString()
 
-        if (rol == "Tutor"){
+        if (rol == "Tutor") {
             titulo = "Asignar tutor"
             subtitulo = "Buscar tutor"
-        }else{
+        } else {
             titulo = "Asignar profesor"
             subtitulo = "Buscar profesor"
+            aula = intent.getStringExtra("grado").toString() + intent.getStringExtra("grupo")
+                .toString()
         }
         binding.tvAsignar.text = titulo
         binding.tvBuscarUsuario.text = subtitulo
@@ -144,7 +146,6 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
                 }
                 return true
             }
-
         })
 
         srvTutores.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -178,7 +179,7 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
         lista: MutableList<Usuario>,
         orden: Boolean
     ) {
-        val databaseController = ControlFirebaseBD(object : DatosConsultados() {
+        val databaseController = ControlLecturaFirebaseBD(object : DatosConsultados() {
             override fun onDatosUsuario(resultados: MutableList<Usuario>) {
                 lsTutoresAdapter.notifyDataSetChanged()
                 lsAlumnoAdapter.notifyDataSetChanged()
@@ -234,11 +235,11 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
             }
 
 
-            val controlFirebaseBD = ControlFirebaseBD(object : DatosConsultados() {
+            val controlLecturaFirebaseBD = ControlLecturaFirebaseBD(object : DatosConsultados() {
                 override fun onDatosConsulta(resultados: MutableList<String>) {
                     for (resultado in resultados) {
                         Log.e("Log", resultado)
-                        Toast.makeText(this@Tutorizacion, resultado, Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(this@Tutorizacion, resultado, Toast.LENGTH_SHORT).show()
                         if (resultado == alumnoSeleccion) {
                             Toast.makeText(
                                 this@Tutorizacion,
@@ -256,10 +257,20 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
 
                     alumnoRefe.child("/$alumnoSeleccion$ruta").updateChildren(datos)
                         .addOnCompleteListener {
+                            if (ruta != "/tutores") {
+                                val datosGrupo = datosGrupo(
+                                    usuarioSeleccion,
+                                    usuarioNombre
+                                )
+                                val alumnos = hashMapOf<String, Any>(alumnoSeleccion to alumnoNombre)
+                                val grupoRef = database.child("grupos/$aula")
+                                grupoRef.updateChildren(datosGrupo)
+                                grupoRef.child("/alumnos").updateChildren(alumnos)
+                            }
                             Toast.makeText(this@Tutorizacion, mensajeExito, duracionToast).show()
                         }.addOnFailureListener {
-                        Toast.makeText(this@Tutorizacion, mensajeFallo, duracionToast).show()
-                    }
+                            Toast.makeText(this@Tutorizacion, mensajeFallo, duracionToast).show()
+                        }
 
                     if (size == 2) {
                         if (resultados.size < 2) {
@@ -304,7 +315,7 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
                 listaAtributos = Array(size) { "" }
                 listaAtributos[0] = "matricula"
             }
-            controlFirebaseBD.consultar(
+            controlLecturaFirebaseBD.consultar(
                 query,
                 listaAtributos
             )
@@ -320,6 +331,7 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
     }
 
     private fun selectLister() {
+        // Verifica si alguno de los elementos está seleccionado en las listas
         val esAlumnoSeleccionado = alumnoLista.any { it.seleccionado }
         val esTutorSeleccionado = usuarioLista.any { it.seleccionado }
         btnAsignar.isEnabled = esAlumnoSeleccionado && esTutorSeleccionado
@@ -329,6 +341,17 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
         btnAsignar.setOnClickListener {
             mostrarConfirmacion()
         }
+    }
+
+    private fun datosGrupo(
+        profesorId: String,
+        nombreProfesor: String
+    ): HashMap<String, Any> {
+        return hashMapOf(
+            "profesor_id" to profesorId,
+            "nombre_profesor" to nombreProfesor,
+            "aula" to aula,
+        )
     }
 
 }

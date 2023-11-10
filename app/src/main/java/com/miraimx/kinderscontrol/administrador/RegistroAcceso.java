@@ -23,7 +23,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
-import com.miraimx.kinderscontrol.ControlFirebaseBD;
+import com.miraimx.kinderscontrol.ControlLecturaFirebaseBD;
 import com.miraimx.kinderscontrol.DatosConsultados;
 import com.miraimx.kinderscontrol.ListViewUsuarioAdapter;
 import com.miraimx.kinderscontrol.R;
@@ -133,7 +133,7 @@ public class RegistroAcceso extends AppCompatActivity {
 
     private void cargarDatosTutor(String cUserId) {
         Query query = database.child("usuarios").orderByChild("usuario_id").equalTo(cUserId);
-        ControlFirebaseBD controlFirebaseBD = new ControlFirebaseBD(new DatosConsultados() {
+        ControlLecturaFirebaseBD controlLecturaFirebaseBD = new ControlLecturaFirebaseBD(new DatosConsultados() {
             @Override
             public void onDatosConsulta(@NonNull List<String> resultados) {
                 super.onDatosConsulta(resultados);
@@ -145,18 +145,18 @@ public class RegistroAcceso extends AppCompatActivity {
             }
         });
         String[] atributos = {"nombre_usuario", "telefono_usuario", "correo_usuario", "direccion_usuario"};
-        controlFirebaseBD.consultar(query, atributos);
+        controlLecturaFirebaseBD.consultar(query, atributos);
     }
 
     private void cargarDatos(String cUserId, String nombreUsuario) {
-        ControlFirebaseBD controlFirebaseBD = new ControlFirebaseBD(new DatosConsultados() {
+        ControlLecturaFirebaseBD controlLecturaFirebaseBD = new ControlLecturaFirebaseBD(new DatosConsultados() {
             @Override
             public void onDatosUsuario(@NonNull List<Usuario> resultados) {
                 super.onDatosUsuario(resultados);
                 listViewAdapter.notifyDataSetChanged();
             }
         });
-        controlFirebaseBD.consultaTutorizaciones(cUserId, nombreUsuario, alumnoLista);
+        controlLecturaFirebaseBD.consultaTutorizaciones(cUserId, nombreUsuario, alumnoLista);
     }
 
     private void btnRegistrarEntrada() {

@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.miraimx.kinderscontrol.Alumno
-import com.miraimx.kinderscontrol.ControlFirebaseBD
+import com.miraimx.kinderscontrol.ControlLecturaFirebaseBD
 import com.miraimx.kinderscontrol.ControlFirebaseStg
 import com.miraimx.kinderscontrol.DatosConsultados
 import com.miraimx.kinderscontrol.ListViewAlumnoAdapter
@@ -79,7 +79,7 @@ class TutorPanelFragment : Fragment(), Propiedades {
     }
 
     private fun cargarDatos(claveUsuario: String, nombreTutor: String) {
-        val controlFirebaseBD = ControlFirebaseBD(object : DatosConsultados() {
+        val controlLecturaFirebaseBD = ControlLecturaFirebaseBD(object : DatosConsultados() {
             override fun onDatosAlumno(resultados: MutableList<Alumno>) {
                 super.onDatosAlumno(resultados)
                 lsAsignacionesAlAdapater.notifyDataSetChanged()
@@ -87,11 +87,11 @@ class TutorPanelFragment : Fragment(), Propiedades {
         })
         val query =
             dbRef.child("alumnos").orderByChild("tutores/$claveUsuario").equalTo(claveUsuario)
-        controlFirebaseBD.consultaAsignacion(query, alumnosAsigLista)
+        controlLecturaFirebaseBD.consultaAsignacion(query, alumnosAsigLista)
     }
 
     private fun datosTutor(uid: String) {
-        val controlFirebaseBD = ControlFirebaseBD(object : DatosConsultados() {
+        val controlLecturaFirebaseBD = ControlLecturaFirebaseBD(object : DatosConsultados() {
             override fun onDatosConsulta(resultados: MutableList<String>) {
                 super.onDatosConsulta(resultados)
                 if (resultados.isNotEmpty()) {
@@ -111,7 +111,7 @@ class TutorPanelFragment : Fragment(), Propiedades {
         val query =
             dbRef.child("usuarios").orderByChild("usuario_id").equalTo(uid)
         val datos = arrayOf("nombre_usuario", "apellidos_usuario")
-        controlFirebaseBD.consultar(query, datos)
+        controlLecturaFirebaseBD.consultar(query, datos)
     }
 
 }

@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
-import com.miraimx.kinderscontrol.ControlFirebaseBD
+import com.miraimx.kinderscontrol.ControlLecturaFirebaseBD
 import com.miraimx.kinderscontrol.DatosConsultados
 import com.miraimx.kinderscontrol.Propiedades
 import com.miraimx.kinderscontrol.databinding.FragmentAccesoEntradaBinding
@@ -78,7 +78,7 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
     }
 
     private fun cargaDatos(identificador: String) {
-        val controlFirebaseBD = ControlFirebaseBD(object : DatosConsultados() {
+        val controlLecturaFirebaseBD = ControlLecturaFirebaseBD(object : DatosConsultados() {
             override fun onDatosConsulta(resultados: MutableList<String>) {
                 super.onDatosConsulta(resultados)
                 if (resultados.isNotEmpty()) {
@@ -121,7 +121,7 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
         })
         val query = database.child("alumnos").orderByChild("matricula").equalTo(identificador)
         val listaAtributos = arrayOf("matricula", "nombre_alumno")
-        controlFirebaseBD.consultar(query, listaAtributos)
+        controlLecturaFirebaseBD.consultar(query, listaAtributos)
     }
 
     private fun btnRegistrarAcceso() {
@@ -215,8 +215,8 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
 
     private fun obtenerNodos(matricula: String, callback: Callback) {
         val query = database.child("alumnos/${matricula}/tutores")
-        val controlFirebaseBD = ControlFirebaseBD(object : DatosConsultados(){})
-        controlFirebaseBD.consultarNodos(query) { listaTutores ->
+        val controlLecturaFirebaseBD = ControlLecturaFirebaseBD(object : DatosConsultados(){})
+        controlLecturaFirebaseBD.consultarNodos(query) { listaTutores ->
             callback.onCallback(listaTutores)
         }
     }

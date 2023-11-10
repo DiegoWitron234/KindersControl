@@ -57,7 +57,7 @@ class PanelAdmin : AppCompatActivity(), Propiedades {
         }
         binding.btnAsignarGrupo.setOnClickListener {
             startActivity(
-                Intent(this, MainGrupo::class.java)
+                Intent(this, VerGrupos::class.java)
                     .putExtra("rol", "Profesor")
             )
         }

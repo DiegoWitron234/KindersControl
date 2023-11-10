@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
-import com.miraimx.kinderscontrol.ControlFirebaseBD
+import com.miraimx.kinderscontrol.ControlLecturaFirebaseBD
 import com.miraimx.kinderscontrol.DatosConsultados
 import com.miraimx.kinderscontrol.ListViewUsuarioAdapter
 import com.miraimx.kinderscontrol.Propiedades
@@ -86,7 +86,7 @@ class AccesoSalidaFragment : Fragment(), Propiedades {
 
     private fun cargarDatosTutor(cUserId: String) {
         val query = database.child("usuarios").orderByChild("usuario_id").equalTo(cUserId)
-        val controlFirebaseBD = ControlFirebaseBD(object : DatosConsultados() {
+        val controlLecturaFirebaseBD = ControlLecturaFirebaseBD(object : DatosConsultados() {
             override fun onDatosConsulta(resultados: MutableList<String>) {
                 super.onDatosConsulta(resultados)
                 if (resultados.isNotEmpty()) {
@@ -108,18 +108,18 @@ class AccesoSalidaFragment : Fragment(), Propiedades {
             "correo_usuario",
             "direccion_usuario"
         )
-        controlFirebaseBD.consultar(query, atributos)
+        controlLecturaFirebaseBD.consultar(query, atributos)
     }
 
     private fun cargarDatos(cUserId: String, nombreUsuario: String) {
-        val controlFirebaseBD = ControlFirebaseBD(object : DatosConsultados() {
+        val controlLecturaFirebaseBD = ControlLecturaFirebaseBD(object : DatosConsultados() {
             override fun onDatosUsuario(resultados: MutableList<Usuario>) {
                 super.onDatosUsuario(resultados)
                 listViewAdapter.notifyDataSetChanged()
             }
         })
 
-        controlFirebaseBD.consultaTutorizaciones(cUserId, nombreUsuario, alumnoLista)
+        controlLecturaFirebaseBD.consultaTutorizaciones(cUserId, nombreUsuario, alumnoLista)
     }
 
 
@@ -220,8 +220,8 @@ class AccesoSalidaFragment : Fragment(), Propiedades {
 
     private fun obtenerTutores(matricula: String, callback: Callback) {
         val query = database.child("alumnos/${matricula}/tutores")
-        val controlFirebaseBD = ControlFirebaseBD(object : DatosConsultados() {})
-        controlFirebaseBD.consultarNodos(query) { listaTutores ->
+        val controlLecturaFirebaseBD = ControlLecturaFirebaseBD(object : DatosConsultados() {})
+        controlLecturaFirebaseBD.consultarNodos(query) { listaTutores ->
             callback.onCallback(listaTutores)
         }
     }

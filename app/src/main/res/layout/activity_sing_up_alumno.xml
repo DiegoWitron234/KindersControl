@@ -129,7 +129,7 @@
                     android:text="@string/grado" />
 
                 <Spinner
-                    android:id="@+id/svAlumnoGrado"
+                    android:id="@+id/svGrado"
                     android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:layout_below="@+id/tvSAlumnoGrado" />
@@ -142,12 +142,12 @@
                     android:text="@string/grupo" />
 
                 <Spinner
-                    android:id="@+id/svAlumnoGrupo"
+                    android:id="@+id/svGrupo"
                     android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:layout_below="@id/tvSAlumnoGrupo"
                     android:layout_marginLeft="15dp"
-                    android:layout_toEndOf="@id/svAlumnoGrado" />
+                    android:layout_toEndOf="@id/svGrado" />
 
             </RelativeLayout>
 

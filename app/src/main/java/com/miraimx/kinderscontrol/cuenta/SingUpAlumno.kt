@@ -240,8 +240,8 @@ class SingUpAlumno : AppCompatActivity(), Propiedades {
     private fun scrollDatos() {
         svEdad = findViewById(R.id.svAlumnoEdad)
         svSangre = findViewById(R.id.svAlumnoSangre)
-        svGrado = binding.svAlumnoGrado
-        svGrupo = binding.svAlumnoGrupo
+        svGrado = binding.svGrado
+        svGrupo = binding.svGrupo
         val datosEdad = listOf("3", "4", "5", "6", "7")
         val datosSangre = listOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-")
         val datosGrupo = listOf("A", "B", "C")

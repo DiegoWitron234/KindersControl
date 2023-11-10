@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.miraimx.kinderscontrol.Alumno
-import com.miraimx.kinderscontrol.ControlFirebaseBD
+import com.miraimx.kinderscontrol.ControlLecturaFirebaseBD
 import com.miraimx.kinderscontrol.ControlFirebaseStg
 import com.miraimx.kinderscontrol.DatosConsultados
 import com.miraimx.kinderscontrol.ListViewAlumnoAdapter
@@ -51,7 +51,7 @@ class ProfesorPanelFragment : Fragment(), Propiedades {
     }
 
     private fun cargaDatos() {
-        val controlFirebaseBD = ControlFirebaseBD(object : DatosConsultados() {
+        val controlLecturaFirebaseBD = ControlLecturaFirebaseBD(object : DatosConsultados() {
 
             override fun onDatosConsulta(resultados: MutableList<String>) {
                 super.onDatosConsulta(resultados)
@@ -77,20 +77,20 @@ class ProfesorPanelFragment : Fragment(), Propiedades {
                 listViewAlumnoAdapter.notifyDataSetChanged()
             }
         })
-        datosProfesor(controlFirebaseBD)
-        datosGrupo(controlFirebaseBD)
+        datosProfesor(controlLecturaFirebaseBD)
+        datosGrupo(controlLecturaFirebaseBD)
     }
 
-    private fun datosProfesor(controlFirebaseBD: ControlFirebaseBD) {
+    private fun datosProfesor(controlLecturaFirebaseBD: ControlLecturaFirebaseBD) {
         val query =
             database.child("usuarios").orderByChild("usuario_id").equalTo(currentUser?.uid)
         val datos = arrayOf("nombre_usuario", "apellidos_usuario")
-        controlFirebaseBD.consultar(query, datos)
+        controlLecturaFirebaseBD.consultar(query, datos)
     }
 
-    private fun datosGrupo(controlFirebaseBD: ControlFirebaseBD) {
+    private fun datosGrupo(controlLecturaFirebaseBD: ControlLecturaFirebaseBD) {
         val query = database.child("alumnos").orderByChild("profesor_id").equalTo(currentUser?.uid)
-        controlFirebaseBD.consultaAsignacion(query, listaAlumnos)
+        controlLecturaFirebaseBD.consultaAsignacion(query, listaAlumnos)
     }
 
 }

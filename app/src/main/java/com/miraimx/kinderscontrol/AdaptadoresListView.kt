@@ -125,9 +125,9 @@ interface ConvertidorTiempo {
 
 class ListViewGrupo(
     context: Context,
-    private val listaGrupo: MutableList<Pair<String,String>>
+    private val listaGrupo: MutableList<Pair<String?,String?>>
 ) :
-    ArrayAdapter<Pair<String, String>>(
+    ArrayAdapter<Pair<String?, String?>>(
         context,
         android.R.layout.simple_selectable_list_item,
         listaGrupo

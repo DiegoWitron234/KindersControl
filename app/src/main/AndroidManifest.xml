@@ -25,7 +25,7 @@
         android:theme="@style/Base.Theme.KindersControl"
         tools:targetApi="31">
         <activity
-            android:name=".administrador.MainGrupo"
+            android:name=".administrador.VerGrupos"
             android:exported="false" />
         <activity
             android:name=".cuenta.Configuracion"

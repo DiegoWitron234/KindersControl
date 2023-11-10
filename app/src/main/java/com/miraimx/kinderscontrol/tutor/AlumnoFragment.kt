@@ -17,7 +17,7 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.miraimx.kinderscontrol.AccesoAlumno
-import com.miraimx.kinderscontrol.ControlFirebaseBD
+import com.miraimx.kinderscontrol.ControlLecturaFirebaseBD
 import com.miraimx.kinderscontrol.ControlFirebaseStg
 import com.miraimx.kinderscontrol.DatosConsultados
 import com.miraimx.kinderscontrol.ListViewAccesoAdapter
@@ -93,7 +93,7 @@ class AlumnoFragment : Fragment(), Propiedades {
 
     private fun cargarDatos(cUserId: String) {
 
-        val controlFirebaseBD = ControlFirebaseBD(object : DatosConsultados() {
+        val controlLecturaFirebaseBD = ControlLecturaFirebaseBD(object : DatosConsultados() {
             override fun onDatosAcceso(resultados: MutableList<AccesoAlumno>) {
                 super.onDatosAcceso(resultados)
                 Log.e("Logaritmo", resultados.size.toString())
@@ -102,7 +102,7 @@ class AlumnoFragment : Fragment(), Propiedades {
                 binding.lvRegistrosAcceso.invalidate()
             }
         })
-        controlFirebaseBD.consultaAccesos(cUserId, alumnosAccesoLista)
+        controlLecturaFirebaseBD.consultaAccesos(cUserId, alumnosAccesoLista)
     }
 
     private fun generateQRCode(data: String): Bitmap? {

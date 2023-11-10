@@ -9,7 +9,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.getValue
 
 
-class ControlFirebaseBD(private val callback: DatosConsultados) {
+class ControlLecturaFirebaseBD(private val callback: DatosConsultados) {
     private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
     fun consultaTutorizacion(
@@ -229,9 +229,11 @@ class ControlFirebaseBD(private val callback: DatosConsultados) {
             override fun onDataChange(snapshot: DataSnapshot) {
                 snapshot.children.map { registro ->
                     val clave = registro.key
-                    val valor = registro.getValue<String>()
-                    if (!valor.isNullOrEmpty() || !clave.isNullOrEmpty()) {
-                        datos.add(Pair(clave, valor))
+                    if (!registro.hasChildren()){
+                        val valor = registro.getValue<String>()
+                        if (!valor.isNullOrEmpty() || !clave.isNullOrEmpty()) {
+                            datos.add(Pair(clave, valor))
+                        }
                     }
                 }.also {
                     callback(datos)

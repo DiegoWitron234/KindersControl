@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondokinder"
-    android:paddingHorizontal="20dp"
+    android:paddingHorizontal="40dp"
     android:paddingBottom="70dp"
-    tools:context=".administrador.MainGrupo">
+    tools:context=".administrador.VerGrupos">
 
     <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"
@@ -39,7 +39,7 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/tvGrupos"
+        android:id="@+id/tvTitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -52,47 +52,65 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
-    <Spinner
-        android:id="@+id/spGrado"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_marginTop="20dp"
+        android:id="@+id/rlSeleccionGrupo"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/spGrupo"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvGrupos" />
-
-    <Spinner
-        android:id="@+id/spGrupo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toStartOf="@id/imgbtnBuscar"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@id/spGrado"
-        app:layout_constraintTop_toBottomOf="@id/tvGrupos" />
-
-    <ImageButton
-        android:id="@+id/imgbtnBuscar"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/spGrupo"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTitulo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@id/spGrupo"
-        app:layout_constraintTop_toBottomOf="@id/tvGrupos" />
+        app:layout_constraintEnd_toStartOf="parent"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tvSAlumnoGrado"
+            style="@style/tvTitulos2"
+            android:text="@string/grado" />
+
+        <Spinner
+            android:id="@+id/svGrado"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/tvSAlumnoGrado" />
+
+        <TextView
+            android:id="@+id/tvSAlumnoGrupo"
+            style="@style/tvTitulos2"
+            android:layout_marginStart="50dp"
+            android:layout_toEndOf="@+id/tvSAlumnoGrado"
+            android:text="@string/grupo" />
+
+        <Spinner
+            android:id="@+id/svGrupo"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/tvSAlumnoGrupo"
+            android:layout_marginLeft="15dp"
+            android:layout_toEndOf="@id/svGrado" />
+
+        <ImageButton
+            android:id="@+id/imgbtnBuscar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_below="@id/tvSAlumnoGrupo"
+            android:layout_toEndOf="@id/svGrupo"
+            android:background="@mipmap/search"
+
+            />
+
+    </RelativeLayout>
 
     <Button
         android:id="@+id/btnEditarGrupo"
         style="@style/btnMenu"
-        android:text="Editar Grupo"
         android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/spGrupo"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="Editar Grupo"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rlSeleccionGrupo" />
 
     <ListView
         android:id="@+id/lvMiembrosGrupo"
