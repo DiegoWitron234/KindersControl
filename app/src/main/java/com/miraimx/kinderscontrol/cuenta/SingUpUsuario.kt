@@ -57,21 +57,38 @@ class SingUpUsuario : AppCompatActivity(), Propiedades {
 
         rol = intent.getStringExtra("rol").toString()
 
-        rutaStorage = if (rol == "Admin") {
-            binding.tituloRegistro.text = "Registrar nuevo administrador"
-            binding.tituloTomarFotografia.text = "Fotografía del administrador"
-            "administradores"
-        } else if (rol == "Tutor") {
-            binding.tituloRegistro.text = "Registrar nuevo tutor"
-            binding.tituloTomarFotografia.text = "Fotografía del tutor"
-            "tutores"
-        } else {
-            binding.tituloRegistro.text = "Registrar nuevo profesor"
-            binding.tituloTomarFotografia.text = "Fotografía del profesor"
-            "profesores"
+        rutaStorage = when (rol) {
+            "Admin" -> {
+                binding.tituloRegistro.text = "Registrar nuevo administrador"
+                binding.tituloTomarFotografia.text = "Fotografía del administrador"
+                "administradores"
+            }
+            "Tutor" -> {
+                binding.tituloRegistro.text = "Registrar nuevo tutor"
+                binding.tituloTomarFotografia.text = "Fotografía del tutor"
+                "tutores"
+            }
+            else -> {
+                binding.tituloRegistro.text = "Registrar nuevo profesor"
+                binding.tituloTomarFotografia.text = "Fotografía del profesor"
+                "profesores"
+            }
         }
 
-
+        //No manches Raúl, tienes el poderoso lenguaje Kotlin y andas haciendo estas tonterías
+            /*if (rol == "Admin") {
+                binding.tituloRegistro.text = "Registrar nuevo administrador"
+                binding.tituloTomarFotografia.text = "Fotografía del administrador"
+                "administradores"
+            } else if (rol == "Tutor") {
+                binding.tituloRegistro.text = "Registrar nuevo tutor"
+                binding.tituloTomarFotografia.text = "Fotografía del tutor"
+                "tutores"
+            } else {
+                binding.tituloRegistro.text = "Registrar nuevo profesor"
+                binding.tituloTomarFotografia.text = "Fotografía del profesor"
+                "profesores"
+            }*/
         edCorreo.setText(currentUser?.email)
 
         // Recibe el enlace de la activity Camera
@@ -229,7 +246,6 @@ class SingUpUsuario : AppCompatActivity(), Propiedades {
                 setTextColor(Color.RED)
             }
         }
-
     }
 
     private fun guardarEnDatabase(

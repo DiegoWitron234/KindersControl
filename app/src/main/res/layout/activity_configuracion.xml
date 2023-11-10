@@ -38,6 +38,21 @@
         android:layout_marginVertical="20dp"
         app:drawableStartCompat="@android:drawable/ic_lock_lock" />
 
+    <!-- Cambiar Datos Personales -->
+    <TextView
+        android:id="@+id/textViewCambiarDatos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/editar_datos_personales"
+        android:textSize="18sp"
+        android:padding="12dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:drawablePadding="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginVertical="20dp"
+        app:drawableStartCompat="@android:drawable/ic_menu_myplaces" />
+
     <!-- Eliminar Cuenta -->
     <TextView
         android:id="@+id/textViewEliminarCuenta"
