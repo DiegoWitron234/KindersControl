@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
+import android.text.Html
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.ArrayAdapter
@@ -59,8 +60,9 @@ class SingUpAlumno : AppCompatActivity(), Propiedades {
                 if (!datos.isNullOrEmpty()) {
                     fotoAlmacenada = datos
                     binding.mensajeFotografia.apply {
-                        text = "Fotografía guardada"
-                        setTextColor(Color.GREEN)
+                        text = Html.fromHtml("<b>Fotografía guardada</b>", 0x12)
+                        textSize = 15f
+                        setTextColor(Color.BLACK)
                     }
                 }
             }

@@ -108,7 +108,7 @@
                 android:layout_width="match_parent"
                 android:layout_gravity="center"
                 android:textColorHint="@color/white"
-                android:hint="@string/tomar_fotografia"
+                android:text="@string/tomar_fotografia"
                />
 
             <TextView

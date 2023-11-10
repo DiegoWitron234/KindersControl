@@ -73,10 +73,10 @@
             android:layout_height="70dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="8dp"
-            android:autoSizeMaxTextSize="20dp"
+            android:autoSizeMaxTextSize="15dp"
             android:autoSizeTextType="uniform"
             android:background="@drawable/estilos_boton"
-            android:text="@string/btn_agregar_empleado"
+            android:text="Administrador"
             android:textColor="@color/white"
             app:layout_constraintEnd_toStartOf="@+id/btnAgregarNino"
             app:layout_constraintStart_toStartOf="parent"
@@ -110,48 +110,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnAgregarEmpleado" />
-
-        <!-- <TextView
-            android:id="@+id/lblEntrada"
-            style="@style/tvTitulos2"
-            android:layout_gravity="center"
-            android:layout_marginTop="170dp"
-            android:text="@string/registrar_entrada"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txtAgregar" />
-
-        <Button
-            android:id="@+id/btnRegistroEntrada"
-            android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="8dp"
-            android:autoSizeMaxTextSize="20dp"
-            android:autoSizeMinTextSize="15dp"
-            android:autoSizeTextType="uniform"
-            android:background="@drawable/estilos_boton"
-            android:text="@string/registrar_entrada"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toStartOf="@+id/btnRegistroSalida"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lblEntrada" />
-
-        <Button
-            android:id="@+id/btnRegistroSalida"
-            android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="10dp"
-            android:autoSizeMaxTextSize="20dp"
-            android:autoSizeTextType="uniform"
-            android:background="@drawable/estilos_boton"
-            android:text="@string/entrada_salida"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btnRegistroEntrada"
-            app:layout_constraintTop_toBottomOf="@+id/lblEntrada" /> -->
 
         <TextView
             android:id="@+id/lblAsignaciones"
@@ -194,6 +152,46 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnAsignarTutorias"
             app:layout_constraintTop_toBottomOf="@id/lblAsignaciones" />
+
+        <TextView
+            android:id="@+id/tvConsulta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Consultar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnAsignarTutorias"
+            style="@style/tvTitulos2"
+            />
+
+        <Button
+            android:id="@+id/btnConsultarProfesores"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="10dp"
+            android:autoSizeMaxTextSize="20dp"
+            android:autoSizeMinTextSize="15dp"
+            android:autoSizeTextType="uniform"
+            android:text="Profesores"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnConsultarAlumnos"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvConsulta" />
+
+        <Button
+            android:id="@+id/btnConsultarAlumnos"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:autoSizeMaxTextSize="20dp"
+            android:autoSizeMinTextSize="15dp"
+            android:autoSizeTextType="uniform"
+            android:text="ALumnos"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btnConsultarProfesores"
+            app:layout_constraintTop_toBottomOf="@id/tvConsulta" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

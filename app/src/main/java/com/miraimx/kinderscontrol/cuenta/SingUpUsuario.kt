@@ -8,6 +8,7 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
@@ -89,8 +90,9 @@ class SingUpUsuario : AppCompatActivity(), Propiedades {
                 if (!datos.isNullOrEmpty()) {
                     fotoAlmacenada = datos
                     binding.mensajeFotografia.apply {
-                        text = "Fotografía guardada"
-                        setTextColor(Color.GREEN)
+                        text = Html.fromHtml("<b>Fotografía guardada</b>", 0x12)
+                        textSize = 15f
+                        setTextColor(Color.BLACK)
                     }
                 }
             }
@@ -192,16 +194,6 @@ class SingUpUsuario : AppCompatActivity(), Propiedades {
                 )
             }
         }
-        val intent = Intent(
-            this,
-            when (rol) {
-                "Admin" -> PanelAdmin::class.java
-                "Tutor" -> MainPanelTutor::class.java
-                else -> MainPanelProfesor::class.java
-            }
-        ).apply { flags = FLAG_ACTIVITY_NEW_TASK and FLAG_ACTIVITY_CLEAR_TASK }
-        startActivity(intent)
-        finish()
     }
 
     private fun subirFoto(onSuccess: (String) -> Unit) {
@@ -280,12 +272,24 @@ class SingUpUsuario : AppCompatActivity(), Propiedades {
     private fun guardarInfo(usuarioRef: DatabaseReference, usuarioInfo: HashMap<String, Any?>) {
         usuarioRef.setValue(usuarioInfo).addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                val intent = Intent(
+                    this,
+                    when (rol) {
+                        "Admin" -> PanelAdmin::class.java
+                        "Tutor" -> MainPanelTutor::class.java
+                        else -> MainPanelProfesor::class.java
+                    }
+                ).apply { flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK }
+                startActivity(intent)
                 Toast.makeText(this@SingUpUsuario, "Usuario registrado", Toast.LENGTH_SHORT).show()
                 finish()
             } else {
                 Toast.makeText(this@SingUpUsuario, "Ha ocurrido un error", Toast.LENGTH_SHORT)
                     .show()
             }
+        }.addOnCanceledListener{
+            Toast.makeText(this@SingUpUsuario, "No se registró el usuario", Toast.LENGTH_LONG)
+                .show()
         }
     }
 }
