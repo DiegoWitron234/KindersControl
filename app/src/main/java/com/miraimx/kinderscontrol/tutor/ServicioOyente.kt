@@ -14,9 +14,10 @@ import com.miraimx.kinderscontrol.R
 
 class ServicioOyente : Service() {
     private lateinit var uid: String
+
     //private lateinit var databaseReference: DatabaseReference
-    private lateinit var valueEventListener: ValueEventListener
-    private lateinit var checkinRef: DatabaseReference
+    private lateinit var childEventListener: ChildEventListener
+    private lateinit var accesosRef: DatabaseReference
     private lateinit var registrosProcesadosRef: DatabaseReference
     override fun onCreate() {
         super.onCreate()
@@ -29,27 +30,28 @@ class ServicioOyente : Service() {
         createNotificationChannel()
 
         val database = FirebaseDatabase.getInstance()
-        val accesosRef = database.getReference("accesos")
+        accesosRef = database.getReference("accesos")
         val registrosProcesadosRef = database.getReference("registrosProcesados")
 
-        accesosRef.addChildEventListener(object : ChildEventListener {
+        childEventListener = object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
                 val tutoresSnapshot = dataSnapshot.child("tutores")
 
-                    if (tutoresSnapshot.hasChild(uid)) {
-                        val accesoId = dataSnapshot.key
-                        val hora_acceso = dataSnapshot.child("hora_acceso").getValue(String::class.java)
-                        val fecha_acceso = dataSnapshot.child("fecha_acceso").getValue(String::class.java)
-                        val inOut = dataSnapshot.child("estatus").getValue(String::class.java)
-                        val matricula = dataSnapshot.child("matricula").getValue(String::class.java)
-                        val horafecha = "$fecha_acceso: $hora_acceso"
+                if (tutoresSnapshot.hasChild(uid)) {
+                    val accesoId = dataSnapshot.key
+                    val hora_acceso = dataSnapshot.child("hora_acceso").getValue(String::class.java)
+                    val fecha_acceso =
+                        dataSnapshot.child("fecha_acceso").getValue(String::class.java)
+                    val inOut = dataSnapshot.child("estatus").getValue(String::class.java)
+                    val matricula = dataSnapshot.child("matricula").getValue(String::class.java)
+                    val horafecha = "$fecha_acceso: $hora_acceso"
 
-                        // Obtén el nombre del alumno
-                        obtenerNombreAlumno(matricula) { nombreAlumno ->
-                            // Muestra una notificación con el nombre del alumno
-                            showNotification(hora_acceso, inOut, nombreAlumno)
-                        }
+                    // Obtén el nombre del alumno
+                    obtenerNombreAlumno(matricula) { nombreAlumno ->
+                        // Muestra una notificación con el nombre del alumno
+                        showNotification(horafecha, inOut, nombreAlumno)
                     }
+                }
             }
 
             // Implementar otros métodos si son necesarios: onChildChanged, onChildRemoved, onChildMoved, onCancelled
@@ -68,11 +70,9 @@ class ServicioOyente : Service() {
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
+        }
 
-
-        })
-
-
+        accesosRef.addChildEventListener(childEventListener)
         /*
         // Configura el oyente de Firebase
         checkinRef = FirebaseDatabase.getInstance().getReference("accesos")
@@ -152,8 +152,7 @@ class ServicioOyente : Service() {
     override fun onDestroy() {
         super.onDestroy()
         // Elimina el oyente cuando el servicio se detiene
-        checkinRef.removeEventListener(valueEventListener)
-        registrosProcesadosRef.removeEventListener(valueEventListener)
+        accesosRef.removeEventListener(childEventListener)
     }
 
     private fun showNotification(horafecha: String?, inOut: String?, nombre: String?) {
@@ -182,7 +181,8 @@ class ServicioOyente : Service() {
 
     private fun createNotification(): Notification {
         // Crea una notificación persistente (en primer plano)
-        val notificationIntent = Intent(this, MainPanelTutor::class.java) // Actividad principal de la aplicación
+        val notificationIntent =
+            Intent(this, MainPanelTutor::class.java) // Actividad principal de la aplicación
         val pendingIntent = PendingIntent.getActivity(
             this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE
         )
@@ -213,12 +213,17 @@ class ServicioOyente : Service() {
             val alumnosRef = FirebaseDatabase.getInstance().getReference("alumnos")
             alumnosRef.child(matricula).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val nombreAlumno = dataSnapshot.child("nombre_alumno").getValue(String::class.java) ?: ""
+                    val nombreAlumno =
+                        dataSnapshot.child("nombre_alumno").getValue(String::class.java) ?: ""
                     callback(nombreAlumno)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    Log.w("Registro", "Error al leer el nombre del alumno: $error", error.toException())
+                    Log.w(
+                        "Registro",
+                        "Error al leer el nombre del alumno: $error",
+                        error.toException()
+                    )
                     callback("") // Devuelve un nombre vacío en caso de error
                 }
             })

@@ -90,11 +90,11 @@ class AccesoSalidaFragment : Fragment(), Propiedades {
             override fun onDatosConsulta(resultados: MutableList<String>) {
                 super.onDatosConsulta(resultados)
                 if (resultados.isNotEmpty()) {
-                    val nombre = "${resultados[0] + resultados[1]}"
+                    val nombre = "${resultados[0]} ${resultados[1]}"
                     binding.txtNombraTutorQR.text = "Tutor: $nombre"
                     binding.txtTelefonoTutorQR.text = "Teléfono: ${resultados[2]}"
                     binding.txEmailTutorQR.text = "Email: ${resultados[3]}"
-                    binding.txDireccionTutorQR.text = "Dirección: ${resultados[4]}"
+                  //  binding.txDireccionTutorQR.text = "Dirección: ${resultados[4]}"
                     cargarDatos(cUserId, nombre)
                 } else {
                     Toast.makeText(requireActivity(), "QR invalido", Toast.LENGTH_SHORT).show()
@@ -105,8 +105,7 @@ class AccesoSalidaFragment : Fragment(), Propiedades {
             "nombre_usuario",
             "apellidos_usuario",
             "telefono_usuario",
-            "correo_usuario",
-            "direccion_usuario"
+            "correo_usuario"
         )
         controlLecturaFirebaseBD.consultar(query, atributos)
     }

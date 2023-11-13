@@ -38,6 +38,8 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
 
     private lateinit var listAlumnoAdapter: ArrayAdapter<Usuario>
 
+    val idProfesor = FirebaseAuth.getInstance().currentUser?.uid
+
     private val database = FirebaseDatabase.getInstance().reference
 
     private val barcodeLauncher = registerForActivityResult(ScanContract()) { result ->
@@ -85,32 +87,34 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
                     binding.btnAceptarEntrada.isEnabled = true
                     val matricula = resultados[0]
                     val nombre = resultados[1]
-                    //val tutor = resultados[2]
-                    //Toast.makeText(requireActivity(), nombre + matricula, Toast.LENGTH_LONG).show()
-                    if (listaMatriculas.isNotEmpty()) {
-                        listaMatriculas.map { alumno ->
-                            if (alumno != matricula) {
-                                listaAlumnos.add(
-                                    Usuario(matricula, nombre, false, "")
-                                )
-                                listaMatriculas.add(matricula)
-                                Toast.makeText(
-                                    requireActivity(),
-                                    "Alumno registrado",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } else {
-                                Toast.makeText(
-                                    requireActivity(),
-                                    "El alumno ya se encuentra en la lista",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                    val apellidos = resultados[2]
+                    if (idProfesor == resultados[3]) {
+                       // Toast.makeText(requireActivity(), nombre + apellidos, Toast.LENGTH_LONG)
+                        if (listaMatriculas.isNotEmpty()) {
+                            listaMatriculas.map { alumno ->
+                                if (alumno != matricula) {
+                                    listaAlumnos.add(
+                                        Usuario(matricula, "$nombre $apellidos", false, "")
+                                    )
+                                    listaMatriculas.add(matricula)
+                                    Toast.makeText(
+                                        requireActivity(),
+                                        "Alumno registrado",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
+                                    Toast.makeText(
+                                        requireActivity(),
+                                        "El alumno ya se encuentra en la lista",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
+                        } else {
+                            listaAlumnos.add(Usuario(matricula, "$nombre $apellidos", false, ""))
+                            listaMatriculas.add(matricula)
+                            //obtenerTutores(matricula)
                         }
-                    } else {
-                        listaAlumnos.add(Usuario(matricula, nombre, false, ""))
-                        listaMatriculas.add(matricula)
-                        //obtenerTutores(matricula)
                     }
                     listAlumnoAdapter.notifyDataSetChanged()
                 } else {
@@ -120,7 +124,8 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
             }
         })
         val query = database.child("alumnos").orderByChild("matricula").equalTo(identificador)
-        val listaAtributos = arrayOf("matricula", "nombre_alumno")
+        val listaAtributos =
+            arrayOf("matricula", "nombre_alumno", "apellidos_alumno", "profesor_id")
         controlLecturaFirebaseBD.consultar(query, listaAtributos)
     }
 
@@ -157,9 +162,9 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
 
             for (alumno in listaAlumnos) {
                 tutores.clear()
-                obtenerNodos(alumno.id, object: Callback {
+                obtenerNodos(alumno.id, object : Callback {
                     override fun onCallback(value: MutableList<Pair<String?, String?>>) {
-                        for (tutor in value){
+                        for (tutor in value) {
                             tutores[tutor.first] = tutor.second
                         }
                         val alumnoInfo = hashMapOf(
@@ -199,6 +204,7 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
             scope.launch(Dispatchers.Main) {
                 jobs.joinAll()
                 listaAlumnos.clear()
+                listaMatriculas.clear()
                 listAlumnoAdapter.notifyDataSetChanged()
                 binding.btnAceptarEntrada.isEnabled = false
                 Toast.makeText(requireActivity(), "Datos guardados", Toast.LENGTH_SHORT)
@@ -215,7 +221,7 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
 
     private fun obtenerNodos(matricula: String, callback: Callback) {
         val query = database.child("alumnos/${matricula}/tutores")
-        val controlLecturaFirebaseBD = ControlLecturaFirebaseBD(object : DatosConsultados(){})
+        val controlLecturaFirebaseBD = ControlLecturaFirebaseBD(object : DatosConsultados() {})
         controlLecturaFirebaseBD.consultarNodos(query) { listaTutores ->
             callback.onCallback(listaTutores)
         }

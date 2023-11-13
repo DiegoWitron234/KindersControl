@@ -77,22 +77,13 @@
             app:layout_constraintTop_toBottomOf="@+id/txtTelefonoTutorQR" />
 
         <TextView
-            android:id="@+id/txDireccionTutorQR"
-            style="@style/tvCuerpo1"
-            android:hint="Dirección"
-            android:textSize="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txEmailTutorQR" />
-
-        <TextView
             android:id="@+id/textView"
             style="@style/tvTitulos1"
             android:gravity="center"
             android:text="Asignados"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txDireccionTutorQR" />
+            app:layout_constraintTop_toBottomOf="@+id/txEmailTutorQR" />
 
         <ListView
             android:id="@+id/lsCheckAlumno"

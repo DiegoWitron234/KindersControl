@@ -314,7 +314,7 @@ class Configuracion : AppCompatActivity() {
                                     //Cambiamos el estado en la RTDB a false
 
                                     val database = FirebaseDatabase.getInstance()
-                                    val myRef = database.getReference("users")
+                                    val myRef = database.getReference("usuarios")
 
                                     if (uid != null) {
                                         myRef.child(uid).addListenerForSingleValueEvent(object :

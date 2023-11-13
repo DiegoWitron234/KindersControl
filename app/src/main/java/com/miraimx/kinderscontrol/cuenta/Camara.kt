@@ -1,37 +1,41 @@
 package com.miraimx.kinderscontrol.cuenta
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import androidx.camera.core.ImageCapture
-import androidx.core.app.ActivityCompat
-import com.miraimx.kinderscontrol.databinding.ActivityCamaraBinding
-import java.util.concurrent.ExecutorService
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import java.io.ByteArrayOutputStream
+import com.miraimx.kinderscontrol.databinding.ActivityCamaraBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 import java.nio.ByteBuffer
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class Camara : AppCompatActivity() {
     private lateinit var binding: ActivityCamaraBinding
     private lateinit var cameraExecutor: ExecutorService
     private var imageCapture: ImageCapture? = null
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCamaraBinding.inflate(layoutInflater)
@@ -46,62 +50,28 @@ class Camara : AppCompatActivity() {
         }
 
         // Set up the listeners for take photo and video capture buttons
-        binding.btnCamera.setOnClickListener {
+        /*binding.btnCamera.setOnClickListener {
             takePhoto()
+        }*/
+
+        binding.btnCamera.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.animate().scaleX(0.9f).scaleY(0.9f).setDuration(200).start()
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    v.animate().scaleX(1f).scaleY(1f).setDuration(200).start()
+                    takePhoto()
+                }
+            }
+            // No consumimos el evento y permitimos que se procese más
+            false
         }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
-    private fun takePhoto() {
-        // Get a stable reference of the modifiable image capture use case
-        val imageCapture = imageCapture ?: return
-        val outputStream: OutputStream = ByteArrayOutputStream()
-        // Create output options object which contains file + metadata
-        ImageCapture.OutputFileOptions
-            .Builder(outputStream)
-            .build()
-
-        // Set up image capture listener, which is triggered after photo has
-        // been taken
-        imageCapture.takePicture(
-            ContextCompat.getMainExecutor(this),
-            object : ImageCapture.OnImageCapturedCallback() {
-                override fun onCaptureSuccess(image: ImageProxy) {
-                    val gradosRotacion = image.imageInfo.rotationDegrees
-                    val bitmap = imageProxyToBitmap(image)
-                    val bitmapRotado = rotateBitmap(bitmap, gradosRotacion)
-                    val file = File(applicationContext.filesDir, "myImage.png")
-                    val fos = FileOutputStream(file)
-                    bitmapRotado.compress(Bitmap.CompressFormat.PNG, 100, fos)
-                    fos.close()
-                    image.close()
-                    Intent().also { result ->
-                        Toast.makeText(baseContext, "Imagen Tomada", Toast.LENGTH_SHORT).show()
-                        result.putExtra("imagen", file.absolutePath)
-                        setResult(Activity.RESULT_OK, result)
-                        finish()
-                    }
-                }
-                override fun onError(exception: ImageCaptureException) {
-                    Log.e(TAG, "Photo capture failed: ${exception.message}", exception)
-                }
-            }
-        )
-    }
-    fun rotateBitmap(source: Bitmap, angle: Int): Bitmap {
-        val matrix = Matrix()
-        matrix.postRotate(angle.toFloat())
-        return Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
-    }
-
-    private fun imageProxyToBitmap(image: ImageProxy): Bitmap {
-        val planeProxy = image.planes[0]
-        val buffer: ByteBuffer = planeProxy.buffer
-        val bytes = ByteArray(buffer.remaining())
-        buffer.get(bytes)
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-    }
 
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
@@ -134,6 +104,62 @@ class Camara : AppCompatActivity() {
             }
 
         }, ContextCompat.getMainExecutor(this))
+    }
+
+    private fun takePhoto() {
+        val imageCapture = imageCapture ?: return
+        imageCapture.takePicture(
+            ContextCompat.getMainExecutor(this),
+            object : ImageCapture.OnImageCapturedCallback() {
+                override fun onCaptureSuccess(image: ImageProxy) {
+                    val gradosRotacion = image.imageInfo.rotationDegrees
+                    val file = File(applicationContext.filesDir, "myImage.png")
+
+                    // Operaciones intensivas de rotación y compresión son cargadas a otro hilo
+                    CoroutineScope(Dispatchers.IO).launch {
+
+                        // Conversión a bitmap
+                        val bitmap = imageProxyToBitmap(image)
+                        val rotatedBitmap = rotateBitmap(bitmap, gradosRotacion)
+
+                        // Rotación y compresión del bitmap
+                        file.outputStream().use { outputStream ->
+                            rotatedBitmap.compress(Bitmap.CompressFormat.PNG, 50, outputStream)
+                        }
+
+                        image.close()
+
+                        // Ejecución de procesos en el hilo principal
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(baseContext, "Imagen Tomada", Toast.LENGTH_SHORT).show()
+                            Intent().also { result ->
+                                result.putExtra("imagen", file.absolutePath)
+                                setResult(Activity.RESULT_OK, result)
+                                finish()
+                            }
+                        }
+                    }
+                }
+
+                override fun onError(exception: ImageCaptureException) {
+                    Log.e(TAG, "Photo capture failed: ${exception.message}", exception)
+                }
+            }
+        )
+    }
+
+    fun rotateBitmap(source: Bitmap, angle: Int): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(angle.toFloat())
+        return Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
+    }
+
+    private fun imageProxyToBitmap(image: ImageProxy): Bitmap {
+        val planeProxy = image.planes[0]
+        val buffer: ByteBuffer = planeProxy.buffer
+        val bytes = ByteArray(buffer.remaining())
+        buffer.get(bytes)
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
     }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {

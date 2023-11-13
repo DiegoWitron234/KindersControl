@@ -261,7 +261,7 @@ class SingUpUsuario : AppCompatActivity(), Propiedades {
             "usuario_id" to id,
             "nombre_usuario" to edNombre,
             "apellidos_usuario" to edApellidos,
-            "telefono_usurio" to edTelefono,
+            "telefono_usuario" to edTelefono,
             "correo_usuario" to emailUsuario,
             "foto_usuario" to fotoEnlace,
             "rol" to rol,

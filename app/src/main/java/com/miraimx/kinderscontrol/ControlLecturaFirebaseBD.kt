@@ -42,7 +42,7 @@ class ControlLecturaFirebaseBD(private val callback: DatosConsultados) {
             database.orderByChild(atributoBuscar[index]).startAt(nombre).endAt(nombre + "\uf8ff")
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                lista.clear() // Borra la lista antes de agregar nuevos resultados
+                //lista.clear() // Borra la lista antes de agregar nuevos resultados
                 if (snapshot.exists()) {
                     snapshot.children.mapNotNull { usuario ->
                         val id = usuario.child(atributoId[0]).getValue(String::class.java)
@@ -102,15 +102,17 @@ class ControlLecturaFirebaseBD(private val callback: DatosConsultados) {
     ) {
         lista.clear()
         val query =
-            database.child("alumnos").orderByChild("usuarios/$claveUsuario").equalTo(nombreUsuario)
+            database.child("alumnos").orderByChild("tutores/$claveUsuario").equalTo(claveUsuario)
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 snapshot.children.mapNotNull { registro ->
                     val matricula = registro.child("matricula").getValue<String>()
                     val nombreAlumno = registro.child("nombre_alumno").getValue<String>()
+                    val apellidosAlumno = registro.child("apellidos_alumno").getValue<String>()
+                    val nombre = "$nombreAlumno $apellidosAlumno"
                     //Log.e("LOG", matricula + nombreAlumno)
                     if (!matricula.isNullOrEmpty() && !nombreAlumno.isNullOrEmpty()) {
-                        Usuario(matricula, nombreAlumno, false, "")
+                        Usuario(matricula, nombre, false, "")
                     } else null
                 }.also { registro ->
                     lista.addAll(registro)
