@@ -96,6 +96,7 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
             elementoSeleccionado.seleccionado = true
 
             if (posAnteriorAlumno != -1 && posAnteriorAlumno != i) {
+                Log.e("LOG", posAnteriorAlumno.toString())
                 alumnoLista[posAnteriorAlumno].seleccionado = false
 
             }
@@ -182,15 +183,16 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
     ) {
         val databaseController = ControlLecturaFirebaseBD(object : DatosConsultados() {
             override fun onDatosUsuario(resultados: MutableList<Usuario>) {
-                if (resultados.isNotEmpty()){
-                    lsTutoresAdapter.notifyDataSetChanged()
-                    lsAlumnoAdapter.notifyDataSetChanged()
-                }
+                lsTutoresAdapter.notifyDataSetChanged()
+                lsAlumnoAdapter.notifyDataSetChanged()
             }
         })
+        posAnteriorAlumno = -1
+        posAnteriorTutor = -1
         lista.clear()
         lsTutoresAdapter.notifyDataSetChanged()
         lsAlumnoAdapter.notifyDataSetChanged()
+        btnAsignar.isEnabled = false
         databaseController.consultaTutorizacion(
             tabla,
             nombre,
@@ -290,6 +292,8 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
 
                     alumnoLista.clear()
                     usuarioLista.clear()
+                    //lsAlumnoAdapter.clear()
+                    //lsTutoresAdapter.clear()
                     lsTutoresAdapter.notifyDataSetChanged()
                     lsAlumnoAdapter.notifyDataSetChanged()
                     posAnteriorAlumno = -1
