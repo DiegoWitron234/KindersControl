@@ -30,6 +30,8 @@ class PanelAdmin : AppCompatActivity(), Propiedades {
 
     private lateinit var btnAgregarEmpleado: Button
     private lateinit var binding: ActivityPanelAdminBinding
+    private lateinit var btnConsultarProfesores: Button
+    private lateinit var btnConsultarAlumnos: Button
     private var rolUsuarioRegistrar: String = "Admin"
     private var auth = FirebaseAuth.getInstance()
 
@@ -44,6 +46,16 @@ class PanelAdmin : AppCompatActivity(), Propiedades {
         binding.adView.loadAd(adRequest)
 
         btnAgregarEmpleado = binding.btnAgregarEmpleado
+
+        binding.btnConsultarAlumnos.setOnClickListener {
+            //Mandar a la nueva Activity
+            Toast.makeText(this, "Diego no ha programado esto", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.btnConsultarProfesores.setOnClickListener {
+            //Igual que el anterior
+            Toast.makeText(this, "Diego no ha programado esto", Toast.LENGTH_SHORT).show()
+        }
 
         botonDimensiones(
             binding.btnAgregarNino,

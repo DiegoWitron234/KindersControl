@@ -28,6 +28,52 @@ class ServicioOyente : Service() {
         //Crear canal de notificaciones
         createNotificationChannel()
 
+        val database = FirebaseDatabase.getInstance()
+        val accesosRef = database.getReference("accesos")
+        val registrosProcesadosRef = database.getReference("registrosProcesados")
+
+        accesosRef.addChildEventListener(object : ChildEventListener {
+            override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
+                val tutoresSnapshot = dataSnapshot.child("tutores")
+
+                    if (tutoresSnapshot.hasChild(uid)) {
+                        val accesoId = dataSnapshot.key
+                        val hora_acceso = dataSnapshot.child("hora_acceso").getValue(String::class.java)
+                        val fecha_acceso = dataSnapshot.child("fecha_acceso").getValue(String::class.java)
+                        val inOut = dataSnapshot.child("estatus").getValue(String::class.java)
+                        val matricula = dataSnapshot.child("matricula").getValue(String::class.java)
+                        val horafecha = "$fecha_acceso: $hora_acceso"
+
+                        // Obtén el nombre del alumno
+                        obtenerNombreAlumno(matricula) { nombreAlumno ->
+                            // Muestra una notificación con el nombre del alumno
+                            showNotification(hora_acceso, inOut, nombreAlumno)
+                        }
+                    }
+            }
+
+            // Implementar otros métodos si son necesarios: onChildChanged, onChildRemoved, onChildMoved, onCancelled
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+
+        })
+
+
+        /*
         // Configura el oyente de Firebase
         checkinRef = FirebaseDatabase.getInstance().getReference("accesos")
         registrosProcesadosRef = FirebaseDatabase.getInstance().getReference("registrosProcesados")
@@ -50,14 +96,15 @@ class ServicioOyente : Service() {
                                     // Muestra un Toast
                                     Toast.makeText(applicationContext, "Se agregó un registro de chekin", Toast.LENGTH_SHORT).show()
 
-                                    val horafecha = childSnapshot.child("hora_acceso").getValue(String::class.java)
+                                    val hora_acceso = childSnapshot.child("hora_acceso").getValue(String::class.java)
+                                    val fecha_acceso = childSnapshot.child("fecha_acceso").getValue(String::class.java)
                                     val inOut = childSnapshot.child("estatus").getValue(String::class.java)
                                     //val matricula = childSnapshot.child("matricula").getValue(String::class.java)
 
                                     // Obtén el nombre del alumno
                                     obtenerNombreAlumno(alumnoId) { nombreAlumno ->
                                         // Muestra una notificación con el nombre del alumno
-                                        showNotification(horafecha, inOut, nombreAlumno)
+                                        showNotification(hora_acceso, inOut, nombreAlumno)
                                     }
 
                                     // Muestra una notificación
@@ -91,6 +138,8 @@ class ServicioOyente : Service() {
         // Agregar el oyente a la referencia de la base de datos
 
         checkinRef.addValueEventListener(valueEventListener)
+
+        */
 
         // Muestra una notificación persistente
         startForeground(NOTIFICATION_ID, createNotification())
