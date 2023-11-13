@@ -38,26 +38,37 @@ class ControlLecturaFirebaseBD(private val callback: DatosConsultados) {
         orden: Boolean,
         rol: String
     ) {
-        val query =
-            database.orderByChild(atributoBuscar[index]).startAt(nombre).endAt(nombre + "\uf8ff")
+        val query = database.orderByChild(atributoBuscar[index]).startAt(nombre).endAt(nombre + "\uf8ff")
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                //lista.clear() // Borra la lista antes de agregar nuevos resultados
+                lista.clear() // Borra la lista antes de agregar nuevos resultados
                 if (snapshot.exists()) {
                     snapshot.children.mapNotNull { usuario ->
-                        val id = usuario.child(atributoId[0]).getValue(String::class.java)
-                        val nombreUsuario =
-                            usuario.child(atributoBuscar[index]).getValue(String::class.java)
-                        val apellidosUsuario =
-                            usuario.child(atributoBuscar[1 - index]).getValue<String>()
-                        datosUsuario(tabla, usuario, nombreUsuario, apellidosUsuario, id, orden, rol)
+                        val id: String?
+                        val nombreUsuario: String?
+                        val apellidosUsuario: String?
+                        // Si orden == True signficia que se está buscando por matricula
+                        if (orden) {
+                            id = usuario.child(atributoBuscar[0]).getValue(String::class.java)
+                            nombreUsuario = usuario.child(atributoId[0]).getValue(String::class.java)
+                            apellidosUsuario = usuario.child(atributoId[1]).getValue<String>()
+                        } else {
+                            // Se está buscando por nombre
+                            id = usuario.child(atributoId[0]).getValue(String::class.java)
+                            nombreUsuario = usuario.child(atributoBuscar[index]).getValue(String::class.java)
+                            apellidosUsuario = usuario.child(atributoBuscar[1 - index]).getValue<String>()
+                        }
+                        datosUsuario(tabla, usuario, nombreUsuario, apellidosUsuario, id, rol)
                     }.also { usuarios ->
                         lista.addAll(usuarios)
                         callback.onDatosUsuario(lista)
                     }
-                } else if (index == 0 && atributoBuscar[1].isNotEmpty()) {
-                    // Si no se encontraron resultados con atributoBuscar[0], intenta con atributoBuscar[1]
-                    consulta(database, tabla, nombre, atributoId, atributoBuscar, 1, lista, orden, rol)
+                } else if (!orden) {
+                    if (index == 0 && atributoBuscar[1].isNotEmpty()){
+                        // Busca por apellidos
+                        // Si no se encontraron resultados con atributoBuscar[0], intenta con atributoBuscar[1]
+                        consulta(database,tabla, nombre, atributoId, atributoBuscar, 1, lista, false, rol)
+                    }
                 }
             }
 
@@ -71,25 +82,17 @@ class ControlLecturaFirebaseBD(private val callback: DatosConsultados) {
         nombreUsuario: String?,
         apellidosUsuario: String?,
         id: String?,
-        orden: Boolean,
         rol: String
     ): Usuario? {
         if (!nombreUsuario.isNullOrEmpty() && !id.isNullOrEmpty() && !apellidosUsuario.isNullOrEmpty()) {
             if (tabla == "usuarios") {
                 val tipoUsuario = usuario.child("rol").getValue<String>()
                 if (!tipoUsuario.isNullOrEmpty() && tipoUsuario == rol) {
-                    return Usuario(
-                        if (orden) "$nombreUsuario $apellidosUsuario" else id,
-                        if (orden) id else "$nombreUsuario $apellidosUsuario",
-                        false, ""
-                    )
+                    return Usuario(id, "$nombreUsuario $apellidosUsuario", false, "")
                 }
             } else {
                 return Usuario(
-                    if (orden) "$nombreUsuario $apellidosUsuario" else id,
-                    if (orden) id else "$nombreUsuario $apellidosUsuario",
-                    false, ""
-                )
+                    id, "$nombreUsuario $apellidosUsuario", false, "")
             }
         }
         return null
@@ -97,12 +100,10 @@ class ControlLecturaFirebaseBD(private val callback: DatosConsultados) {
 
     fun consultaTutorizaciones(
         claveUsuario: String,
-        nombreUsuario: String,
         lista: MutableList<Usuario>
     ) {
         lista.clear()
-        val query =
-            database.child("alumnos").orderByChild("tutores/$claveUsuario").equalTo(claveUsuario)
+        val query = database.child("alumnos").orderByChild("tutores/$claveUsuario").equalTo(claveUsuario)
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 snapshot.children.mapNotNull { registro ->
@@ -138,29 +139,12 @@ class ControlLecturaFirebaseBD(private val callback: DatosConsultados) {
                     val edad = alumno.child("edad_alumno").getValue<String>()
                     val grado = alumno.child("grado").getValue<String>() ?: ""
                     val grupo = alumno.child("grupo").getValue<String>() ?: ""
-                    val estatus =
-                        alumno.child("accesos/estatus").getValue<String>() ?: "Sin registro"
+                    val estatus = alumno.child("accesos/estatus").getValue<String>() ?: "Sin registro"
                     val fecha = alumno.child("accesos/fecha_acceso").getValue<String>() ?: ""
                     val hora = alumno.child("accesos/hora_acceso").getValue<String>() ?: ""
-                    if (listOf(
-                            matricula,
-                            nombre,
-                            tiposangre,
-                            edad
-                        ).all { !it.isNullOrEmpty() }
+                    if (listOf(matricula, nombre, tiposangre, edad).all { !it.isNullOrEmpty() }
                     ) {
-                        Alumno(
-                            matricula!!,
-                            nombre!!,
-                            apellidos,
-                            tiposangre!!,
-                            edad!!,
-                            grado,
-                            grupo,
-                            estatus,
-                            fecha,
-                            hora,
-                        )
+                        Alumno(matricula!!, nombre!!, apellidos, tiposangre!!, edad!!, grado, grupo, estatus, fecha, hora,)
                     } else null
                 }.also { alumnos ->
                     listaAlumnos.addAll(alumnos)
@@ -222,6 +206,7 @@ class ControlLecturaFirebaseBD(private val callback: DatosConsultados) {
 
         })
     }
+
     fun consultarNodos(
         query: Query,
         callback: (MutableList<Pair<String?, String?>>) -> Unit
@@ -231,7 +216,7 @@ class ControlLecturaFirebaseBD(private val callback: DatosConsultados) {
             override fun onDataChange(snapshot: DataSnapshot) {
                 snapshot.children.map { registro ->
                     val clave = registro.key
-                    if (!registro.hasChildren()){
+                    if (!registro.hasChildren()) {
                         val valor = registro.getValue<String>()
                         if (!valor.isNullOrEmpty() || !clave.isNullOrEmpty()) {
                             datos.add(Pair(clave, valor))
