@@ -256,7 +256,7 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
                     }
                     val alumnoRefe = database.child("alumnos")
 
-                    val mensajeExito = "Alumno asignado"
+                    val mensajeExito = "com.miraimx.kinderscontrol.administrador.com.miraimx.kinderscontrol.administrador.Alumno asignado"
                     val mensajeFallo = "No se pudo asignar al alumno"
                     val duracionToast = Toast.LENGTH_SHORT
 

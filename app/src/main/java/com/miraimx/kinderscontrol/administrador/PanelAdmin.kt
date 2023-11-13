@@ -49,7 +49,9 @@ class PanelAdmin : AppCompatActivity(), Propiedades {
 
         binding.btnConsultarAlumnos.setOnClickListener {
             //Mandar a la nueva Activity
-            Toast.makeText(this, "Diego no ha programado esto", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "Diego no ha programado esto", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, ConsultarAlumnos::class.java)
+            startActivity(intent)
         }
 
         binding.btnConsultarProfesores.setOnClickListener {

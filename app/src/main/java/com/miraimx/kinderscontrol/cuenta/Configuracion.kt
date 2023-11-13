@@ -353,7 +353,7 @@ class Configuracion : AppCompatActivity() {
                                                 Log.d(TAG, "Cuenta de usuario Auth eliminada.")
 
                                                 Toast.makeText(this, "Cuenta eliminada exitosamente.", Toast.LENGTH_SHORT).show()
-                                                // Cerrar todas las demás actividades y volver a MainActivity
+                                                // Cerrar todas las demás actividades y volver a com.miraimx.kinderscontrol.administrador.com.miraimx.kinderscontrol.administrador.MainActivity
                                                 val intent = Intent(this, Login::class.java)
                                                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                                                 startActivity(intent)

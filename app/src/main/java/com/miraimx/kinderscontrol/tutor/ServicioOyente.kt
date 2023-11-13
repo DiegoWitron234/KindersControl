@@ -171,7 +171,7 @@ class ServicioOyente : Service() {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("Nuevo registro de check-in")
-            .setContentText("In/Out: $inOut, Hora/Fecha: $horafecha\n, Alumno: $nombre")
+            .setContentText("In/Out: $inOut, Hora/Fecha: $horafecha\n, com.miraimx.kinderscontrol.administrador.com.miraimx.kinderscontrol.administrador.Alumno: $nombre")
             .setSmallIcon(R.drawable.notification)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent) // Configura el PendingIntent aquí

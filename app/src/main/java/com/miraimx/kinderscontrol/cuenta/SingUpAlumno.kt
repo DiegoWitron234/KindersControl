@@ -231,7 +231,7 @@ class SingUpAlumno : AppCompatActivity(), Propiedades {
     private fun guardarInfo(usuarioRef: DatabaseReference, usuarioInfo: HashMap<String, Any?>) {
         usuarioRef.setValue(usuarioInfo).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                Toast.makeText(this@SingUpAlumno, "Alumno registrado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@SingUpAlumno, "com.miraimx.kinderscontrol.administrador.com.miraimx.kinderscontrol.administrador.Alumno registrado", Toast.LENGTH_SHORT).show()
                 finish()
             } else {
                 Toast.makeText(this@SingUpAlumno, "Ha ocurrido un error", Toast.LENGTH_SHORT).show()

@@ -99,7 +99,7 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
                                     listaMatriculas.add(matricula)
                                     Toast.makeText(
                                         requireActivity(),
-                                        "Alumno registrado",
+                                        "com.miraimx.kinderscontrol.administrador.com.miraimx.kinderscontrol.administrador.Alumno registrado",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 } else {
