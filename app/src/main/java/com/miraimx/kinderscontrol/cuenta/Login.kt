@@ -167,20 +167,12 @@ class Login : AppCompatActivity(), Propiedades {
                                     .show()
                             }
                         }
-                    } else {
-                        // El nodo de rol no existe para este usuario
-                        Toast.makeText(
-                            this@Login,
-                            "El usuario no está en la RTBD",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
                     }
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
                     // Manejar errores de lectura de la base de datos
-                    Toast.makeText(this@Login, "Error al leer la RTDB", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this@Login, "Error al leer la RTDB", Toast.LENGTH_SHORT).show()
                 }
             })
         }

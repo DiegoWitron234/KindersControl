@@ -18,12 +18,11 @@ class ControlLecturaFirebaseBD(private val callback: DatosConsultados) {
         rol: String,
         atributoId: Array<String>,
         atributoBuscar: Array<String>,
-        lista: MutableList<Usuario>,
         orden: Boolean
     ) {
         if (nombre.isNotBlank()) {
             val database = database.child(tabla)
-            consulta(database, tabla, nombre, atributoId, atributoBuscar, 0, lista, orden, rol)
+            consulta(database, tabla, nombre, atributoId, atributoBuscar, 0, orden, rol)
         }
     }
 
@@ -34,14 +33,14 @@ class ControlLecturaFirebaseBD(private val callback: DatosConsultados) {
         atributoId: Array<String>,
         atributoBuscar: Array<String>,
         index: Int,
-        lista: MutableList<Usuario>,
         orden: Boolean,
         rol: String
     ) {
         val query = database.orderByChild(atributoBuscar[index]).startAt(nombre).endAt(nombre + "\uf8ff")
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                lista.clear() // Borra la lista antes de agregar nuevos resultados
+                val lista = mutableListOf<Usuario>()
+                 // Borra la lista antes de agregar nuevos resultados
                 if (snapshot.exists()) {
                     snapshot.children.mapNotNull { usuario ->
                         val id: String?
@@ -67,7 +66,7 @@ class ControlLecturaFirebaseBD(private val callback: DatosConsultados) {
                     if (index == 0 && atributoBuscar[1].isNotEmpty()){
                         // Busca por apellidos
                         // Si no se encontraron resultados con atributoBuscar[0], intenta con atributoBuscar[1]
-                        consulta(database,tabla, nombre, atributoId, atributoBuscar, 1, lista, false, rol)
+                        consulta(database,tabla, nombre, atributoId, atributoBuscar, 1, false, rol)
                     }
                 }
             }
@@ -100,10 +99,11 @@ class ControlLecturaFirebaseBD(private val callback: DatosConsultados) {
 
     fun consultaTutorizaciones(
         claveUsuario: String,
+        nombreUsuario: String?,
         lista: MutableList<Usuario>
     ) {
         lista.clear()
-        val query = database.child("alumnos").orderByChild("tutores/$claveUsuario").equalTo(claveUsuario)
+        val query = database.child("alumnos").orderByChild("tutores/$claveUsuario").equalTo(nombreUsuario)
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 snapshot.children.mapNotNull { registro ->

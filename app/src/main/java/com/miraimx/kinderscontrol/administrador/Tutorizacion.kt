@@ -38,7 +38,8 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
     private lateinit var binding: ActivityTutorizacionBinding
     private val database = FirebaseDatabase.getInstance().reference
     private lateinit var rol: String
-    private lateinit var aula: String
+    private lateinit var gradoAula: String
+    private lateinit var grupoAula:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,8 +63,8 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
         } else {
             titulo = "Asignar profesor"
             subtitulo = "Buscar profesor"
-            aula = intent.getStringExtra("grado").toString() + intent.getStringExtra("grupo")
-                .toString()
+            gradoAula = intent.getStringExtra("grado").toString()
+            grupoAula = intent.getStringExtra("grupo").toString()
         }
         binding.tvAsignar.text = titulo
         binding.tvBuscarUsuario.text = subtitulo
@@ -183,15 +184,21 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
     ) {
         val databaseController = ControlLecturaFirebaseBD(object : DatosConsultados() {
             override fun onDatosUsuario(resultados: MutableList<Usuario>) {
+                posAnteriorAlumno = -1
+                posAnteriorTutor = -1
+                lista.clear()
+                lista.addAll(resultados)
                 lsTutoresAdapter.notifyDataSetChanged()
                 lsAlumnoAdapter.notifyDataSetChanged()
+                binding.buscarAlumno.isEnabled = true
+                binding.buscarTutor.isEnabled = true
             }
         })
-        posAnteriorAlumno = -1
-        posAnteriorTutor = -1
-        lista.clear()
+        /*lista.clear()
         lsTutoresAdapter.notifyDataSetChanged()
-        lsAlumnoAdapter.notifyDataSetChanged()
+        lsAlumnoAdapter.notifyDataSetChanged()*/
+        binding.buscarAlumno.isEnabled = false
+        binding.buscarTutor.isEnabled = false
         btnAsignar.isEnabled = false
         databaseController.consultaTutorizacion(
             tabla,
@@ -199,7 +206,6 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
             rol,
             atributoId,
             atributoBuscar,
-            lista,
             orden
         )
     }
@@ -218,11 +224,11 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
         lateinit var alumnoSeleccion: String
         lateinit var alumnoNombre: String
         var listaAtributos: Array<String>
-        var size = 0
+        var size: Int
         val alumnoRef = database.child("alumnos")
         val datos = hashMapOf<String, Any>()
         var ruta = ""
-        var atbUsuario = ""
+        var atbUsuario: String
         builder.setTitle("Confirmación")
         builder.setMessage("¿Desea realizar la asignacion de los alumnos?")
         builder.setPositiveButton("Sí") { dialog, _ ->
@@ -258,7 +264,7 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
                     }
                     val alumnoRefe = database.child("alumnos")
 
-                    val mensajeExito = "com.miraimx.kinderscontrol.administrador.com.miraimx.kinderscontrol.administrador.Alumno asignado"
+                    val mensajeExito = "Alumno asignado"
                     val mensajeFallo = "No se pudo asignar al alumno"
                     val duracionToast = Toast.LENGTH_SHORT
 
@@ -270,16 +276,33 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
                                     usuarioNombre
                                 )
                                 val alumnos = hashMapOf<String, Any>(alumnoSeleccion to alumnoNombre)
-                                val grupoRef = database.child("grupos/$aula")
+
+
+                                val gradoGrupoAlumno = hashMapOf<String, Any>(
+                                    "grado" to gradoAula,
+                                    "grupo" to grupoAula
+                                )
+
+                                val grupoRef = database.child("grupos/${gradoAula+grupoAula}")
                                 grupoRef.updateChildren(datosGrupo)
                                 grupoRef.child("/alumnos").updateChildren(alumnos)
+                                alumnoRef.child(alumnoSeleccion).updateChildren(gradoGrupoAlumno)
                             }
                             Toast.makeText(this@Tutorizacion, mensajeExito, duracionToast).show()
+                            alumnoLista.clear()
+                            usuarioLista.clear()
+                            lsTutoresAdapter.notifyDataSetChanged()
+                            lsAlumnoAdapter.notifyDataSetChanged()
+                            posAnteriorAlumno = -1
+                            posAnteriorTutor = -1
+                            btnAsignar.isEnabled = false
+                            buscarAlumnos.setQuery("", false)
+                            buscarTutores.setQuery("", false)
                         }.addOnFailureListener {
                             Toast.makeText(this@Tutorizacion, mensajeFallo, duracionToast).show()
                         }
 
-                    if (size == 2) {
+                    /*if (size == 2) {
                         if (resultados.size < 2) {
                             alumnoRef.child("/$alumnoSeleccion")
                                 .updateChildren(hashMapOf<String, Any>("tutor_main" to usuarioSeleccion))
@@ -288,19 +311,7 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
                                         .show()
                                 }
                         }
-                    }
-
-                    alumnoLista.clear()
-                    usuarioLista.clear()
-                    //lsAlumnoAdapter.clear()
-                    //lsTutoresAdapter.clear()
-                    lsTutoresAdapter.notifyDataSetChanged()
-                    lsAlumnoAdapter.notifyDataSetChanged()
-                    posAnteriorAlumno = -1
-                    posAnteriorTutor = -1
-                    btnAsignar.isEnabled = false
-                    buscarAlumnos.setQuery("", false)
-                    buscarTutores.setQuery("", false)
+                    }*/
                     dialog.dismiss()
                 }
             })
@@ -310,13 +321,13 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
             if (rol == "Tutor") {
                 // Asignar elemento al nodo tutores
                 ruta = "/tutores"
-                datos[usuarioSeleccion] = usuarioSeleccion
-                query = alumnoRef.orderByChild("tutores/${usuarioSeleccion}").equalTo(usuarioSeleccion)
+                datos[usuarioSeleccion] = usuarioNombre
+                query = alumnoRef.orderByChild("tutores/${usuarioSeleccion}").equalTo(usuarioNombre)
                 atbUsuario = ""
-                size = 2
+                size = 1
                 listaAtributos = Array(size) { "" }
                 listaAtributos[0] = "matricula"
-                listaAtributos[1] = "tutor_main"
+                //listaAtributos[1] = "tutor_main"
             } else {
                 // Asignar profesor
                 datos["profesor_id"] = usuarioSeleccion
@@ -361,7 +372,7 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
         return hashMapOf(
             "profesor_id" to profesorId,
             "nombre_profesor" to nombreProfesor,
-            "aula" to aula,
+            "aula" to gradoAula+grupoAula,
         )
     }
 

@@ -117,7 +117,7 @@
                     android:layout_toEndOf="@id/svAlumnoEdad" />
             </RelativeLayout>
 
-            <RelativeLayout
+            <!-- <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
@@ -149,7 +149,7 @@
                     android:layout_marginLeft="15dp"
                     android:layout_toEndOf="@id/svGrado" />
 
-            </RelativeLayout>
+            </RelativeLayout>-->
 
             <TextView
                 style="@style/tvTitulos2"

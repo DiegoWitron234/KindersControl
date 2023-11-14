@@ -54,10 +54,10 @@ class PanelAdmin : AppCompatActivity(), Propiedades {
             startActivity(intent)
         }
 
-        binding.btnConsultarProfesores.setOnClickListener {
+        /*binding.btnConsultarProfesores.setOnClickListener {
             //Igual que el anterior
             Toast.makeText(this, "Diego no ha programado esto", Toast.LENGTH_SHORT).show()
-        }
+        }*/
 
         botonDimensiones(
             binding.btnAgregarNino,

@@ -163,25 +163,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnAsignarTutorias" />
 
-        <Button
-            android:id="@+id/btnConsultarProfesores"
-            style="@style/botonMenu"
-            android:layout_width="0dp"
-            android:layout_height="70dp"
-            android:layout_marginTop="10dp"
-            android:autoSizeMaxTextSize="20dp"
-            android:autoSizeMinTextSize="15dp"
-            android:autoSizeTextType="uniform"
-            android:text="Profesores"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnConsultarAlumnos"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvConsulta" />
 
         <Button
             android:id="@+id/btnConsultarAlumnos"
             style="@style/botonMenu"
-            android:layout_width="0dp"
+            android:layout_width="150dp"
             android:layout_height="70dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
@@ -191,7 +177,7 @@
             android:text="ALumnos"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btnConsultarProfesores"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvConsulta" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

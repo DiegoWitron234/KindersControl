@@ -137,8 +137,6 @@ class SingUpAlumno : AppCompatActivity(), Propiedades {
         val edEdad = svEdad.selectedItem.toString()
         val edTSangre = svSangre.selectedItem.toString()
         val edApellidos = binding.edAluApellido.text.toString()
-        val edGrupo = svGrupo.selectedItem.toString()
-        val edGrado = svGrado.selectedItem.toString()
         if (validarDatos(edNombre, edApellidos, edEdad, edTSangre)) {
             subirFoto { url ->
                 guardarEnDatabase(
@@ -146,8 +144,6 @@ class SingUpAlumno : AppCompatActivity(), Propiedades {
                     edApellidos,
                     edEdad,
                     edTSangre,
-                    edGrado,
-                    edGrupo,
                     url
                 )
             }
@@ -190,8 +186,6 @@ class SingUpAlumno : AppCompatActivity(), Propiedades {
         edApellidos: String,
         edEdad: String,
         edTSangre: String,
-        edGrado: String,
-        edGrupo: String,
         fotoEnlace: String
     ) {
         val database = FirebaseDatabase.getInstance()
@@ -199,7 +193,7 @@ class SingUpAlumno : AppCompatActivity(), Propiedades {
 
         // Crea la información del empleado
         val alumnoInfo =
-            crearInfo(edNombre, edApellidos, edEdad, edTSangre, edGrado, edGrupo, fotoEnlace)
+            crearInfo(edNombre, edApellidos, edEdad, edTSangre, fotoEnlace)
 
         // Guarda la información del empleado en la base de datos
         guardarInfo(alumnoRef, alumnoInfo)
@@ -211,8 +205,6 @@ class SingUpAlumno : AppCompatActivity(), Propiedades {
         edApellidos: String,
         edEdad: String,
         edTSangre: String,
-        edGrado: String,
-        edGrupo: String,
         fotoEnlace: String
     ): HashMap<String, Any?> {
         return hashMapOf(
@@ -221,17 +213,16 @@ class SingUpAlumno : AppCompatActivity(), Propiedades {
             "apellidos_alumno" to edApellidos,
             "edad_alumno" to edEdad,
             "tiposangre_alumno" to edTSangre,
-            "grado" to edGrado,
-            "grupo" to edGrupo,
             "foto_alumno" to fotoEnlace,
             "estado" to true
         )
     }
-
+//    "grado" to edGrado,
+//            "grupo" to edGrupo,
     private fun guardarInfo(usuarioRef: DatabaseReference, usuarioInfo: HashMap<String, Any?>) {
         usuarioRef.setValue(usuarioInfo).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                Toast.makeText(this@SingUpAlumno, "com.miraimx.kinderscontrol.administrador.com.miraimx.kinderscontrol.administrador.Alumno registrado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@SingUpAlumno, "Alumno registrado", Toast.LENGTH_SHORT).show()
                 finish()
             } else {
                 Toast.makeText(this@SingUpAlumno, "Ha ocurrido un error", Toast.LENGTH_SHORT).show()
@@ -242,16 +233,16 @@ class SingUpAlumno : AppCompatActivity(), Propiedades {
     private fun scrollDatos() {
         svEdad = findViewById(R.id.svAlumnoEdad)
         svSangre = findViewById(R.id.svAlumnoSangre)
-        svGrado = binding.svGrado
-        svGrupo = binding.svGrupo
+        //svGrado = binding.svGrado
+        //svGrupo = binding.svGrupo
         val datosEdad = listOf("3", "4", "5", "6", "7")
         val datosSangre = listOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-")
-        val datosGrupo = listOf("A", "B", "C")
-        val datosGrado = listOf("1", "2", "3")
+        //val datosGrupo = listOf("A", "B", "C")
+        //val datosGrado = listOf("1", "2", "3")
         adapterScroll(svEdad, datosEdad)
         adapterScroll(svSangre, datosSangre)
-        adapterScroll(svGrado, datosGrado)
-        adapterScroll(svGrupo, datosGrupo)
+        //adapterScroll(svGrado, datosGrado)
+        //adapterScroll(svGrupo, datosGrupo)
     }
 
 

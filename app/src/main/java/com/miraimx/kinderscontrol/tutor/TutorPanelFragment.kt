@@ -86,7 +86,7 @@ class TutorPanelFragment : Fragment(), Propiedades {
             }
         })
         val query =
-            dbRef.child("alumnos").orderByChild("tutores/$claveUsuario").equalTo(claveUsuario)
+            dbRef.child("alumnos").orderByChild("tutores/$claveUsuario").equalTo(nombreTutor)
         controlLecturaFirebaseBD.consultaAsignacion(query, alumnosAsigLista)
     }
 
@@ -108,8 +108,7 @@ class TutorPanelFragment : Fragment(), Propiedades {
                 }
             }
         })
-        val query =
-            dbRef.child("usuarios").orderByChild("usuario_id").equalTo(uid)
+        val query = dbRef.child("usuarios").orderByChild("usuario_id").equalTo(uid)
         val datos = arrayOf("nombre_usuario", "apellidos_usuario")
         controlLecturaFirebaseBD.consultar(query, datos)
     }

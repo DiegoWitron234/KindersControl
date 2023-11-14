@@ -142,7 +142,7 @@ class ServicioOyente : Service() {
         */
 
         // Muestra una notificación persistente
-        startForeground(NOTIFICATION_ID, createNotification())
+        //startForeground(NOTIFICATION_ID, createNotification())
     }
 
     override fun onBind(intent: Intent?): IBinder? {

@@ -92,7 +92,8 @@ class ConsultarAlumnos : AppCompatActivity() {
                 val nombreAlumno = alumno.nombre_alumno
                 val matricula = alumno.matricula
                 val edadAlumno = alumno.edad_alumno
-                val gradoGrupo = alumno.grado_grupo
+                val grado = alumno.grado
+                val grupo = alumno.grupo
                 val tipoSangreAlumno = alumno.tiposangre_alumno
                 val tutores = alumno.tutores.values.toList()
                 // Haz algo con las variables aquí
@@ -101,7 +102,7 @@ class ConsultarAlumnos : AppCompatActivity() {
                 intent.putExtra("nombreAlumno", nombreAlumno)
                 intent.putExtra("matricula", matricula)
                 intent.putExtra("edadAlumno", edadAlumno)
-                intent.putExtra("gradoGrupo", gradoGrupo)
+                intent.putExtra("gradoGrupo", grado+grupo)
                 intent.putExtra("tipoSangreAlumno", tipoSangreAlumno)
                 intent.putStringArrayListExtra("tutores", ArrayList(tutores))
 
@@ -118,7 +119,8 @@ data class Alumno(
     val nombre_alumno: String = "",
     val matricula: String = "",
     val edad_alumno: String = "",
-    val grado_grupo: String = "",
+    val grado: String = "",
+    val grupo: String = "",
     val tiposangre_alumno: String = "",
     val tutores: Map<String, String> = emptyMap()
 )
