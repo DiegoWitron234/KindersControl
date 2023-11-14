@@ -1,5 +1,6 @@
 package com.miraimx.kinderscontrol.administrador
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -86,7 +87,7 @@ class ConsultarAlumnos : AppCompatActivity() {
             val textView = holder.view.findViewById<TextView>(android.R.id.text1)
             textView.text = alumno.nombre_alumno
 
-            // Aquí puedes obtener los datos del alumno y guardarlos en variables
+            // Obtenemos los datos al dar clic y los guardamos en variables
             holder.itemView.setOnClickListener {
                 val nombreAlumno = alumno.nombre_alumno
                 val matricula = alumno.matricula
@@ -95,7 +96,17 @@ class ConsultarAlumnos : AppCompatActivity() {
                 val tipoSangreAlumno = alumno.tiposangre_alumno
                 val tutores = alumno.tutores.values.toList()
                 // Haz algo con las variables aquí
-                Log.e("Mensaje", "Nombre: $nombreAlumno")
+                val intent = Intent(it.context, DatosAlumno::class.java)
+                // Pasar datos con putExtra
+                intent.putExtra("nombreAlumno", nombreAlumno)
+                intent.putExtra("matricula", matricula)
+                intent.putExtra("edadAlumno", edadAlumno)
+                intent.putExtra("gradoGrupo", gradoGrupo)
+                intent.putExtra("tipoSangreAlumno", tipoSangreAlumno)
+                intent.putStringArrayListExtra("tutores", ArrayList(tutores))
+
+                // Iniciar la Activity
+                it.context.startActivity(intent)
             }
         }
 

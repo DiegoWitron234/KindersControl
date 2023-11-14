@@ -47,6 +47,8 @@ class MainPanelTutor : AppCompatActivity() {
         if (tienePermisos()) {
             serviceIntent = Intent(this, ServicioOyente::class.java)
             startService(serviceIntent)
+        } else {
+            Toast.makeText(this, "No se pueden mostrar notificaciones", Toast.LENGTH_LONG).show()
         }
     }
 
