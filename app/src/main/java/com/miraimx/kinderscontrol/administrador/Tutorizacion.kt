@@ -197,8 +197,8 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
         /*lista.clear()
         lsTutoresAdapter.notifyDataSetChanged()
         lsAlumnoAdapter.notifyDataSetChanged()*/
-        binding.buscarAlumno.isEnabled = false
-        binding.buscarTutor.isEnabled = false
+        binding.spAlumnos.isEnabled = false
+        binding.spTutores.isEnabled = false
         btnAsignar.isEnabled = false
         databaseController.consultaTutorizacion(
             tabla,
