@@ -5,6 +5,7 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -26,6 +27,10 @@ import com.miraimx.kinderscontrol.profesor.MainPanelProfesor
 import com.miraimx.kinderscontrol.tutor.MainPanelTutor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Login : AppCompatActivity(), Propiedades {
 
@@ -114,7 +119,6 @@ class Login : AppCompatActivity(), Propiedades {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithEmail:success")
-                    Toast.makeText(this, "Bienvenido", Toast.LENGTH_SHORT).show()
                     verificacionRol()
                 } else {
                     // If sign in fails, display a message to the user.
@@ -124,17 +128,14 @@ class Login : AppCompatActivity(), Propiedades {
                         "No se pudo iniciar sesión.",
                         Toast.LENGTH_SHORT,
                     ).show()
-                    //Hacer algo si sale mal
                 }
             }
-        // [END sign_in_with_email]
     }
 
     private fun verificacionRol() {
         // Obtener una referencia a la base de datos
         val database = FirebaseDatabase.getInstance()
         val currentUser = FirebaseAuth.getInstance().currentUser
-        val scope = CoroutineScope(Dispatchers.IO)
 
         // Verificar si el usuario está autenticado
         if (currentUser != null) {
@@ -147,13 +148,12 @@ class Login : AppCompatActivity(), Propiedades {
                         // Aquí puedes tomar decisiones basadas en el rol del usuario
                         when (val role = dataSnapshot.child("rol").value.toString()) {
                             "Admin" -> {
-                                // Mostrar la interfaz de administrador
-                                verificarUsuario(role)
-                                //intent.putExtra("rol", role)
+                                startActivity(Intent(this@Login, PanelAdmin::class.java))
+                                Toast.makeText(this@Login, "Bienvenido", Toast.LENGTH_SHORT).show()
+                                finish()
                             }
 
                             "Tutor" -> {
-                                // Mostrar la interfaz de usuario
                                 verificarUsuario(role)
                             }
 
@@ -170,16 +170,23 @@ class Login : AppCompatActivity(), Propiedades {
                     }
                 }
 
-                override fun onCancelled(databaseError: DatabaseError) {
-                    // Manejar errores de lectura de la base de datos
-                    //Toast.makeText(this@Login, "Error al leer la RTDB", Toast.LENGTH_SHORT).show()
-                }
+                override fun onCancelled(databaseError: DatabaseError) {}
             })
         }
     }
 
 
     private fun verificarUsuario(rol: String) {
+        val scope = CoroutineScope(Dispatchers.IO)
+        val job = scope.launch {
+            delay(5000)  // Espera 5 segundos
+            if (isActive) {  // Si la corutina aún está activa después de 5 segundos
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@Login, "No se pudo iniciar la sesión", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        }
         val currentUser = FirebaseAuth.getInstance().currentUser ?: return
         val uid = currentUser.uid
         val uRef = FirebaseDatabase.getInstance().getReference("usuarios").child(uid)
@@ -195,19 +202,18 @@ class Login : AppCompatActivity(), Propiedades {
                         putExtra("rol", rol)
                     }
 
-                    Toast.makeText(this@Login, "Registrando usuario", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(this@Login, "Registrando usuario", Toast.LENGTH_SHORT).show()
                     startActivity(intent)
                     finish()
                 } else {
                     val intent = Intent(
                         this@Login,
                         when (rol) {
-                            "Admin" -> PanelAdmin::class.java
                             "Tutor" -> MainPanelTutor::class.java
                             else -> MainPanelProfesor::class.java
                         }
                     )
+                    Toast.makeText(this@Login, "Bienvenido", Toast.LENGTH_SHORT).show()
                     startActivity(intent)
                     finish()
                 }
@@ -215,8 +221,8 @@ class Login : AppCompatActivity(), Propiedades {
 
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(this@Login, "onCancelled", Toast.LENGTH_SHORT).show()
-
             }
         })
+        job.cancel()
     }
 }

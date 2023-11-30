@@ -13,7 +13,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="0dp"
         android:autoSizeMaxTextSize="30sp"
-        android:autoSizeMinTextSize="25sp"
+        android:autoSizeMinTextSize="10sp"
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
         android:gravity="center"
@@ -21,16 +21,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <ImageButton
         android:id="@+id/imbQR"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="5dp"
         android:background="@mipmap/qr"
-        android:contentDescription="QR de alumno"
+        android:contentDescription="@string/qr_de_alumno"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtAlumnoNombre" />
 
@@ -94,15 +94,28 @@
         app:layout_constraintStart_toEndOf="@id/imgAlumno"
         app:layout_constraintTop_toBottomOf="@id/txtAlumnoSangre" />
 
+    <Button
+        android:id="@+id/btnCambiarImagen"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:autoSizeMaxTextSize="20sp"
+        android:autoSizeMinTextSize="10sp"
+        android:autoSizeTextType="uniform"
+        android:text="Cambiar imagen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgAlumno" />
+
     <TextView
         android:id="@+id/txtRegistrosAcceso"
         style="@style/tvTitulos2"
-        android:layout_marginTop="20dp"
-        android:text="Registro de acceso"
+        android:layout_marginTop="10dp"
+        android:text="@string/registro_de_acceso"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imgAlumno" />
+        app:layout_constraintTop_toBottomOf="@id/btnCambiarImagen" />
 
     <ListView
         android:id="@+id/lvRegistrosAcceso"

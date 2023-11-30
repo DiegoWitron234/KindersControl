@@ -1,6 +1,7 @@
 package com.miraimx.kinderscontrol.profesor
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -93,13 +94,11 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
                         if (listaMatriculas.isNotEmpty()) {
                             listaMatriculas.map { alumno ->
                                 if (alumno != matricula) {
-                                    listaAlumnos.add(
-                                        Usuario(matricula, "$nombre $apellidos", false, "")
-                                    )
+                                    listaAlumnos.add(Usuario(matricula, "$nombre $apellidos", false, ""))
                                     listaMatriculas.add(matricula)
                                     Toast.makeText(
                                         requireActivity(),
-                                        "com.miraimx.kinderscontrol.administrador.com.miraimx.kinderscontrol.administrador.Alumno registrado",
+                                        "Alumno registrado",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 } else {
@@ -161,7 +160,6 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
             val tutores = HashMap<String?, String?>()
 
             for (alumno in listaAlumnos) {
-                tutores.clear()
                 obtenerNodos(alumno.id, object : Callback {
                     override fun onCallback(value: MutableList<Pair<String?, String?>>) {
                         for (tutor in value) {
@@ -178,8 +176,9 @@ class AccesoEntradaFragment : Fragment(), Propiedades {
                         jobs.add(scope.launch {
                             try {
                                 database.child("accesos").push().setValue(alumnoInfo).await()
+                                tutores.clear()
                             } catch (e: Exception) {
-                                //
+                                Log.e("Log", "Error al subir datos")
                             }
                         })
                     }

@@ -190,8 +190,9 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
                 lista.addAll(resultados)
                 lsTutoresAdapter.notifyDataSetChanged()
                 lsAlumnoAdapter.notifyDataSetChanged()
-                binding.buscarAlumno.isEnabled = true
-                binding.buscarTutor.isEnabled = true
+                binding.spAlumnos.isEnabled = true
+                binding.spTutores.isEnabled = true
+                Toast.makeText(this@Tutorizacion, "Busqueda terminada", Toast.LENGTH_SHORT).show()
             }
         })
         /*lista.clear()
@@ -295,6 +296,8 @@ class Tutorizacion : AppCompatActivity(), Propiedades {
                             lsAlumnoAdapter.notifyDataSetChanged()
                             posAnteriorAlumno = -1
                             posAnteriorTutor = -1
+                            binding.spAlumnos.isEnabled = false
+                            binding.spTutores.isEnabled = false
                             btnAsignar.isEnabled = false
                             buscarAlumnos.setQuery("", false)
                             buscarTutores.setQuery("", false)

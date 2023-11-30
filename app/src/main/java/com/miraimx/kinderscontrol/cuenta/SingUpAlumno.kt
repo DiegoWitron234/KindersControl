@@ -31,8 +31,6 @@ import java.io.File
 class SingUpAlumno : AppCompatActivity(), Propiedades {
     private lateinit var svEdad: Spinner
     private lateinit var svSangre: Spinner
-    private lateinit var svGrado: Spinner
-    private lateinit var svGrupo: Spinner
     private lateinit var binding: ActivitySingUpAlumnoBinding
     private var matricula: String? = null
     private var ruta: String? = null

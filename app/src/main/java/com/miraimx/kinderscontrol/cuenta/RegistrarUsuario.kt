@@ -170,16 +170,3 @@ class RegistrarUsuario : AppCompatActivity(), Propiedades {
             }
     }
 }
-
-/*
-      val user = auth.currentUser
-                    if (user != null) {
-                        val uid = user.uid
-                        val database = FirebaseDatabase.getInstance()
-                        val usersRef = database.getReference("users")
-                        val userData = hashMapOf(
-                            "role" to rol
-                        )
-                        usersRef.child(uid).setValue(userData)
-                    }
- */

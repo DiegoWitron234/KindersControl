@@ -101,7 +101,7 @@ class TutorPanelFragment : Fragment(), Propiedades {
                     ControlFirebaseStg().cargarImagen(
                         "tutores/$uid.png",
                         binding.imagenUsuario,
-                        requireActivity()
+                        requireContext()
                     )
                     binding.nombreTutor.text = nombre.ifEmpty { "Bienvenido" }
                     cargarDatos(uid, nombre)

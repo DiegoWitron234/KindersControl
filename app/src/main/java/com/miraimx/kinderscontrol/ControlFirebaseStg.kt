@@ -12,6 +12,7 @@ class ControlFirebaseStg : AppGlideModule() {
         val storageRef = storage.reference.child(ruta)
         storageRef.downloadUrl.addOnSuccessListener { uri ->
             Glide.with(context)
+                .asBitmap()  //Funciona como thumbnail
                 .load(uri.toString())
                 .centerCrop()
                 .into(view)
